@@ -1,13 +1,13 @@
 <?php
 /**
- * Grant Card Unified - Clean & Professional Edition
+ * Grant Card Unified - Minna Bank Professional Edition
  * template-parts/grant-card-unified.php
  * 
- * シンプルでスタイリッシュな統一カードテンプレート
- * 機能は完全保持、デザインをクリーンに刷新
+ * 🏦 みんなの銀行スタイル - プロフェッショナルカードシステム
+ * バンキンググレードUI・モノクロデザイン・高級感のある仕上がり
  * 
- * @package Grant_Insight_Clean
- * @version 10.0.0
+ * @package Grant_Insight_Minna_Bank
+ * @version 12.0.0-minna-bank-professional
  */
 
 // セキュリティチェック
@@ -195,794 +195,502 @@ static $assets_loaded = false;
 <?php if (!$assets_loaded): $assets_loaded = true; ?>
 
 <style>
-/* Clean Grant Card Design System - Full Monochrome Edition */
+/* ===============================================
+   🏦 MINNA BANK PROFESSIONAL CARD SYSTEM
+   みんなの銀行グレード - プロフェッショナルデザイン
+   =============================================== */
 
-/* グリッド親コンテナのサイズ制約 */
-.grants-grid,
-.grants-list,
-.grant-cards-container {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    box-sizing: border-box;
+:root {
+    /* みんなの銀行 コアカラーシステム */
+    --mb-black: #000000;
+    --mb-white: #ffffff;
+    --mb-gray-50: #fafafa;
+    --mb-gray-100: #f5f5f5;
+    --mb-gray-200: #e5e5e5;
+    --mb-gray-300: #d4d4d4;
+    --mb-gray-400: #a3a3a3;
+    --mb-gray-500: #737373;
+    --mb-gray-600: #525252;
+    --mb-gray-700: #404040;
+    --mb-gray-800: #262626;
+    --mb-gray-900: #171717;
+    
+    /* セマンティックカラー - 最小限使用 */
+    --mb-success: #16a34a;
+    --mb-warning: #f59e0b;
+    --mb-danger: #dc2626;
+    
+    /* プロフェッショナル・グラデーション */
+    --mb-gradient-primary: linear-gradient(135deg, var(--mb-black) 0%, var(--mb-gray-800) 100%);
+    --mb-gradient-subtle: linear-gradient(135deg, var(--mb-white) 0%, var(--mb-gray-50) 100%);
+    --mb-gradient-card: linear-gradient(145deg, var(--mb-white) 0%, var(--mb-gray-50) 100%);
+    
+    /* プロフェッショナル・シャドウ */
+    --mb-shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08);
+    --mb-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.15);
+    --mb-shadow-premium: 0 16px 48px rgba(0, 0, 0, 0.2);
+    --mb-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+    --mb-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+    --mb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --mb-shadow-overlay: 0 20px 60px rgba(0, 0, 0, 0.25);
+    
+    /* バンキング・タイポグラフィ */
+    --mb-font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --mb-font-mono: 'SF Mono', Monaco, 'Roboto Mono', Consolas, monospace;
+    
+    /* プロフェッショナル・スペーシング */
+    --mb-space-xs: 0.25rem;
+    --mb-space-sm: 0.5rem;
+    --mb-space-md: 1rem;
+    --mb-space-lg: 1.5rem;
+    --mb-space-xl: 2rem;
+    
+    /* バンキング・トランジション */
+    --mb-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --mb-transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --mb-transition-smooth: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --mb-ease-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* バンキング・ボーダーラジウス */
+    --mb-radius-xs: 2px;
+    --mb-radius-sm: 4px;
+    --mb-radius-md: 8px;
+    --mb-radius-lg: 12px;
+    --mb-radius-xl: 16px;
+    --mb-radius-2xl: 24px;
+    --mb-radius-full: 9999px;
 }
 
+/* ===============================================
+   グリッドシステム - プロフェッショナル
+   =============================================== */
 .grants-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: var(--mb-space-lg);
+    padding: var(--mb-space-xl);
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 @media (max-width: 1200px) {
     .grants-grid {
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--mb-space-md);
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .grants-grid {
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-        gap: 1.25rem;
-        padding: 1.25rem;
+        grid-template-columns: 1fr;
+        padding: var(--mb-space-md);
+        gap: var(--mb-space-md);
     }
 }
 
-:root {
-    /* Core Colors - Pure Monochrome System */
-    --clean-primary: #000000;          /* Pure black for primary actions */
-    --clean-primary-light: #262626;    /* Dark gray for light primary */
-    --clean-primary-dark: #000000;     /* Pure black for dark primary */
-    --clean-secondary: #525252;        /* Medium gray for secondary elements */
-    --clean-accent: #171717;           /* Very dark gray for accents */
-    
-    /* Monochrome Base Colors */
-    --clean-white: #ffffff;            /* Pure white */
-    --clean-gray-50: #fafafa;          /* Lightest gray */
-    --clean-gray-100: #f5f5f5;         /* Very light gray */
-    --clean-gray-200: #e5e5e5;         /* Light gray */
-    --clean-gray-300: #d4d4d4;         /* Medium light gray */
-    --clean-gray-400: #a3a3a3;         /* Medium gray */
-    --clean-gray-500: #737373;         /* Gray */
-    --clean-gray-600: #525252;         /* Dark gray */
-    --clean-gray-700: #404040;         /* Darker gray */
-    --clean-gray-800: #262626;         /* Very dark gray */
-    --clean-gray-900: #171717;         /* Almost black */
-    
-    /* Semantic Colors - Minimal Use */
-    --clean-success: #22c55e;          /* Green (minimal use) */
-    --clean-warning: #f59e0b;          /* Orange (minimal use) */
-    --clean-danger: #ef4444;           /* Red (minimal use) */
-    --clean-info: #000000;             /* Black for info */
-    
-    /* Gradients - Pure Monochrome */
-    --clean-gradient-primary: linear-gradient(135deg, #000000 0%, #262626 100%);
-    --clean-gradient-light: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
-    --clean-gradient-secondary: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%);
-    --clean-gradient-dark: linear-gradient(135deg, #262626 0%, #171717 100%);
-    --clean-gradient-accent: linear-gradient(135deg, #171717 0%, #000000 100%);
-    
-    /* Monochrome Shadows */
-    --clean-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --clean-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-    --clean-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-    --clean-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    
-    /* Border Radius - Clean & Modern */
-    --clean-radius-sm: 0.25rem;
-    --clean-radius-md: 0.5rem;
-    --clean-radius-lg: 0.75rem;
-    --clean-radius-xl: 1rem;
-    --clean-radius-2xl: 1.5rem;
-    
-    /* Transitions */
-    --clean-transition: all 0.15s ease-in-out;
-    --clean-transition-slow: all 0.3s ease-in-out;
-    
-    /* Typography Colors */
-    --clean-text-primary: #171717;     /* Primary text (almost black) */
-    --clean-text-secondary: #525252;   /* Secondary text */
-    --clean-text-muted: #737373;       /* Muted text */
-    --clean-text-light: #a3a3a3;       /* Light text */
-    
-    /* Border Colors */
-    --clean-border-light: #e5e5e5;     /* Light border */
-    --clean-border-medium: #d4d4d4;    /* Medium border */
-    --clean-border-dark: #a3a3a3;      /* Dark border */
-    --clean-border-primary: #000000;   /* Primary border (black) */
-}
-
-	
-
-/* ============================================
-   カード表示モード - コンパクト版（縦サイズを小さく）
-============================================ */
-.grant-view-card .grant-card-unified {
+/* ===============================================
+   🏦 MINNA BANK PROFESSIONAL CARD DESIGN
+   =============================================== */
+.grant-card-unified {
     position: relative;
-    width: 100%;
-    max-width: 100%;
-    min-height: 320px; /* 420px から 320px に縮小 */
-    background: var(--clean-white);
-    border: 2px solid var(--clean-gray-300);
-    border-radius: var(--clean-radius-xl);
+    background: var(--mb-gradient-card);
+    border: 2px solid var(--mb-gray-300);
+    border-radius: 16px;
     overflow: hidden;
-    transition: var(--clean-transition-slow);
-    cursor: default;
+    transition: var(--mb-transition-slow);
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 420px;
+    box-shadow: var(--mb-shadow-card);
+    cursor: pointer;
+    
+    /* 改善されたプロフェッショナル・ボーダー */
+    box-shadow: 
+        var(--mb-shadow-card),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    
+    /* より明確な境界線 */
+    outline: 1px solid var(--mb-gray-200);
+    outline-offset: -1px;
 }
 
-.grant-view-card .grant-card-unified:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: var(--clean-gray-500);
+.grant-card-unified:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--mb-shadow-hover);
+    border-color: var(--mb-black);
+    
+    /* より鮮明なホバーエフェクト */
+    background: var(--mb-white);
+    outline-color: var(--mb-gray-400);
+    
+    /* 強化されたボーダー効果 */
+    border-width: 3px;
 }
 
-/* ============================================
-   リスト表示モード
-============================================ */
-.grant-view-list .grant-card-unified {
-    position: relative;
-    width: 100%;
-    background: var(--clean-white);
-    border: 1px solid var(--clean-gray-200);
-    border-radius: var(--clean-radius-lg);
-    transition: var(--clean-transition);
-    cursor: default;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    min-height: 140px;
-    margin-bottom: 1rem;
+.grant-card-unified::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--mb-gradient-primary);
+    z-index: 1;
 }
 
-.grant-view-list .grant-card-unified:hover {
-    box-shadow: var(--clean-shadow-lg);
-    transform: translateX(4px);
-    border-color: var(--clean-gray-800);
-}
-
-.grant-view-list .grant-status-header {
-    width: 6px;
-    height: auto;
-    padding: 0;
-    writing-mode: vertical-rl;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--clean-gradient-primary);
-}
-
-.grant-view-list .grant-card-content {
-    flex: 1;
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: row;
-    gap: 1.5rem;
-}
-
-.grant-view-list .grant-main-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.grant-view-list .grant-title {
-    font-size: 1.125rem;
-    margin-bottom: 0.75rem;
-    -webkit-line-clamp: 2;
-}
-
-.grant-view-list .grant-ai-summary {
-    display: block;
-    max-height: 3.5rem;
-}
-
-.grant-view-list .grant-info-grid {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-    flex-wrap: wrap;
-}
-
-.grant-view-list .grant-info-item {
-    background: transparent;
-    padding: 0.5rem 0.75rem;
-    gap: 0.5rem;
-    border-radius: var(--clean-radius-sm);
-    background: var(--clean-gray-100);
-}
-
-.grant-view-list .grant-info-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    font-size: 0.875rem;
-}
-
-.grant-view-list .grant-card-footer {
-    padding: 1.25rem;
-    background: transparent;
-    border: none;
-    border-left: 1px solid var(--clean-gray-200);
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    min-width: 12rem;
-    justify-content: center;
-}
-
-/* ============================================
-   コンパクト表示モード
-============================================ */
-.grant-view-compact .grant-card-unified {
-    position: relative;
-    width: 100%;
-    background: var(--clean-white);
-    border: 1px solid var(--clean-gray-200);
-    border-radius: var(--clean-radius-md);
-    transition: var(--clean-transition);
-    cursor: default;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-}
-
-.grant-view-compact .grant-card-unified:hover {
-    background: var(--clean-gray-50);
-    box-shadow: var(--clean-shadow-md);
-    border-color: var(--clean-gray-800);
-}
-
-.grant-view-compact .grant-status-header {
-    display: none;
-}
-
-.grant-view-compact .grant-card-content {
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-}
-
-.grant-view-compact .grant-title {
-    font-size: 1rem;
-    margin: 0;
-    -webkit-line-clamp: 1;
-}
-
-.grant-view-compact .grant-ai-summary,
-.grant-view-compact .grant-info-grid,
-.grant-view-compact .grant-success-rate {
-    display: none;
-}
-
-.grant-view-compact .grant-card-footer {
-    padding: 0;
-    background: transparent;
-    border: none;
-    flex-direction: row;
-    gap: 0.75rem;
-    min-width: auto;
-}
-
-.grant-view-compact .grant-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-}
-
-/* ============================================
-   共通スタイル
-============================================ */
-
-/* ステータスヘッダー */
+/* ===============================================
+   🏦 MINNA BANK STATUS HEADER - プロフェッショナル
+   =============================================== */
 .grant-status-header {
     position: relative;
-    height: 3rem;
-    background: var(--clean-gradient-primary);
+    height: 56px;
+    background: var(--mb-gradient-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.5rem;
-    overflow: hidden;
+    padding: 0 var(--mb-space-lg);
+    margin: -1px -1px 0 -1px;
+    z-index: 2;
+    
+    /* バンキンググレード・テクスチャ */
+    background-size: 200% 200%;
+    animation: subtle-gradient 8s ease-in-out infinite;
+}
+
+@keyframes subtle-gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.grant-status-header.status--active {
+    background: linear-gradient(135deg, var(--mb-success) 0%, #059669 100%);
 }
 
 .grant-status-header.status--closed {
-    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    background: linear-gradient(135deg, var(--mb-gray-600) 0%, var(--mb-gray-700) 100%);
 }
 
 .grant-status-header.status--urgent {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, var(--mb-danger) 0%, #b91c1c 100%);
+    animation: urgent-pulse 2s ease-in-out infinite;
+}
+
+@keyframes urgent-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.9; }
 }
 
 .grant-status-badge {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--clean-white);
+    gap: var(--mb-space-sm);
+    color: var(--mb-white);
+    font-family: var(--mb-font-primary);
     font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .grant-deadline-indicator {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 1rem;
-    color: var(--clean-white);
+    gap: var(--mb-space-xs);
+    padding: var(--mb-space-xs) var(--mb-space-sm);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    color: var(--mb-white);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: var(--mb-font-mono);
 }
 
-/* カードコンテンツ */
+/* ===============================================
+   🏦 CARD CONTENT - プロフェッショナル・レイアウト
+   =============================================== */
 .grant-card-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 1.5rem;
-    overflow: hidden;
+    padding: var(--mb-space-lg);
+    position: relative;
+    z-index: 2;
 }
 
-/* タイトルセクション - 改良版 */
 .grant-title-section {
-    margin-bottom: 1rem;
-    padding-right: 6rem;
+    margin-bottom: var(--mb-space-lg);
     position: relative;
 }
 
 .grant-category-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 1rem;
-    background: var(--clean-gradient-primary);
-    color: var(--clean-white);
-    border-radius: var(--clean-radius-2xl);
+    gap: var(--mb-space-xs);
+    padding: var(--mb-space-sm) var(--mb-space-md);
+    background: var(--mb-black);
+    color: var(--mb-white);
+    border-radius: 6px;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.75rem;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 5;
-    max-width: calc(100% - 120px);
+    letter-spacing: 1px;
+    margin-bottom: var(--mb-space-md);
+    font-family: var(--mb-font-mono);
+    
+    /* プレミアム・エッジ */
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .grant-title {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    line-height: 1.4;
-    color: var(--clean-gray-900);
+    line-height: 1.3;
+    color: var(--mb-gray-900);
     margin: 0;
+    font-family: var(--mb-font-primary);
+    
+    /* テキスト・エリプシス */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: auto;
-    max-height: 3.5rem;
+    min-height: 2.6rem;
+    
+    /* プレミアム・テキスト・シャドウ */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .grant-title a {
     color: inherit;
     text-decoration: none;
-    transition: var(--clean-transition);
+    transition: var(--mb-transition);
 }
 
 .grant-title a:hover {
-    color: var(--clean-gray-800);
+    color: var(--mb-black);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* ============================================
-   トレーディングカード風 AI要約セクション - 全面表示版（縦サイズ拡大）
-============================================ */
+/* ===============================================
+   🏦 AI SUMMARY - バンキング・インテリジェンス
+   =============================================== */
 .grant-ai-summary {
     position: relative;
-    padding: 2rem;
-    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 30%, #ffffff 70%, #f0f9ff 100%);
-    border: 4px solid var(--clean-gray-900);
-    border-radius: var(--clean-radius-2xl);
-    margin-bottom: 1.5rem; /* 2rem から 1.5rem に縮小 */
-    min-height: 180px; /* 160px から 180px に拡大 */
-    max-height: 240px; /* 200px から 240px に拡大 */
+    background: var(--mb-gradient-subtle);
+    border: 1px solid var(--mb-gray-200);
+    border-radius: 12px;
+    padding: var(--mb-space-lg);
+    margin-bottom: var(--mb-space-lg);
+    min-height: 140px;
     overflow: hidden;
-    transition: var(--clean-transition-slow);
+    transition: var(--mb-transition-slow);
+    
+    /* プロフェッショナル・ボーダー */
     box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.15),
-        inset 0 2px 0 rgba(255, 255, 255, 0.9),
-        0 0 0 2px rgba(0, 0, 0, 0.08),
-        inset 0 -2px 8px rgba(0, 0, 0, 0.05);
-    cursor: default;
-    z-index: 5;
-    flex: 1; /* 利用可能なスペースを最大限使用 */
+        var(--mb-shadow-card),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* トレーディングカード風ホバーエフェクト - スクロール機能付き */
 .grant-ai-summary:hover {
-    transform: translateY(-8px) scale(1.03) rotateX(3deg);
-    max-height: 280px; /* 250px から 280px に拡大 */
-    overflow-y: auto;
-    box-shadow: 
-        0 20px 45px rgba(0, 0, 0, 0.25),
-        0 8px 20px rgba(0, 0, 0, 0.15),
-        inset 0 3px 0 rgba(255, 255, 255, 0.95),
-        0 0 0 3px rgba(0, 0, 0, 0.1);
-    border-color: var(--clean-gray-700);
-    background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 25%, #ffffff 50%, #f8fafc 75%, #ffffff 100%);
-    z-index: 10;
+    background: var(--mb-white);
+    border-color: var(--mb-gray-400);
+    box-shadow: var(--mb-shadow-hover);
+    transform: translateY(-2px);
 }
 
-/* 装飾的な境界線 - トレーディングカード風 */
-.grant-ai-summary::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    right: 6px;
-    bottom: 6px;
-    border: 2px solid rgba(0, 0, 0, 0.15);
-    border-radius: calc(var(--clean-radius-2xl) - 6px);
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* 装飾的なコーナーライン */
-.grant-ai-summary::after {
-    content: '';
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 20px;
-    height: 20px;
-    border-top: 3px solid var(--clean-gray-800);
-    border-right: 3px solid var(--clean-gray-800);
-    border-radius: 0 8px 0 0;
-    pointer-events: none;
-    z-index: 2;
-    opacity: 0.6;
-}
-
-/* トレーディングカード風ラベル - 改良版 */
 .grant-ai-summary-label {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    color: var(--clean-white);
-    background: linear-gradient(135deg, #000000 0%, #1f2937 50%, #374151 100%);
-    font-size: 0.8rem;
-    font-weight: 900;
-    margin: -1.8rem -1.8rem 1.25rem -1.8rem;
-    padding: 0.9rem 1.8rem;
+    gap: var(--mb-space-sm);
+    color: var(--mb-gray-700);
+    font-size: 0.75rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    position: relative;
-    border-bottom: 3px solid rgba(0, 0, 0, 0.15);
-    box-shadow: 
-        inset 0 -2px 0 rgba(255, 255, 255, 0.3),
-        0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 3;
-    border-radius: var(--clean-radius-2xl) var(--clean-radius-2xl) 0 0;
-}
-
-/* アイコン：白黒のブレインアイコン */
-.grant-ai-summary-label::before {
-    content: '🧠';
-    font-size: 1.2rem;
-    animation: pulse-brain 3s ease-in-out infinite;
-    filter: grayscale(1) brightness(0) invert(1);
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
-}
-
-@keyframes pulse-brain {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg); 
-        opacity: 1;
-    }
-    33% { 
-        transform: scale(1.1) rotate(-2deg); 
-        opacity: 0.8;
-    }
-    66% { 
-        transform: scale(1.05) rotate(2deg); 
-        opacity: 0.9;
+    letter-spacing: 1.5px;
+    margin-bottom: var(--mb-space-md);
+    font-family: var(--mb-font-mono);
+    
+    /* アイコン：プロフェッショナル・インジケーター */
+    &::before {
+        content: '◆';
+        color: var(--mb-black);
+        font-size: 0.75rem;
+        font-weight: 900;
     }
 }
 
-/* スクロール可能なAI要約テキスト - 全面表示版 */
 .grant-ai-summary-text {
-    color: var(--clean-gray-900);
-    font-size: 1.05rem; /* 1rem から 1.05rem に拡大 */
-    line-height: 1.7;
+    color: var(--mb-gray-800);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 400;
     margin: 0;
-    font-weight: 600;
-    max-height: 140px; /* 100px から 140px に拡大 */
-    overflow-y: hidden;
-    padding-right: 0.75rem;
-    position: relative;
-    z-index: 2;
-    transition: var(--clean-transition);
+    font-family: var(--mb-font-primary);
+    
+    /* テキスト制限 */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* ホバー時にスクロール可能に */
-.grant-ai-summary:hover .grant-ai-summary-text {
-    max-height: 220px; /* 180px から 220px に拡大 */
-    overflow-y: auto;
-    padding-right: 0.5rem;
-}
-
-/* カスタムスクロールバー - トレーディングカード風 */
-.grant-ai-summary-text::-webkit-scrollbar {
-    width: 6px;
-}
-
-.grant-ai-summary-text::-webkit-scrollbar-track {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-    border-radius: 3px;
-    margin: 4px 0;
-}
-
-.grant-ai-summary-text::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
-    border-radius: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.grant-ai-summary-text::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-}
-
-/* ============================================
-   トレーディングカード風情報グリッド - 助成額と地域のみ
-============================================ */
+/* ===============================================
+   🏦 INFO GRID - プロフェッショナル・データ表示
+   =============================================== */
 .grant-info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-    padding: 0.5rem 0;
-    position: relative;
+    gap: var(--mb-space-md);
+    margin-bottom: var(--mb-space-lg);
 }
 
-/* グリッドの装飾線 */
-.grant-info-grid::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent 0%, var(--clean-gray-400) 20%, var(--clean-gray-800) 50%, var(--clean-gray-400) 80%, transparent 100%);
-    border-radius: 1px;
-}
-
-/* トレーディングカード風情報アイテム - 改良版 */
 .grant-info-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem 1.25rem;
-    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 30%, #ffffff 70%, #f5f8fa 100%);
-    border: 3px solid var(--clean-gray-900);
-    border-radius: var(--clean-radius-xl);
-    transition: var(--clean-transition-slow);
-    position: relative;
-    overflow: hidden;
-    min-height: 100px;
+    padding: var(--mb-space-md);
+    background: var(--mb-white);
+    border: 1px solid var(--mb-gray-200);
+    border-radius: 8px;
     text-align: center;
+    min-height: 80px;
+    transition: var(--mb-transition);
+    
+    /* プロフェッショナル・シャドウ */
     box-shadow: 
-        0 6px 18px rgba(0, 0, 0, 0.12),
-        inset 0 2px 0 rgba(255, 255, 255, 0.9),
-        0 0 0 1px rgba(0, 0, 0, 0.05);
-    cursor: default;
+        var(--mb-shadow-card),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* トレーディングカード風ホバーエフェクト - 改良版 */
 .grant-info-item:hover {
-    transform: translateY(-6px) scale(1.05) rotateY(2deg);
-    box-shadow: 
-        0 12px 32px rgba(0, 0, 0, 0.2),
-        0 6px 16px rgba(0, 0, 0, 0.12),
-        inset 0 3px 0 rgba(255, 255, 255, 0.95),
-        0 0 0 2px rgba(0, 0, 0, 0.08);
-    border-color: var(--clean-gray-600);
-    background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 25%, #ffffff 50%, #f8fafc 75%, #ffffff 100%);
-    z-index: 3;
+    background: var(--mb-gray-50);
+    border-color: var(--mb-gray-400);
+    transform: translateY(-1px);
+    box-shadow: var(--mb-shadow-hover);
 }
 
-/* 装飾線 - トレーディングカード風 */
-.grant-info-item::after {
-    content: '';
-    position: absolute;
-    bottom: 8px;
-    left: 15%;
-    right: 15%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 20%, var(--clean-gray-900) 50%, rgba(0, 0, 0, 0.1) 80%, transparent 100%);
-    border-radius: 1.5px;
-}
-
-/* コーナーの装飾 */
-.grant-info-item::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 16px;
-    height: 16px;
-    border-top: 2px solid rgba(0, 0, 0, 0.2);
-    border-left: 2px solid rgba(0, 0, 0, 0.2);
-    border-radius: 4px 0 0 0;
-    pointer-events: none;
-}
-
-.grant-info-content {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-/* トレーディングカード風ラベル - 改良版 */
 .grant-info-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: var(--clean-gray-800);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--mb-gray-600);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.75rem;
-    position: relative;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
-    padding: 0.375rem 0.75rem;
-    border-radius: var(--clean-radius-2xl);
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    letter-spacing: 1px;
+    margin-bottom: var(--mb-space-xs);
+    font-family: var(--mb-font-mono);
 }
 
-/* アイコン追加 - 白黒モノクローム */
 .grant-info-label[data-type="amount"]::before {
-    content: '●';
-    font-size: 0.8rem;
-    color: var(--clean-gray-800);
-    margin-right: 0.5rem;
-    display: inline-block;
+    content: '¥ ';
+    color: var(--mb-black);
+    font-weight: 900;
 }
 
 .grant-info-label[data-type="region"]::before {
-    content: '▲';
-    font-size: 0.8rem;
-    color: var(--clean-gray-800);
-    margin-right: 0.5rem;
-    display: inline-block;
+    content: '📍 ';
+    filter: grayscale(1);
 }
 
-/* トレーディングカード風値表示 - 改良版 */
 .grant-info-value {
-    display: block;
     font-size: 1rem;
-    font-weight: 900;
-    color: var(--clean-gray-900);
-    line-height: 1.3;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--clean-radius-md);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+    font-weight: 700;
+    color: var(--mb-gray-900);
+    line-height: 1.2;
+    font-family: var(--mb-font-primary);
+    word-break: break-word;
 }
 
-/* アクションフッター - 改良版 */
+/* ===============================================
+   🏦 CARD FOOTER - プロフェッショナル・アクション
+   =============================================== */
 .grant-card-footer {
-    padding: 1.25rem;
-    background: var(--clean-white);
-    border-top: 2px solid var(--clean-gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    position: relative;
-    z-index: 50;
+    padding: var(--mb-space-lg);
+    background: var(--mb-gray-50);
+    border-top: 1px solid var(--mb-gray-200);
     margin-top: auto;
-    pointer-events: auto;
+    z-index: 3;
+    position: relative;
 }
 
 .grant-actions {
     display: flex;
-    gap: 0.5rem;
-    flex: 1;
-    flex-wrap: wrap;
+    gap: var(--mb-space-sm);
+    width: 100%;
 }
 
 .grant-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    padding: 0.75rem 1.25rem;
-    min-height: 45px;
-    border: 2px solid transparent;
-    border-radius: 2rem;
+    gap: var(--mb-space-xs);
+    padding: var(--mb-space-sm) var(--mb-space-md);
+    border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 600;
+    font-family: var(--mb-font-primary);
     cursor: pointer;
-    transition: var(--clean-transition-slow);
+    transition: var(--mb-transition);
     text-decoration: none;
     white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-    z-index: 100;
+    min-height: 44px;
     flex: 1;
-    min-width: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    pointer-events: auto;
+    
+    /* バンキング・グレード・ボーダー */
+    border: 1px solid transparent;
+    box-shadow: var(--mb-shadow-card);
 }
 
-/* 詳細ボタン - 改良版 */
+/* プライマリボタン - みんなの銀行スタイル */
 .grant-btn--primary {
-    background: var(--clean-gradient-primary);
-    color: var(--clean-white);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid var(--clean-gray-800);
+    background: var(--mb-gradient-primary);
+    color: var(--mb-white);
+    border-color: var(--mb-black);
 }
 
 .grant-btn--primary:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    background: var(--clean-gradient-dark);
-    border-color: var(--clean-gray-900);
+    background: var(--mb-black);
+    transform: translateY(-1px);
+    box-shadow: var(--mb-shadow-hover);
 }
 
+/* セカンダリボタン */
 .grant-btn--secondary {
-    background: var(--clean-white);
-    color: var(--clean-gray-900);
-    border: 2px solid var(--clean-gray-400);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--mb-white);
+    color: var(--mb-gray-900);
+    border-color: var(--mb-gray-300);
 }
 
 .grant-btn--secondary:hover {
-    background: var(--clean-gradient-primary);
-    color: var(--clean-white);
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border-color: var(--clean-gray-800);
+    background: var(--mb-gray-100);
+    border-color: var(--mb-gray-500);
+    transform: translateY(-1px);
 }
 
-/* AI質問ボタン - 改良版 */
+/* AIボタン - インテリジェント・スタイル */
 .grant-btn--ai {
-    background: var(--clean-gradient-accent);
-    color: var(--clean-white);
-    border: 2px solid var(--clean-gray-800);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    background: var(--mb-gray-900);
+    color: var(--mb-white);
+    border-color: var(--mb-gray-700);
+    position: relative;
+}
+
+.grant-btn--ai::before {
+    content: '◆';
+    font-size: 0.75rem;
+    margin-right: var(--mb-space-xs);
 }
 
 .grant-btn--ai:hover {
-    background: var(--clean-gradient-primary);
-    color: var(--clean-white);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    border-color: var(--clean-gray-900);
-}
-
-.grant-btn--ai:focus {
-    outline: 2px solid var(--clean-gray-800);
-    outline-offset: 2px;
+    background: var(--mb-black);
+    transform: translateY(-1px);
+    box-shadow: var(--mb-shadow-hover);
 }
 
 /* AI Checklist Button styles removed per user request */
@@ -1134,153 +842,185 @@ emoji,
     50% { opacity: 0.6; }
 }
 
-/* AI申請難易度 - 位置調整 */
+/* みんなの銀行 AI申請難易度インジケーター */
 .grant-ai-difficulty {
     position: absolute;
     bottom: 5.5rem;
     left: 1rem;
-    background: #fff;
-    border: 2px solid #000;
-    padding: 0.6rem 0.9rem;
-    border-radius: 1rem;
+    background: var(--mb-gradient-subtle);
+    border: 1px solid var(--mb-gray-300);
+    padding: 0.75rem 1rem;
+    border-radius: var(--mb-radius-lg);
     font-size: 0.75rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     z-index: 10;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    min-width: 90px;
+    transition: var(--mb-transition-smooth);
+    box-shadow: var(--mb-shadow-sm);
+    min-width: 100px;
+    font-family: var(--mb-font-primary);
+    backdrop-filter: blur(8px);
 }
 
 .grant-ai-difficulty:hover {
-    background: #000;
-    color: #fff;
+    background: var(--mb-gradient-primary);
+    color: var(--mb-white);
+    transform: translateY(-1px);
+    box-shadow: var(--mb-shadow-md);
 }
 
 .difficulty-stars {
     font-size: 0.875rem;
     letter-spacing: 0.1em;
     font-weight: 900;
+    font-family: var(--mb-font-mono);
 }
 
 .difficulty-label {
     font-weight: 600;
+    font-family: var(--mb-font-primary);
 }
 
+/* みんなの銀行 難易度レベル - モノクロ階層 */
 .grant-ai-difficulty[data-level="very-easy"] {
-    border-color: #10b981;
+    border-color: var(--mb-gray-400);
+    background: linear-gradient(135deg, var(--mb-white), var(--mb-gray-50));
 }
 
 .grant-ai-difficulty[data-level="easy"] {
-    border-color: #6ee7b7;
+    border-color: var(--mb-gray-500);
+    background: linear-gradient(135deg, var(--mb-gray-50), var(--mb-gray-100));
 }
 
 .grant-ai-difficulty[data-level="normal"] {
-    border-color: #000;
+    border-color: var(--mb-gray-700);
+    background: linear-gradient(135deg, var(--mb-gray-100), var(--mb-gray-200));
 }
 
 .grant-ai-difficulty[data-level="hard"] {
-    border-color: #525252;
+    border-color: var(--mb-gray-800);
+    background: linear-gradient(135deg, var(--mb-gray-200), var(--mb-gray-300));
 }
 
 .grant-ai-difficulty[data-level="very-hard"] {
-    border-color: #262626;
+    border-color: var(--mb-black);
+    background: linear-gradient(135deg, var(--mb-gray-300), var(--mb-gray-400));
 }
 
-/* AI期限アラート - 位置調整 */
+/* みんなの銀行 AI期限アラートシステム */
 .grant-urgency-alert {
     position: absolute;
     top: 4.5rem;
     left: 1rem;
-    color: #fff;
-    padding: 0.6rem 1rem;
-    border-radius: 2rem;
+    color: var(--mb-white);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--mb-radius-full);
     font-size: 0.8rem;
     font-weight: 700;
+    font-family: var(--mb-font-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     z-index: 12;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    min-width: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--mb-shadow-lg);
+    min-width: 110px;
     justify-content: center;
+    backdrop-filter: blur(10px);
+    background: var(--mb-gradient-primary);
 }
 
-/* スマホ対応: アラートを下に配置 */
+/* みんなの銀行 レスポンシブアラート */
 @media (max-width: 640px) {
     .grant-urgency-alert {
         position: static;
         display: inline-flex;
         margin-bottom: 0.5rem;
         font-size: 0.7rem;
-        padding: 0.4rem 0.7rem;
+        padding: 0.5rem 0.875rem;
+        box-shadow: var(--mb-shadow-md);
+        animation: mb-urgency-pulse 2s ease-in-out infinite;
     }
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    animation: urgency-pulse 2s ease-in-out infinite;
 }
 
-@keyframes urgency-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+/* みんなの銀行 アニメーション - バンキング品質 */
+@keyframes mb-urgency-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: var(--mb-shadow-md);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: var(--mb-shadow-lg);
+    }
 }
 
 .grant-urgency-alert[data-level="critical"] {
-    animation: urgency-shake 0.5s ease-in-out infinite;
+    animation: mb-urgency-critical 1s ease-in-out infinite;
+    background: linear-gradient(135deg, var(--mb-gray-800), var(--mb-black));
 }
 
-@keyframes urgency-shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-2px); }
-    75% { transform: translateX(2px); }
+@keyframes mb-urgency-critical {
+    0%, 100% { 
+        transform: translateX(0) scale(1);
+        filter: brightness(1);
+    }
+    25% { 
+        transform: translateX(-1px) scale(1.01);
+        filter: brightness(1.1);
+    }
+    75% { 
+        transform: translateX(1px) scale(1.01);
+        filter: brightness(1.1);
+    }
 }
 
-/* ホバー時の詳細表示 - 改良版（ボタンクリック問題修正） */
+/* みんなの銀行 ホバー詳細システム - バンキンググレード */
 .grant-hover-details {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(25px);
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px) saturate(150%);
     padding: 0;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.35s var(--mb-ease-smooth);
     overflow: hidden;
     z-index: 5;
-    border-radius: var(--clean-radius-xl);
+    border-radius: var(--mb-radius-xl);
     display: flex;
     flex-direction: column;
     pointer-events: none;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    border: 3px solid var(--clean-gray-900);
+    box-shadow: var(--mb-shadow-overlay);
+    border: 1px solid var(--mb-gray-300);
 }
 
+/* みんなの銀行 ホバーインタラクション */
 .grant-card-unified:hover .grant-hover-details {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: scale(1.02);
+    transform: scale(1.005) translateY(-2px);
 }
 
-/* フッターボタンがクリック可能になるよう、ホバー時にz-indexを高くする */
+/* みんなの銀行 ボタンアクセシビリティ */
 .grant-card-unified:hover .grant-card-footer {
     position: relative;
     z-index: 20;
     pointer-events: auto;
 }
 
-/* ボタンを確実にクリック可能にする */
 .grant-card-footer .grant-btn {
     position: relative;
     z-index: 25;
     pointer-events: auto;
 }
 
-/* ホバー詳細が表示されている時でもボタンがクリック可能 */
+/* インタラクティブ要素のアクセシビリティ保証 */
 .grant-hover-details.show-details ~ .grant-card-footer,
 .grant-card-unified:hover .grant-card-footer {
     z-index: 30;
@@ -1292,7 +1032,7 @@ emoji,
     pointer-events: auto;
 }
 
-/* スクロール可能なコンテンツエリア - 改良版 */
+/* みんなの銀行 スクロールアリア */
 .grant-hover-scrollable {
     flex: 1;
     overflow-y: auto;
@@ -1301,25 +1041,28 @@ emoji,
     height: 100%;
     scroll-behavior: smooth;
     position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mb-gray-400) var(--mb-gray-100);
 }
 
-/* スクロールバーのカスタマイズ */
+/* みんなの銀行 カスタムスクロールバー */
 .grant-hover-scrollable::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .grant-hover-scrollable::-webkit-scrollbar-track {
-    background: var(--clean-gray-200);
-    border-radius: 3px;
+    background: var(--mb-gray-100);
+    border-radius: var(--mb-radius-sm);
 }
 
 .grant-hover-scrollable::-webkit-scrollbar-thumb {
-    background: var(--clean-gray-800);
-    border-radius: 3px;
+    background: var(--mb-gray-400);
+    border-radius: var(--mb-radius-sm);
+    transition: var(--mb-transition);
 }
 
 .grant-hover-scrollable::-webkit-scrollbar-thumb:hover {
-    background: var(--clean-gray-900);
+    background: var(--mb-gray-600);
 }
 
 .grant-hover-details::before {
@@ -1328,150 +1071,186 @@ emoji,
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: var(--clean-gradient-primary);
+    height: 2px;
+    background: var(--mb-gradient-primary);
     z-index: 10;
+    border-radius: var(--mb-radius-xl) var(--mb-radius-xl) 0 0;
 }
 
+/* みんなの銀行 ホバーヘッダー */
 .grant-hover-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
     position: sticky;
     top: 0;
-    background: rgba(248, 250, 252, 0.98);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
     z-index: 10;
     padding-bottom: 1rem;
+    border-bottom: 1px solid var(--mb-gray-200);
 }
 
 .grant-hover-title {
-    font-size: 1.375rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--clean-gray-900);
+    font-family: var(--mb-font-primary);
+    color: var(--mb-black);
     line-height: 1.3;
     flex: 1;
     padding-right: 1rem;
+    letter-spacing: -0.02em;
 }
 
 .grant-hover-close {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--clean-gray-200);
+    background: var(--mb-gray-100);
     border-radius: 50%;
-    color: var(--clean-gray-600);
+    color: var(--mb-gray-600);
     cursor: pointer;
     flex-shrink: 0;
-    transition: var(--clean-transition);
-    border: none;
+    transition: var(--mb-transition-smooth);
+    border: 1px solid var(--mb-gray-200);
     pointer-events: auto;
+    font-size: 0.875rem;
 }
 
 .grant-hover-close:hover {
-    background: var(--clean-gray-800);
-    color: var(--clean-white);
-    transform: rotate(90deg);
+    background: var(--mb-black);
+    color: var(--mb-white);
+    transform: rotate(90deg) scale(1.05);
+    border-color: var(--mb-black);
 }
 
-/* クイック情報バー */
+/* みんなの銀行 クイックスタッツバー */
 .grant-quick-stats {
     display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--clean-white);
-    border: 1px solid var(--clean-gray-200);
-    border-radius: var(--clean-radius-lg);
+    gap: 0;
+    padding: 0;
+    background: var(--mb-gradient-subtle);
+    border: 1px solid var(--mb-gray-200);
+    border-radius: var(--mb-radius-lg);
     margin-bottom: 1.25rem;
+    overflow: hidden;
 }
 
 .grant-stat-item {
     flex: 1;
     text-align: center;
-    padding: 0.75rem;
-    border-right: 1px solid var(--clean-gray-200);
+    padding: 1rem 0.75rem;
+    border-right: 1px solid var(--mb-gray-200);
     position: relative;
+    transition: var(--mb-transition);
 }
 
 .grant-stat-item:last-child {
     border-right: none;
 }
 
+.grant-stat-item:hover {
+    background: var(--mb-white);
+    transform: translateY(-1px);
+}
+
 .grant-stat-value {
     display: block;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
-    color: var(--clean-gray-900);
-    margin-bottom: 0.375rem;
+    font-family: var(--mb-font-mono);
+    color: var(--mb-black);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
 }
 
 .grant-stat-label {
     display: block;
-    font-size: 0.6875rem;
-    color: var(--clean-gray-500);
+    font-size: 0.65rem;
+    color: var(--mb-gray-600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 600;
+    font-family: var(--mb-font-primary);
 }
 
+/* みんなの銀行 詳細セクション */
 .grant-detail-sections {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
     flex: 1;
 }
 
 .grant-detail-section {
-    padding: 1rem;
-    background: var(--clean-white);
-    border: 1px solid var(--clean-gray-200);
-    border-radius: var(--clean-radius-md);
-    transition: var(--clean-transition);
+    padding: 1.25rem;
+    background: var(--mb-white);
+    border: 1px solid var(--mb-gray-200);
+    border-radius: var(--mb-radius-md);
+    transition: var(--mb-transition-smooth);
+    position: relative;
 }
 
 .grant-detail-section:hover {
-    box-shadow: var(--clean-shadow-md);
+    box-shadow: var(--mb-shadow-md);
     transform: translateY(-1px);
-    border-color: var(--clean-gray-800);
+    border-color: var(--mb-gray-400);
+    background: var(--mb-gradient-subtle);
 }
 
 .grant-detail-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    color: var(--clean-gray-800);
+    font-family: var(--mb-font-primary);
+    color: var(--mb-gray-800);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
 }
 
 .grant-detail-value {
     font-size: 0.875rem;
-    color: var(--clean-gray-700);
-    line-height: 1.5;
+    font-family: var(--mb-font-primary);
+    color: var(--mb-gray-700);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
 }
 
-/* ステータスインジケーター */
+/* みんなの銀行 ステータスインジケーター */
 .grant-status-indicator {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    width: 0.75rem;
-    height: 0.75rem;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: var(--clean-success);
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    background: var(--mb-gray-700);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    transition: var(--mb-transition);
+}
+
+.grant-status-indicator.open {
+    background: var(--mb-black);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+    animation: mb-status-pulse 2s ease-in-out infinite;
 }
 
 .grant-status-indicator.closed {
-    background: var(--clean-gray-400);
-    box-shadow: none;
+    background: var(--mb-gray-400);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes mb-status-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
 }
 
 /* 注目バッジ */
@@ -2748,6 +2527,7 @@ document.head.appendChild(grantCardStyles);
 <!-- クリーンカード本体 -->
 <article class="grant-card-unified <?php echo esc_attr($view_class); ?>" 
          data-post-id="<?php echo esc_attr($post_id); ?>"
+         data-grant-id="<?php echo esc_attr($post_id); ?>"
          data-priority="<?php echo esc_attr($priority_order); ?>"
          role="article"
          aria-label="助成金情報カード">
@@ -3398,5 +3178,726 @@ function showToast(message, type = 'success') {
         height: 1.125rem;
     }
 }
+
+/* ===============================================
+   みんなの銀行 AIモーダル・トーストシステム
+   =============================================== */
+
+/* AIモーダル */
+.ai-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--mb-transition-smooth);
+}
+
+.ai-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ai-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.ai-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: var(--mb-white);
+    border-radius: var(--mb-radius-xl);
+    box-shadow: var(--mb-shadow-overlay);
+    max-width: 600px;
+    width: 90vw;
+    max-height: 80vh;
+    overflow: hidden;
+    border: 2px solid var(--mb-gray-200);
+    transition: var(--mb-transition-smooth);
+}
+
+.ai-modal.show .ai-modal-content {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.ai-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--mb-space-lg);
+    border-bottom: 2px solid var(--mb-gray-200);
+    background: var(--mb-gradient-subtle);
+}
+
+.ai-modal-header h3 {
+    margin: 0;
+    font-family: var(--mb-font-primary);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--mb-black);
+}
+
+.ai-modal-close {
+    background: var(--mb-gray-100);
+    border: 1px solid var(--mb-gray-300);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--mb-transition);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--mb-gray-600);
+}
+
+.ai-modal-close:hover {
+    background: var(--mb-black);
+    color: var(--mb-white);
+    border-color: var(--mb-black);
+    transform: rotate(90deg);
+}
+
+.ai-modal-body {
+    padding: var(--mb-space-lg);
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* AI ローディング */
+.ai-loading {
+    text-align: center;
+    padding: var(--mb-space-xl);
+}
+
+.ai-loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--mb-gray-200);
+    border-top: 2px solid var(--mb-black);
+    border-radius: 50%;
+    animation: mb-spin 1s linear infinite;
+    margin: 0 auto var(--mb-space-md);
+}
+
+@keyframes mb-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* AI分析結果 */
+.ai-analysis-result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mb-space-lg);
+}
+
+.ai-summary-section,
+.ai-checklist-section,
+.ai-tips-section {
+    padding: var(--mb-space-lg);
+    background: var(--mb-gradient-subtle);
+    border-radius: var(--mb-radius-lg);
+    border: 1px solid var(--mb-gray-200);
+}
+
+.ai-summary-section h4,
+.ai-checklist-section h4,
+.ai-tips-section h4 {
+    margin: 0 0 var(--mb-space-md) 0;
+    font-family: var(--mb-font-primary);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--mb-black);
+}
+
+.ai-match-score {
+    font-size: 2rem;
+    font-weight: 900;
+    font-family: var(--mb-font-mono);
+    color: var(--mb-black);
+    text-align: center;
+    margin: var(--mb-space-md) 0;
+    padding: var(--mb-space-md);
+    background: var(--mb-white);
+    border-radius: var(--mb-radius-md);
+    border: 2px solid var(--mb-gray-300);
+}
+
+/* AIチェックリスト */
+.ai-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mb-space-sm);
+}
+
+.ai-checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mb-space-sm);
+    padding: var(--mb-space-md);
+    background: var(--mb-white);
+    border-radius: var(--mb-radius-md);
+    border: 1px solid var(--mb-gray-200);
+    cursor: pointer;
+    transition: var(--mb-transition);
+}
+
+.ai-checklist-item:hover {
+    background: var(--mb-gray-50);
+    border-color: var(--mb-gray-300);
+}
+
+.ai-check-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--mb-gray-400);
+    border-radius: var(--mb-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--mb-transition);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.ai-checklist-item input:checked + .ai-check-mark {
+    background: var(--mb-black);
+    border-color: var(--mb-black);
+    color: var(--mb-white);
+}
+
+.ai-checklist-item input:checked + .ai-check-mark::after {
+    content: '✓';
+}
+
+/* AIコツ */
+.ai-tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ai-tips-list li {
+    padding: var(--mb-space-sm);
+    margin-bottom: var(--mb-space-sm);
+    background: var(--mb-white);
+    border-radius: var(--mb-radius-md);
+    border: 1px solid var(--mb-gray-200);
+    position: relative;
+    padding-left: 2.5rem;
+}
+
+.ai-tips-list li::before {
+    content: '💡';
+    position: absolute;
+    left: var(--mb-space-sm);
+    top: var(--mb-space-sm);
+}
+
+/* AIエラー */
+.ai-error {
+    text-align: center;
+    padding: var(--mb-space-xl);
+}
+
+.ai-error-icon {
+    font-size: 3rem;
+    margin-bottom: var(--mb-space-md);
+}
+
+/* みんなの銀行トースト */
+.minna-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--mb-gradient-primary);
+    color: var(--mb-white);
+    padding: var(--mb-space-md) var(--mb-space-lg);
+    border-radius: var(--mb-radius-full);
+    box-shadow: var(--mb-shadow-lg);
+    z-index: 10001;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: var(--mb-transition-smooth);
+    font-family: var(--mb-font-primary);
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.minna-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.minna-toast--success {
+    background: linear-gradient(135deg, var(--mb-success), #16a34a);
+}
+
+.minna-toast--warning {
+    background: linear-gradient(135deg, var(--mb-warning), #f59e0b);
+    color: var(--mb-black);
+}
+
+.minna-toast--error {
+    background: linear-gradient(135deg, var(--mb-danger), #dc2626);
+}
+
+.minna-toast-content {
+    display: flex;
+    align-items: center;
+    gap: var(--mb-space-sm);
+}
+
+.minna-toast-icon {
+    font-size: 1.125rem;
+}
+
+.minna-toast-message {
+    font-size: 0.875rem;
+}
+
+/* AIモーダル・トーストのレスポンシブ調整 */
+@media (max-width: 768px) {
+    .ai-modal-content {
+        width: 95vw;
+        max-height: 90vh;
+    }
+    
+    .ai-modal-header,
+    .ai-modal-body {
+        padding: var(--mb-space-md);
+    }
+    
+    .ai-summary-section,
+    .ai-checklist-section,
+    .ai-tips-section {
+        padding: var(--mb-space-md);
+    }
+    
+    .minna-toast {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+}
+
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ==============================================
+    // みんなの銀行 カードインタラクション機能
+    // ==============================================
+    
+    // 詳細ボタンのクリック処理
+    document.querySelectorAll('.grant-details-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const url = this.getAttribute('href');
+            if (url && url !== '#') {
+                // みんなの銀行スタイルのロード表示
+                showMinnaToast('詳細を読み込み中...', 'info');
+                
+                // 新しいタブで開く
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        });
+    });
+    
+    // AI機能ボタンのクリック処理
+    document.querySelectorAll('.grant-ai-btn, .ai-analysis-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const grantId = this.closest('.grant-card-unified').dataset.grantId || 
+                           this.dataset.grantId;
+            
+            if (grantId) {
+                showAIAnalysisModal(grantId);
+            } else {
+                showMinnaToast('AI分析データが見つかりません', 'warning');
+            }
+        });
+    });
+    
+    // カードクリック処理（詳細ページへのナビゲーション）
+    document.querySelectorAll('.grant-card-unified').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // ボタンクリック時は無視
+            if (e.target.closest('.grant-btn, button, a')) {
+                return;
+            }
+            
+            const detailsLink = card.querySelector('.grant-details-btn');
+            if (detailsLink && detailsLink.href) {
+                window.location.href = detailsLink.href;
+            }
+        });
+    });
+    
+    // ==============================================
+    // AI分析モーダル表示機能
+    // ==============================================
+    
+    function showAIAnalysisModal(grantId) {
+        // 既存のモーダルを閉じる
+        const existingModal = document.querySelector('.ai-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // みんなの銀行スタイルのモーダルを作成
+        const modal = document.createElement('div');
+        modal.className = 'ai-modal';
+        modal.innerHTML = `
+            <div class="ai-modal-backdrop" onclick="closeAIModal()"></div>
+            <div class="ai-modal-content">
+                <div class="ai-modal-header">
+                    <h3>🏦 みんなの銀行 AI分析</h3>
+                    <button class="ai-modal-close" onclick="closeAIModal()">×</button>
+                </div>
+                <div class="ai-modal-body">
+                    <div class="ai-loading">
+                        <div class="ai-loading-spinner"></div>
+                        <p>AI分析を実行中...</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // フェードイン
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+        
+        // AI分析データを取得
+        fetchAIAnalysis(grantId, modal);
+    }
+    
+    // ==============================================
+    // AI分析データ取得
+    // ==============================================
+    
+    function fetchAIAnalysis(grantId, modal) {
+        // WordPress AJAX エンドポイント
+        const ajaxUrl = window.ajaxurl || '/wp-admin/admin-ajax.php';
+        
+        fetch(ajaxUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'action': 'get_grant_ai_analysis',
+                'grant_id': grantId,
+                'nonce': window.grant_nonce || ''
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                displayAIAnalysis(modal, data.data);
+            } else {
+                displayAIError(modal, data.message || 'AI分析の取得に失敗しました');
+            }
+        })
+        .catch(error => {
+            console.error('AI Analysis Error:', error);
+            displayAIError(modal, 'ネットワークエラーが発生しました');
+        });
+    }
+    
+    function displayAIAnalysis(modal, data) {
+        const modalBody = modal.querySelector('.ai-modal-body');
+        modalBody.innerHTML = `
+            <div class="ai-analysis-result">
+                <div class="ai-summary-section">
+                    <h4>📊 適合度分析</h4>
+                    <div class="ai-match-score">${data.match_score || '85'}%</div>
+                    <p>${data.summary || 'この助成金はあなたのプロジェクトに適合している可能性が高いです。'}</p>
+                </div>
+                
+                <div class="ai-checklist-section">
+                    <h4>✅ 申請準備チェックリスト</h4>
+                    <div class="ai-checklist">
+                        ${(data.checklist || getDefaultChecklist()).map(item => `
+                            <label class="ai-checklist-item">
+                                <input type="checkbox" />
+                                <div class="ai-check-mark"></div>
+                                <div class="ai-check-text">${item}</div>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="ai-tips-section">
+                    <h4>💡 申請のコツ</h4>
+                    <ul class="ai-tips-list">
+                        ${(data.tips || getDefaultTips()).map(tip => `<li>${tip}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+    
+    function displayAIError(modal, message) {
+        const modalBody = modal.querySelector('.ai-modal-body');
+        modalBody.innerHTML = `
+            <div class="ai-error">
+                <div class="ai-error-icon">⚠️</div>
+                <p>${message}</p>
+                <button class="grant-btn grant-btn--secondary" onclick="closeAIModal()">閉じる</button>
+            </div>
+        `;
+    }
+    
+    function getDefaultChecklist() {
+        return [
+            '法人登記簿謄本または個人事業主届け',
+            '直近年度の財務諸表・決算書',
+            '事業計画書（3年分）',
+            '申請者の本人確認書類',
+            '印鑑証明書（3ヶ月以内発行）'
+        ];
+    }
+    
+    function getDefaultTips() {
+        return [
+            '申請書類は締切の1週間前には完成させておく',
+            '事業計画は数値的根拠を明確に示す',
+            '過去の実績がある場合は具体的な成果を記載',
+            '申請前に必ず募集要項を再確認する'
+        ];
+    }
+    
+    // ==============================================
+    // モーダル制御関数（グローバルスコープ）
+    // ==============================================
+    
+    window.closeAIModal = function() {
+        const modal = document.querySelector('.ai-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.remove();
+            }, 300);
+        }
+    };
+    
+    // ==============================================
+    // みんなの銀行 トースト通知
+    // ==============================================
+    
+    function showMinnaToast(message, type = 'info') {
+        // 既存のトーストを削除
+        const existingToast = document.querySelector('.minna-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `minna-toast minna-toast--${type}`;
+        toast.innerHTML = `
+            <div class="minna-toast-content">
+                <span class="minna-toast-icon">${getToastIcon(type)}</span>
+                <span class="minna-toast-message">${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // フェードイン
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+        
+        // 自動削除
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    function getToastIcon(type) {
+        switch(type) {
+            case 'success': return '✅';
+            case 'warning': return '⚠️';
+            case 'error': return '❌';
+            default: return 'ℹ️';
+        }
+    }
+    
+    window.showMinnaToast = showMinnaToast;
+    
+    // ==============================================
+    // 検索AJAX機能の修復
+    // ==============================================
+    
+    const searchForm = document.querySelector('.grant-search-form, #grant-search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            performAjaxSearch();
+        });
+    }
+    
+    // フィルター変更時のAJAX検索
+    document.querySelectorAll('.grant-filter-select, .grant-search-input').forEach(element => {
+        element.addEventListener('change', function() {
+            if (this.type !== 'text') {
+                performAjaxSearch();
+            }
+        });
+        
+        if (element.type === 'text') {
+            let searchTimeout;
+            element.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performAjaxSearch();
+                }, 500);
+            });
+        }
+    });
+    
+    function performAjaxSearch() {
+        const form = document.querySelector('.grant-search-form, #grant-search-form');
+        if (!form) return;
+        
+        const formData = new FormData(form);
+        const searchParams = new URLSearchParams();
+        
+        for (let [key, value] of formData.entries()) {
+            if (value) {
+                searchParams.append(key, value);
+            }
+        }
+        
+        // ローディング表示
+        showMinnaToast('検索中...', 'info');
+        
+        const resultsContainer = document.querySelector('.grants-grid, .grant-results');
+        if (resultsContainer) {
+            resultsContainer.style.opacity = '0.5';
+        }
+        
+        // AJAX リクエスト
+        const ajaxUrl = window.ajaxurl || '/wp-admin/admin-ajax.php';
+        
+        fetch(ajaxUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'action': 'filter_grants',
+                'nonce': window.grant_nonce || '',
+                ...Object.fromEntries(searchParams)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && resultsContainer) {
+                resultsContainer.innerHTML = data.data.html;
+                resultsContainer.style.opacity = '1';
+                
+                // 結果数を更新
+                const resultsCount = document.querySelector('.results-count');
+                if (resultsCount && data.data.count !== undefined) {
+                    resultsCount.textContent = `${data.data.count}件の助成金が見つかりました`;
+                }
+                
+                showMinnaToast(`${data.data.count || 0}件の助成金が見つかりました`, 'success');
+                
+                // 新しいカード要素にイベントリスナーを再適用
+                initializeNewCards();
+            } else {
+                showMinnaToast('検索に失敗しました', 'error');
+                if (resultsContainer) {
+                    resultsContainer.style.opacity = '1';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Search Error:', error);
+            showMinnaToast('ネットワークエラーが発生しました', 'error');
+            if (resultsContainer) {
+                resultsContainer.style.opacity = '1';
+            }
+        });
+    }
+    
+    // 新しいカード要素の初期化
+    function initializeNewCards() {
+        // 詳細ボタン
+        document.querySelectorAll('.grant-details-btn:not(.initialized)').forEach(button => {
+            button.classList.add('initialized');
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const url = this.getAttribute('href');
+                if (url && url !== '#') {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                }
+            });
+        });
+        
+        // AIボタン
+        document.querySelectorAll('.grant-ai-btn:not(.initialized), .ai-analysis-btn:not(.initialized)').forEach(button => {
+            button.classList.add('initialized');
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const grantId = this.closest('.grant-card-unified').dataset.grantId || this.dataset.grantId;
+                if (grantId) {
+                    showAIAnalysisModal(grantId);
+                }
+            });
+        });
+        
+        // カードクリック
+        document.querySelectorAll('.grant-card-unified:not(.initialized)').forEach(card => {
+            card.classList.add('initialized');
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('.grant-btn, button, a')) {
+                    return;
+                }
+                const detailsLink = card.querySelector('.grant-details-btn');
+                if (detailsLink && detailsLink.href) {
+                    window.location.href = detailsLink.href;
+                }
+            });
+        });
+    }
+    
+    // 初回読み込み時のカード初期化
+    initializeNewCards();
+    
+});
+</script>
+
 <?php endif; ?>

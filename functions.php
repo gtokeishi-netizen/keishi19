@@ -84,6 +84,34 @@ function gi_final_init() {
 add_action('wp_loaded', 'gi_final_init', 999);
 
 /**
+ * みんなの銀行 AJAX nonce とグローバル変数の設定
+ */
+function gi_enqueue_minna_bank_scripts() {
+    // インラインスクリプトでグローバル変数を設定
+    $inline_script = "
+        window.ajaxurl = '" . admin_url('admin-ajax.php') . "';
+        window.grant_nonce = '" . wp_create_nonce('gi_ajax_nonce') . "';
+    ";
+    
+    // headに直接出力
+    wp_add_inline_script('jquery', $inline_script);
+}
+add_action('wp_enqueue_scripts', 'gi_enqueue_minna_bank_scripts');
+
+/**
+ * フロントエンド用 AJAX nonce を head に出力
+ */
+function gi_output_ajax_nonce() {
+    if (!is_admin()) {
+        echo '<script>
+            window.ajaxurl = "' . admin_url('admin-ajax.php') . '";
+            window.grant_nonce = "' . wp_create_nonce('gi_ajax_nonce') . '";
+        </script>';
+    }
+}
+add_action('wp_head', 'gi_output_ajax_nonce', 1);
+
+/**
  * クリーンアップ処理
  */
 function gi_theme_cleanup() {

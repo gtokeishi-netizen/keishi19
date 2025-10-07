@@ -35,12 +35,23 @@ $search_params = [
 ];
 
 // 統計データ取得
+$total_grants = wp_count_posts('grant');
+$prefecture_terms = get_terms(['taxonomy' => 'grant_prefecture', 'hide_empty' => true]);
+
 $stats = function_exists('gi_get_cached_stats') ? gi_get_cached_stats() : [
-    'total_grants' => wp_count_posts('grant')->publish ?? 0,
+    'total_grants' => $total_grants->publish ?? 0,
     'active_grants' => 0,
-    'prefecture_count' => count(get_terms(['taxonomy' => 'grant_prefecture', 'hide_empty' => true])),
+    'prefecture_count' => is_array($prefecture_terms) ? count($prefecture_terms) : 47,
     'avg_success_rate' => 65
 ];
+
+// キーが存在しない場合のデフォルト値を設定
+$stats = wp_parse_args($stats, [
+    'total_grants' => 0,
+    'active_grants' => 0,
+    'prefecture_count' => 47,
+    'avg_success_rate' => 65
+]);
 
 // タクソノミー取得
 $all_categories = get_terms([

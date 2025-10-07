@@ -93,6 +93,14 @@ add_action('wp_ajax_nopriv_gi_compare_grants', 'gi_ajax_compare_grants');
 // 市町村データ初期化機能
 add_action('wp_ajax_gi_initialize_municipalities', 'gi_ajax_initialize_municipalities');
 
+// みんなの銀行カード - AI分析取得機能
+add_action('wp_ajax_get_grant_ai_analysis', 'handle_grant_ai_analysis_request');
+add_action('wp_ajax_nopriv_get_grant_ai_analysis', 'handle_grant_ai_analysis_request');
+
+// みんなの銀行カード - フィルター検索機能
+add_action('wp_ajax_filter_grants', 'handle_grants_filter_request');
+add_action('wp_ajax_nopriv_filter_grants', 'handle_grants_filter_request');
+
 /**
  * =============================================================================
  * 主要なAJAXハンドラー関数 - 完全版
@@ -1997,6 +2005,636 @@ function gi_enhance_search_query($query) {
     }
     
     return $enhanced_query;
+}
+
+/**
+ * =============================================================================
+ * みんなの銀行カード専用 AJAX ハンドラー
+ * =============================================================================
+ */
+
+/**
+ * AI分析データ取得ハンドラー (みんなの銀行カード用)
+ */
+function handle_grant_ai_analysis_request() {
+    try {
+        // セキュリティチェック
+        $nonce = $_POST['nonce'] ?? '';
+        if (!wp_verify_nonce($nonce, 'gi_ajax_nonce') && !wp_verify_nonce($nonce, 'gi_ai_search_nonce')) {
+            // 開発環境での緩和
+            if (!defined('WP_DEBUG') || !WP_DEBUG) {
+                wp_send_json_error(['message' => 'セキュリティチェックに失敗しました']);
+                return;
+            }
+        }
+        
+        $grant_id = intval($_POST['grant_id'] ?? 0);
+        
+        if (!$grant_id) {
+            wp_send_json_error(['message' => '助成金IDが指定されていません']);
+            return;
+        }
+        
+        // 助成金の存在確認
+        $grant_post = get_post($grant_id);
+        if (!$grant_post || $grant_post->post_type !== 'grant') {
+            wp_send_json_error(['message' => '指定された助成金が見つかりません']);
+            return;
+        }
+        
+        $start_time = microtime(true);
+        
+        // AI分析データを生成
+        $ai_analysis_data = generate_minna_bank_ai_analysis($grant_id);
+        
+        $processing_time = round((microtime(true) - $start_time) * 1000);
+        
+        wp_send_json_success([
+            'grant_id' => $grant_id,
+            'grant_title' => $grant_post->post_title,
+            'match_score' => $ai_analysis_data['match_score'],
+            'summary' => $ai_analysis_data['summary'],
+            'checklist' => $ai_analysis_data['checklist'],
+            'tips' => $ai_analysis_data['tips'],
+            'difficulty' => $ai_analysis_data['difficulty'],
+            'success_rate' => $ai_analysis_data['success_rate'],
+            'processing_time_ms' => $processing_time
+        ]);
+        
+    } catch (Exception $e) {
+        error_log('Grant AI Analysis Error: ' . $e->getMessage());
+        wp_send_json_error([
+            'message' => 'AI分析の実行中にエラーが発生しました',
+            'debug' => WP_DEBUG ? $e->getMessage() : null
+        ]);
+    }
+}
+
+/**
+ * フィルター検索ハンドラー (みんなの銀行カード用)
+ */
+function handle_grants_filter_request() {
+    try {
+        // セキュリティチェック
+        $nonce = $_POST['nonce'] ?? '';
+        if (!wp_verify_nonce($nonce, 'gi_ajax_nonce') && !wp_verify_nonce($nonce, 'gi_ai_search_nonce')) {
+            if (!defined('WP_DEBUG') || !WP_DEBUG) {
+                wp_send_json_error(['message' => 'セキュリティチェックに失敗しました']);
+                return;
+            }
+        }
+        
+        $start_time = microtime(true);
+        
+        // 検索パラメータを取得
+        $search_params = [
+            's' => sanitize_text_field($_POST['s'] ?? ''),
+            'category' => sanitize_text_field($_POST['category'] ?? ''),
+            'prefecture' => sanitize_text_field($_POST['prefecture'] ?? ''),
+            'municipality' => sanitize_text_field($_POST['municipality'] ?? ''),
+            'amount' => sanitize_text_field($_POST['amount'] ?? ''),
+            'status' => sanitize_text_field($_POST['status'] ?? ''),
+            'difficulty' => sanitize_text_field($_POST['difficulty'] ?? ''),
+            'success_rate' => sanitize_text_field($_POST['success_rate'] ?? ''),
+            'sort' => sanitize_text_field($_POST['sort'] ?? 'date_desc'),
+            'per_page' => min(intval($_POST['per_page'] ?? 12), 50)
+        ];
+        
+        // WP_Query引数を構築
+        $query_args = build_minna_bank_query_args($search_params);
+        
+        // クエリ実行
+        $grants_query = new WP_Query($query_args);
+        
+        $grants_html = '';
+        $grants_data = [];
+        
+        if ($grants_query->have_posts()) {
+            ob_start();
+            
+            while ($grants_query->have_posts()) {
+                $grants_query->the_post();
+                
+                // grant-card-unified.php をinclude
+                $current_view = 'grid';
+                $display_mode = 'card';
+                
+                include get_template_directory() . '/template-parts/grant-card-unified.php';
+                
+                // データも収集
+                $grants_data[] = [
+                    'id' => get_the_ID(),
+                    'title' => get_the_title(),
+                    'permalink' => get_permalink(),
+                    'excerpt' => wp_trim_words(get_the_excerpt(), 20),
+                    'amount' => get_field('max_amount') ?: '要確認',
+                    'deadline' => get_field('deadline') ?: '随時',
+                    'organization' => get_field('organization') ?: '',
+                    'status' => get_field('application_status') ?: 'open'
+                ];
+            }
+            
+            $grants_html = ob_get_clean();
+            wp_reset_postdata();
+        }
+        
+        $processing_time = round((microtime(true) - $start_time) * 1000);
+        
+        wp_send_json_success([
+            'html' => $grants_html,
+            'data' => $grants_data,
+            'count' => $grants_query->found_posts,
+            'total_pages' => $grants_query->max_num_pages,
+            'current_page' => $query_args['paged'] ?? 1,
+            'search_params' => $search_params,
+            'processing_time_ms' => $processing_time,
+            'message' => sprintf('%d件の助成金が見つかりました', $grants_query->found_posts)
+        ]);
+        
+    } catch (Exception $e) {
+        error_log('Filter Grants Error: ' . $e->getMessage());
+        wp_send_json_error([
+            'message' => '検索の実行中にエラーが発生しました',
+            'debug' => WP_DEBUG ? $e->getMessage() : null
+        ]);
+    }
+}
+
+/**
+ * =============================================================================
+ * みんなの銀行AI分析 ヘルパー関数
+ * =============================================================================
+ */
+
+/**
+ * みんなの銀行スタイル AI分析データ生成
+ */
+function generate_minna_bank_ai_analysis($grant_id) {
+    // 助成金の基本データを取得
+    $grant_data = [
+        'title' => get_the_title($grant_id),
+        'content' => get_post_field('post_content', $grant_id),
+        'organization' => get_field('organization', $grant_id) ?: '',
+        'max_amount' => get_field('max_amount', $grant_id) ?: '',
+        'max_amount_numeric' => intval(get_field('max_amount_numeric', $grant_id)),
+        'deadline' => get_field('deadline', $grant_id) ?: '',
+        'grant_target' => get_field('grant_target', $grant_id) ?: '',
+        'application_method' => get_field('application_method', $grant_id) ?: '',
+        'grant_difficulty' => get_field('grant_difficulty', $grant_id) ?: 'normal',
+        'adoption_rate' => floatval(get_field('adoption_rate', $grant_id)),
+        'subsidy_rate' => get_field('subsidy_rate', $grant_id) ?: '',
+        'categories' => wp_get_post_terms($grant_id, 'grant_category', ['fields' => 'names'])
+    ];
+    
+    // AI分析を実行
+    $match_score = calculate_minna_bank_match_score($grant_data);
+    $summary = generate_minna_bank_summary($grant_data, $match_score);
+    $checklist = generate_minna_bank_checklist($grant_data);
+    $tips = generate_minna_bank_tips($grant_data);
+    $difficulty_analysis = analyze_minna_bank_difficulty($grant_data);
+    $success_rate_analysis = analyze_minna_bank_success_rate($grant_data);
+    
+    return [
+        'match_score' => $match_score,
+        'summary' => $summary,
+        'checklist' => $checklist,
+        'tips' => $tips,
+        'difficulty' => $difficulty_analysis,
+        'success_rate' => $success_rate_analysis
+    ];
+}
+
+/**
+ * みんなの銀行 適合度スコア計算
+ */
+function calculate_minna_bank_match_score($grant_data) {
+    $score = 50; // ベーススコア
+    
+    // 金額による加点
+    if ($grant_data['max_amount_numeric'] > 0) {
+        if ($grant_data['max_amount_numeric'] >= 10000000) { // 1000万円以上
+            $score += 20;
+        } elseif ($grant_data['max_amount_numeric'] >= 5000000) { // 500万円以上
+            $score += 15;
+        } elseif ($grant_data['max_amount_numeric'] >= 1000000) { // 100万円以上
+            $score += 10;
+        }
+    }
+    
+    // 難易度による調整
+    switch ($grant_data['grant_difficulty']) {
+        case 'very-easy':
+            $score += 15;
+            break;
+        case 'easy':
+            $score += 10;
+            break;
+        case 'normal':
+            $score += 5;
+            break;
+        case 'hard':
+            $score -= 5;
+            break;
+        case 'very-hard':
+            $score -= 10;
+            break;
+    }
+    
+    // 採択率による加点
+    if ($grant_data['adoption_rate'] > 0) {
+        if ($grant_data['adoption_rate'] >= 80) {
+            $score += 15;
+        } elseif ($grant_data['adoption_rate'] >= 60) {
+            $score += 10;
+        } elseif ($grant_data['adoption_rate'] >= 40) {
+            $score += 5;
+        }
+    }
+    
+    // 申請方法による調整
+    if (strpos($grant_data['application_method'], 'オンライン') !== false) {
+        $score += 5;
+    }
+    
+    return min(max($score, 10), 100); // 10-100の範囲に制限
+}
+
+/**
+ * みんなの銀行 サマリー生成
+ */
+function generate_minna_bank_summary($grant_data, $match_score) {
+    $title = $grant_data['title'];
+    $organization = $grant_data['organization'];
+    $amount = $grant_data['max_amount'];
+    
+    $summary = "🏦 みんなの銀行AI分析結果\n\n";
+    
+    if ($match_score >= 80) {
+        $summary .= "✨ 高適合度：この助成金はあなたのビジネスに非常に適しています。";
+    } elseif ($match_score >= 60) {
+        $summary .= "👍 良適合度：この助成金は申請を検討する価値があります。";
+    } elseif ($match_score >= 40) {
+        $summary .= "💡 要検討：条件を満たせば申請の機会があります。";
+    } else {
+        $summary .= "⚠️ 低適合度：他の助成金も併せてご検討ください。";
+    }
+    
+    $summary .= "\n\n";
+    
+    if ($amount) {
+        $summary .= "💰 助成規模：{$amount}\n";
+    }
+    if ($organization) {
+        $summary .= "🏢 実施機関：{$organization}\n";
+    }
+    
+    // 特徴的なポイントを追加
+    if ($grant_data['adoption_rate'] >= 70) {
+        $summary .= "🎯 採択率が高く、成功の可能性が期待できます。\n";
+    }
+    
+    if ($grant_data['grant_difficulty'] === 'easy' || $grant_data['grant_difficulty'] === 'very-easy') {
+        $summary .= "📝 申請難易度が低く、取り組みやすい助成金です。\n";
+    }
+    
+    $summary .= "\n詳細な申請戦略は下記のチェックリストとコツをご確認ください。";
+    
+    return $summary;
+}
+
+/**
+ * みんなの銀行 チェックリスト生成
+ */
+function generate_minna_bank_checklist($grant_data) {
+    $checklist = [
+        '事業計画書の作成（3年分の収支計画含む）',
+        '法人登記簿謄本または個人事業主届出書の準備',
+        '直近2年分の決算書・財務諸表の準備',
+        '印鑑証明書（3ヶ月以内発行）の取得'
+    ];
+    
+    // 金額に応じた追加項目
+    if ($grant_data['max_amount_numeric'] >= 5000000) {
+        $checklist[] = '税理士・会計士による財務書類の確認';
+        $checklist[] = '専門家による事業計画のレビュー';
+    }
+    
+    // 難易度に応じた追加項目
+    if ($grant_data['grant_difficulty'] === 'hard' || $grant_data['grant_difficulty'] === 'very-hard') {
+        $checklist[] = '外部専門家への相談・支援依頼';
+        $checklist[] = '類似事例の研究・分析';
+    }
+    
+    // オンライン申請の場合
+    if (strpos($grant_data['application_method'], 'オンライン') !== false) {
+        $checklist[] = 'オンライン申請システムでのアカウント作成';
+        $checklist[] = '電子証明書の準備（必要に応じて）';
+    }
+    
+    // カテゴリ固有の項目
+    if (in_array('IT・デジタル化', $grant_data['categories'])) {
+        $checklist[] = 'IT導入計画書の作成';
+        $checklist[] = 'セキュリティ対策計画の策定';
+    }
+    
+    return array_slice($checklist, 0, 8); // 最大8項目
+}
+
+/**
+ * みんなの銀行 申請のコツ生成
+ */
+function generate_minna_bank_tips($grant_data) {
+    $tips = [
+        '申請書類は締切の1週間前には完成させておく',
+        '事業計画書では数値的根拠を明確に示す',
+        '過去の実績がある場合は具体的な成果を記載する'
+    ];
+    
+    // 採択率に応じたコツ
+    if ($grant_data['adoption_rate'] < 50) {
+        $tips[] = '競争が激しいため、差別化要素を強調する';
+        $tips[] = '外部専門家のサポートを積極的に活用する';
+    } elseif ($grant_data['adoption_rate'] >= 70) {
+        $tips[] = '基本要件を確実に満たすことを最優先にする';
+    }
+    
+    // 難易度に応じたコツ
+    switch ($grant_data['grant_difficulty']) {
+        case 'very-easy':
+        case 'easy':
+            $tips[] = '基本的な申請書類を丁寧に作成すれば十分';
+            break;
+        case 'hard':
+        case 'very-hard':
+            $tips[] = '申請前に必ず事前相談を実施する';
+            $tips[] = '専門用語や技術内容を分かりやすく説明する';
+            break;
+    }
+    
+    // 金額に応じたコツ
+    if ($grant_data['max_amount_numeric'] >= 10000000) {
+        $tips[] = '大型助成金のため、ROIを明確に示す';
+        $tips[] = '事業の継続性・発展性を重点的にアピール';
+    }
+    
+    return array_slice($tips, 0, 6); // 最大6項目
+}
+
+/**
+ * みんなの銀行 難易度分析
+ */
+function analyze_minna_bank_difficulty($grant_data) {
+    $difficulty = $grant_data['grant_difficulty'];
+    
+    $difficulty_info = [
+        'level' => $difficulty,
+        'score' => 3, // デフォルト
+        'description' => '標準的な難易度',
+        'preparation_time' => '1-2ヶ月',
+        'recommended_support' => false
+    ];
+    
+    switch ($difficulty) {
+        case 'very-easy':
+            $difficulty_info['score'] = 1;
+            $difficulty_info['description'] = '申請しやすく、初心者にもおすすめ';
+            $difficulty_info['preparation_time'] = '2-3週間';
+            break;
+        case 'easy':
+            $difficulty_info['score'] = 2;
+            $difficulty_info['description'] = '基本的な準備で申請可能';
+            $difficulty_info['preparation_time'] = '1ヶ月';
+            break;
+        case 'normal':
+            $difficulty_info['score'] = 3;
+            $difficulty_info['description'] = '標準的な難易度、計画的な準備が重要';
+            $difficulty_info['preparation_time'] = '1-2ヶ月';
+            break;
+        case 'hard':
+            $difficulty_info['score'] = 4;
+            $difficulty_info['description'] = '専門的な知識と入念な準備が必要';
+            $difficulty_info['preparation_time'] = '2-3ヶ月';
+            $difficulty_info['recommended_support'] = true;
+            break;
+        case 'very-hard':
+            $difficulty_info['score'] = 5;
+            $difficulty_info['description'] = '高度な専門性が求められる上級者向け';
+            $difficulty_info['preparation_time'] = '3-6ヶ月';
+            $difficulty_info['recommended_support'] = true;
+            break;
+    }
+    
+    return $difficulty_info;
+}
+
+/**
+ * みんなの銀行 成功率分析
+ */
+function analyze_minna_bank_success_rate($grant_data) {
+    $base_rate = $grant_data['adoption_rate'] > 0 ? $grant_data['adoption_rate'] : 50;
+    
+    // 難易度による調整
+    $difficulty_adjustment = 0;
+    switch ($grant_data['grant_difficulty']) {
+        case 'very-easy':
+            $difficulty_adjustment = 15;
+            break;
+        case 'easy':
+            $difficulty_adjustment = 10;
+            break;
+        case 'hard':
+            $difficulty_adjustment = -10;
+            break;
+        case 'very-hard':
+            $difficulty_adjustment = -20;
+            break;
+    }
+    
+    $adjusted_rate = min(max($base_rate + $difficulty_adjustment, 5), 95);
+    
+    $success_info = [
+        'rate' => $adjusted_rate,
+        'confidence' => $grant_data['adoption_rate'] > 0 ? 85 : 60,
+        'factors' => []
+    ];
+    
+    // 成功要因の分析
+    if ($grant_data['max_amount_numeric'] >= 5000000) {
+        $success_info['factors'][] = '大型助成金のため競争が激しい';
+    }
+    
+    if ($grant_data['adoption_rate'] >= 70) {
+        $success_info['factors'][] = '採択率が高く成功の可能性大';
+    }
+    
+    if (strpos($grant_data['application_method'], 'オンライン') !== false) {
+        $success_info['factors'][] = 'オンライン申請で手続きが効率的';
+    }
+    
+    return $success_info;
+}
+
+/**
+ * みんなの銀行 検索クエリ構築
+ */
+function build_minna_bank_query_args($search_params) {
+    $args = [
+        'post_type' => 'grant',
+        'post_status' => 'publish',
+        'posts_per_page' => $search_params['per_page'],
+        'paged' => 1,
+        'meta_query' => ['relation' => 'AND'],
+        'tax_query' => ['relation' => 'AND']
+    ];
+    
+    // キーワード検索
+    if (!empty($search_params['s'])) {
+        $args['s'] = $search_params['s'];
+    }
+    
+    // カテゴリフィルター
+    if (!empty($search_params['category'])) {
+        $args['tax_query'][] = [
+            'taxonomy' => 'grant_category',
+            'field' => 'slug',
+            'terms' => $search_params['category']
+        ];
+    }
+    
+    // 都道府県フィルター
+    if (!empty($search_params['prefecture'])) {
+        $args['tax_query'][] = [
+            'taxonomy' => 'grant_prefecture',
+            'field' => 'slug',
+            'terms' => $search_params['prefecture']
+        ];
+    }
+    
+    // 市町村フィルター
+    if (!empty($search_params['municipality'])) {
+        $args['tax_query'][] = [
+            'taxonomy' => 'grant_municipality',
+            'field' => 'slug',
+            'terms' => $search_params['municipality']
+        ];
+    }
+    
+    // 金額フィルター
+    if (!empty($search_params['amount'])) {
+        switch ($search_params['amount']) {
+            case 'small':
+                $args['meta_query'][] = [
+                    'key' => 'max_amount_numeric',
+                    'value' => 1000000,
+                    'compare' => '<='
+                ];
+                break;
+            case 'medium':
+                $args['meta_query'][] = [
+                    'relation' => 'AND',
+                    [
+                        'key' => 'max_amount_numeric',
+                        'value' => 1000000,
+                        'compare' => '>'
+                    ],
+                    [
+                        'key' => 'max_amount_numeric',
+                        'value' => 10000000,
+                        'compare' => '<='
+                    ]
+                ];
+                break;
+            case 'large':
+                $args['meta_query'][] = [
+                    'key' => 'max_amount_numeric',
+                    'value' => 10000000,
+                    'compare' => '>'
+                ];
+                break;
+        }
+    }
+    
+    // ステータスフィルター
+    if (!empty($search_params['status']) && $search_params['status'] !== 'all') {
+        $args['meta_query'][] = [
+            'key' => 'application_status',
+            'value' => $search_params['status'],
+            'compare' => '='
+        ];
+    }
+    
+    // 難易度フィルター
+    if (!empty($search_params['difficulty'])) {
+        $args['meta_query'][] = [
+            'key' => 'grant_difficulty',
+            'value' => $search_params['difficulty'],
+            'compare' => '='
+        ];
+    }
+    
+    // 成功率フィルター
+    if (!empty($search_params['success_rate'])) {
+        switch ($search_params['success_rate']) {
+            case 'high':
+                $args['meta_query'][] = [
+                    'key' => 'adoption_rate',
+                    'value' => 70,
+                    'compare' => '>='
+                ];
+                break;
+            case 'medium':
+                $args['meta_query'][] = [
+                    'relation' => 'AND',
+                    [
+                        'key' => 'adoption_rate',
+                        'value' => 40,
+                        'compare' => '>='
+                    ],
+                    [
+                        'key' => 'adoption_rate',
+                        'value' => 70,
+                        'compare' => '<'
+                    ]
+                ];
+                break;
+            case 'low':
+                $args['meta_query'][] = [
+                    'key' => 'adoption_rate',
+                    'value' => 40,
+                    'compare' => '<'
+                ];
+                break;
+        }
+    }
+    
+    // ソート
+    switch ($search_params['sort']) {
+        case 'date_desc':
+            $args['orderby'] = 'date';
+            $args['order'] = 'DESC';
+            break;
+        case 'date_asc':
+            $args['orderby'] = 'date';
+            $args['order'] = 'ASC';
+            break;
+        case 'amount_desc':
+            $args['orderby'] = 'meta_value_num';
+            $args['meta_key'] = 'max_amount_numeric';
+            $args['order'] = 'DESC';
+            break;
+        case 'amount_asc':
+            $args['orderby'] = 'meta_value_num';
+            $args['meta_key'] = 'max_amount_numeric';
+            $args['order'] = 'ASC';
+            break;
+        case 'deadline':
+            $args['orderby'] = 'meta_value';
+            $args['meta_key'] = 'deadline_date';
+            $args['order'] = 'ASC';
+            break;
+    }
+    
+    return $args;
 }
 
 function gi_extract_semantic_terms($query) {
