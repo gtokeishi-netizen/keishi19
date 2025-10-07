@@ -68,11 +68,13 @@ $grant_data = array(
     'max_amount' => function_exists('get_field') ? get_field('max_amount', $post_id) : get_post_meta($post_id, 'max_amount', true),
     'max_amount_numeric' => function_exists('get_field') ? intval(get_field('max_amount_numeric', $post_id)) : intval(get_post_meta($post_id, 'max_amount_numeric', true)),
     'min_amount' => function_exists('get_field') ? intval(get_field('min_amount', $post_id)) : intval(get_post_meta($post_id, 'min_amount', true)),
+    'amount_note' => function_exists('get_field') ? get_field('amount_note', $post_id) : get_post_meta($post_id, 'amount_note', true),
     'subsidy_rate' => function_exists('get_field') ? get_field('subsidy_rate', $post_id) : get_post_meta($post_id, 'subsidy_rate', true),
     
     // 期間・締切情報
     'deadline' => function_exists('get_field') ? get_field('deadline', $post_id) : get_post_meta($post_id, 'deadline', true),
     'deadline_date' => function_exists('get_field') ? get_field('deadline_date', $post_id) : get_post_meta($post_id, 'deadline_date', true),
+    'deadline_note' => function_exists('get_field') ? get_field('deadline_note', $post_id) : get_post_meta($post_id, 'deadline_note', true),
     'application_period' => function_exists('get_field') ? get_field('application_period', $post_id) : get_post_meta($post_id, 'application_period', true),
     
     // 申請情報
@@ -109,9 +111,11 @@ $grant_data = array_merge(array(
     'max_amount' => '',
     'max_amount_numeric' => 0,
     'min_amount' => 0,
+    'amount_note' => '',
     'subsidy_rate' => '',
     'deadline' => '',
     'deadline_date' => '',
+    'deadline_note' => '',
     'application_period' => '',
     'grant_target' => '',
     'application_method' => 'online',
@@ -1042,25 +1046,168 @@ a:focus, button:focus, .btn:focus {
     outline-offset: 2px;
 }
 
-/* Icon Font Replacement with Unicode (No Emojis) */
-.icon-yen::before { content: '¥'; }
-.icon-calendar::before { content: '📅'; }
-.icon-chart::before { content: '📊'; }
-.icon-building::before { content: '🏢'; }
-.icon-document::before { content: '📄'; }
-.icon-target::before { content: '🎯'; }
-.icon-location::before { content: '📍'; }
-.icon-phone::before { content: '📞'; }
-.icon-clock::before { content: '⏰'; }
-.icon-money::before { content: '💵'; }
-.icon-map::before { content: '🗺️'; }
-.icon-link::before { content: '🔗'; }
-.icon-globe::before { content: '🌐'; }
-.icon-heart::before { content: '❤️'; }
-.icon-share::before { content: '📤'; }
-.icon-print::before { content: '🖨️'; }
-.icon-tag::before { content: '🏷️'; }
-.icon-home::before { content: '🏘️'; }
+/* White & Black Icons Only - No Emojis */
+.icon-yen {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 002-2v-3a2 2 0 012-2h8a2 2 0 012 2v3a2 2 0 002 2m-6 0v1a2 2 0 11-4 0v-1m4 0H9m5 0v1a2 2 0 01-2 2H9.5m.5-3H15M9 8h6" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-calendar {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-chart {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-building {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-document {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-target {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-location {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-phone {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-clock {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-money {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-map {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-link {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-globe {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-heart {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-share {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-print {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-tag {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.icon-home {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%23374151"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* Common icon styles */
+[class*="icon-"] {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* Icon hover states */
+.info-card:hover [class*="icon-"]:not(.icon-yen) {
+    filter: invert(1);
+}
+
+.btn:hover [class*="icon-"]:not(.icon-yen) {
+    filter: invert(1);
+}
 </style>
 
 <main class="grant-minna">
@@ -1089,7 +1236,7 @@ a:focus, button:focus, .btn:focus {
         <div class="key-info-grid">
             <?php if ($formatted_amount): ?>
             <div class="info-card">
-                <div class="info-icon icon-yen">¥</div>
+                <div class="info-icon icon-yen"></div>
                 <div class="info-label">最大助成額</div>
                 <div class="info-value highlight"><?php echo esc_html($formatted_amount); ?></div>
             </div>
@@ -1586,7 +1733,7 @@ a:focus, button:focus, .btn:focus {
         if (!empty($similar_grants)) :
     ?>
     <!-- Similar Grants Recommendation Section -->
-    <section class="similar-grants-section" style="margin-top: var(--space-16); padding-top: var(--space-12); border-top: 2px solid var(--mono-pale-gray);">
+    <section class="similar-grants-section" style="margin-top: var(--space-2xl); padding: var(--space-2xl); border: 2px solid var(--color-border); border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-muted) 100%); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
         <header style="text-align: center; margin-bottom: var(--space-2xl);">
             <div style="display: inline-flex; align-items: center; gap: var(--space-sm); background: var(--color-gray-900); color: white; padding: var(--space-sm) var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-md);">
                 <span style="font-weight: 700;">AI</span>
@@ -1600,7 +1747,7 @@ a:focus, button:focus, .btn:focus {
             </p>
         </header>
         
-        <div class="similar-grants-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg);">
+        <div class="similar-grants-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-xl); padding: var(--space-md); background: var(--color-muted); border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
             <?php foreach ($similar_grants as $similar_post) : 
                 $similar_id = $similar_post->ID;
                 $similar_amount = get_field('max_amount', $similar_id);
@@ -1627,76 +1774,75 @@ a:focus, button:focus, .btn:focus {
                     }
                 }
             ?>
-            <article class="similar-grant-card" style="background: var(--mono-white); border: 2px solid var(--mono-pale-gray); border-radius: var(--radius-lg); padding: var(--space-6); transition: all var(--transition-base); position: relative; overflow: hidden;">
+            <article class="similar-grant-card" style="background: var(--color-bg); border: 2px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-lg); transition: var(--transition); position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); cursor: pointer;" onmouseover="this.style.borderColor='var(--color-gray-900)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 20px rgba(0, 0, 0, 0.15)';" onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.1)';">
                 <!-- AI Match Score Badge -->
                 <?php if ($match_score >= 70) : ?>
-                <div style="position: absolute; top: var(--space-4); right: var(--space-4); background: var(--mono-black); color: var(--mono-white); padding: var(--space-2) var(--space-3); border-radius: var(--radius-2xl); font-size: var(--text-xs); font-weight: 700; display: flex; align-items: center; gap: var(--space-2); z-index: 10;">
-                    <i class="fas fa-brain" style="font-size: 0.875rem;"></i>
-                    <span><?php echo $match_score; ?>%</span>
+                <div style="position: absolute; top: var(--space-md); right: var(--space-md); background: var(--color-gray-900); color: white; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); font-size: var(--type-xs); font-weight: 700; z-index: 10;">
+                    <span>AI <?php echo $match_score; ?>%</span>
                 </div>
                 <?php endif; ?>
                 
                 <!-- Category Badge -->
                 <?php if (!empty($similar_categories)) : ?>
-                <div style="margin-bottom: var(--space-4);">
-                    <span style="display: inline-block; background: var(--mono-off-white); color: var(--mono-dark-gray); padding: var(--space-1) var(--space-3); border-radius: var(--radius-base); font-size: var(--text-xs); font-weight: 600; border: 1px solid var(--mono-pale-gray);">
-                        🏷️ <?php echo esc_html($similar_categories[0]); ?>
+                <div style="margin-bottom: var(--space-md);">
+                    <span style="display: inline-block; background: var(--color-muted); color: var(--color-gray-700); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); font-size: var(--type-xs); font-weight: 600; border: 1px solid var(--color-border);">
+                        <?php echo esc_html($similar_categories[0]); ?>
                     </span>
                 </div>
                 <?php endif; ?>
                 
                 <!-- Title -->
-                <h3 style="font-size: var(--text-lg); font-weight: 700; color: var(--mono-black); margin: 0 0 var(--space-4); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                <h3 style="font-size: var(--type-lg); font-weight: 700; color: var(--color-gray-900); margin: 0 0 var(--space-md); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                     <?php echo esc_html($similar_post->post_title); ?>
                 </h3>
                 
                 <!-- Details Grid -->
-                <div style="display: grid; gap: var(--space-3); margin-bottom: var(--space-5);">
+                <div style="display: grid; gap: var(--space-sm); margin-bottom: var(--space-lg);">
                     <?php if ($similar_amount) : ?>
-                    <div style="display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--mono-charcoal);">
-                        <div style="width: 24px; height: 24px; background: var(--mono-off-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--text-xs); flex-shrink: 0;"></div>
+                    <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: var(--type-sm); color: var(--color-gray-700);">
+                        <div class="icon-money" style="width: 20px; height: 20px; flex-shrink: 0;"></div>
                         <span style="font-weight: 600;"><?php echo esc_html($similar_amount); ?></span>
                     </div>
                     <?php endif; ?>
                     
                     <?php if ($deadline_text) : ?>
-                    <div style="display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: <?php echo $deadline_class_similar === 'urgent' ? 'var(--accent-danger)' : 'var(--mono-charcoal)'; ?>;">
-                        <div style="width: 24px; height: 24px; background: var(--mono-off-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--text-xs); flex-shrink: 0;">⏰</div>
+                    <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: var(--type-sm); color: <?php echo $deadline_class_similar === 'urgent' ? 'var(--accent-danger)' : 'var(--color-gray-700)'; ?>;">
+                        <div class="icon-clock" style="width: 20px; height: 20px; flex-shrink: 0;"></div>
                         <span style="font-weight: 600;"><?php echo esc_html($deadline_text); ?></span>
                     </div>
                     <?php endif; ?>
                     
                     <?php if (!empty($similar_prefecture)) : ?>
-                    <div style="display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--mono-charcoal);">
-                        <div style="width: 24px; height: 24px; background: var(--mono-off-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--text-xs); flex-shrink: 0;">📍</div>
+                    <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: var(--type-sm); color: var(--color-gray-700);">
+                        <div class="icon-location" style="width: 20px; height: 20px; flex-shrink: 0;"></div>
                         <span><?php echo esc_html($similar_prefecture[0]); ?></span>
                     </div>
                     <?php endif; ?>
                 </div>
                 
                 <!-- View Button -->
-                <a href="<?php echo get_permalink($similar_id); ?>" class="btn btn-secondary" style="width: 100%; text-decoration: none; margin: 0;">
-                    詳細を見る
-                    <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                <a href="<?php echo get_permalink($similar_id); ?>" class="btn btn-secondary" style="width: 100%; text-decoration: none; margin: 0; justify-content: space-between;">
+                    <span>詳細を見る</span>
+                    <span style="font-size: 0.75rem;">→</span>
                 </a>
                 
                 <!-- Hover Effect -->
                 <style>
-                .similar-grant-card:hover {
-                    border-color: var(--mono-black);
-                    transform: translateY(-4px);
-                    box-shadow: var(--shadow-medium);
-                }
+.similar-grant-card:hover {
+    border-color: var(--color-gray-900);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
                 </style>
             </article>
             <?php endforeach; ?>
         </div>
         
         <!-- View More Button -->
-        <div style="text-align: center; margin-top: var(--space-10);">
-            <a href="<?php echo get_post_type_archive_link('grant'); ?>" class="btn btn-primary" style="display: inline-flex; text-decoration: none;">
-                <i class="fas fa-search" style="font-size: 1rem;"></i>
-                他の助成金を探す
+        <div style="text-align: center; margin-top: var(--space-2xl);">
+            <a href="<?php echo get_post_type_archive_link('grant'); ?>" class="btn btn-primary" style="display: inline-flex; text-decoration: none; gap: var(--space-xs);">
+                <div class="icon-document" style="width: 16px; height: 16px;"></div>
+                <span>他の助成金を探す</span>
             </a>
         </div>
     </section>
@@ -1797,25 +1943,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        /* Icon content for accessibility */
-        .icon-yen::before { content: '¥'; font-weight: bold; }
-        .icon-calendar::before { content: '📅'; }
-        .icon-chart::before { content: '📊'; }
-        .icon-building::before { content: '🏢'; }
-        .icon-document::before { content: '📄'; }
-        .icon-target::before { content: '🎯'; }
-        .icon-location::before { content: '📍'; }
-        .icon-phone::before { content: '📞'; }
-        .icon-clock::before { content: '⏰'; }
-        .icon-money::before { content: '💵'; }
-        .icon-map::before { content: '🗺️'; }
-        .icon-link::before { content: '🔗'; }
-        .icon-globe::before { content: '🌐'; }
-        .icon-heart::before { content: '❤️'; }
-        .icon-share::before { content: '📤'; }
-        .icon-print::before { content: '🖨️'; }
-        .icon-tag::before { content: '🏷️'; }
-        .icon-home::before { content: '🏘️'; }
+        /* Icon styling - SVG based, no emojis */
+        [class*="icon-"]:not(.icon-yen) {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
     `;
     document.head.appendChild(style);
     
