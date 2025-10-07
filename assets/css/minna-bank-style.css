@@ -1,0 +1,682 @@
+/**
+ * Minna Bank Style CSS - Professional Monochrome Design System
+ * File: minna-bank-style.css
+ * 
+ * みんなの銀行スタイル - 完全モノクロ・プロフェッショナルデザイン
+ * 白黒アイコンのみ・高級感のあるデザイン
+ * 
+ * @version 1.0.0
+ */
+
+/* ===== MINNA BANK DESIGN SYSTEM VARIABLES ===== */
+:root {
+    /* Primary Brand Colors - Professional Monochrome */
+    --minna-primary: #000000;
+    --minna-secondary: #1a1a1a;
+    --minna-accent: #262626;
+    
+    /* Extended Grayscale Palette */
+    --minna-white: #ffffff;
+    --minna-gray-25: #fcfcfc;
+    --minna-gray-50: #fafafa;
+    --minna-gray-100: #f5f5f5;
+    --minna-gray-150: #f0f0f0;
+    --minna-gray-200: #e5e5e5;
+    --minna-gray-250: #e0e0e0;
+    --minna-gray-300: #d4d4d4;
+    --minna-gray-350: #c9c9c9;
+    --minna-gray-400: #a3a3a3;
+    --minna-gray-450: #999999;
+    --minna-gray-500: #737373;
+    --minna-gray-550: #666666;
+    --minna-gray-600: #525252;
+    --minna-gray-650: #484848;
+    --minna-gray-700: #404040;
+    --minna-gray-750: #383838;
+    --minna-gray-800: #262626;
+    --minna-gray-850: #1f1f1f;
+    --minna-gray-900: #171717;
+    --minna-gray-950: #0a0a0a;
+    
+    /* Semantic Colors - Minimal & Professional */
+    --minna-success: #22c55e;
+    --minna-warning: #f59e0b;
+    --minna-danger: #ef4444;
+    --minna-info: #3b82f6;
+    
+    /* Typography Scale */
+    --minna-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --minna-font-secondary: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic Medium', sans-serif;
+    --minna-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    
+    /* Font Weights */
+    --minna-weight-thin: 100;
+    --minna-weight-light: 300;
+    --minna-weight-normal: 400;
+    --minna-weight-medium: 500;
+    --minna-weight-semibold: 600;
+    --minna-weight-bold: 700;
+    --minna-weight-extrabold: 800;
+    --minna-weight-black: 900;
+    
+    /* Font Sizes */
+    --minna-text-xs: 0.75rem;      /* 12px */
+    --minna-text-sm: 0.875rem;     /* 14px */
+    --minna-text-base: 1rem;       /* 16px */
+    --minna-text-lg: 1.125rem;     /* 18px */
+    --minna-text-xl: 1.25rem;      /* 20px */
+    --minna-text-2xl: 1.5rem;      /* 24px */
+    --minna-text-3xl: 1.875rem;    /* 30px */
+    --minna-text-4xl: 2.25rem;     /* 36px */
+    --minna-text-5xl: 3rem;        /* 48px */
+    --minna-text-6xl: 3.75rem;     /* 60px */
+    --minna-text-7xl: 4.5rem;      /* 72px */
+    --minna-text-8xl: 6rem;        /* 96px */
+    --minna-text-9xl: 8rem;        /* 128px */
+    
+    /* Line Heights */
+    --minna-leading-none: 1;
+    --minna-leading-tight: 1.25;
+    --minna-leading-snug: 1.375;
+    --minna-leading-normal: 1.5;
+    --minna-leading-relaxed: 1.625;
+    --minna-leading-loose: 2;
+    
+    /* Spacing Scale - Professional Precision */
+    --minna-space-px: 1px;
+    --minna-space-0: 0;
+    --minna-space-0-5: 0.125rem;   /* 2px */
+    --minna-space-1: 0.25rem;      /* 4px */
+    --minna-space-1-5: 0.375rem;   /* 6px */
+    --minna-space-2: 0.5rem;       /* 8px */
+    --minna-space-2-5: 0.625rem;   /* 10px */
+    --minna-space-3: 0.75rem;      /* 12px */
+    --minna-space-3-5: 0.875rem;   /* 14px */
+    --minna-space-4: 1rem;         /* 16px */
+    --minna-space-5: 1.25rem;      /* 20px */
+    --minna-space-6: 1.5rem;       /* 24px */
+    --minna-space-7: 1.75rem;      /* 28px */
+    --minna-space-8: 2rem;         /* 32px */
+    --minna-space-9: 2.25rem;      /* 36px */
+    --minna-space-10: 2.5rem;      /* 40px */
+    --minna-space-11: 2.75rem;     /* 44px */
+    --minna-space-12: 3rem;        /* 48px */
+    --minna-space-14: 3.5rem;      /* 56px */
+    --minna-space-16: 4rem;        /* 64px */
+    --minna-space-20: 5rem;        /* 80px */
+    --minna-space-24: 6rem;        /* 96px */
+    --minna-space-28: 7rem;        /* 112px */
+    --minna-space-32: 8rem;        /* 128px */
+    --minna-space-36: 9rem;        /* 144px */
+    --minna-space-40: 10rem;       /* 160px */
+    --minna-space-44: 11rem;       /* 176px */
+    --minna-space-48: 12rem;       /* 192px */
+    --minna-space-52: 13rem;       /* 208px */
+    --minna-space-56: 14rem;       /* 224px */
+    --minna-space-60: 15rem;       /* 240px */
+    --minna-space-64: 16rem;       /* 256px */
+    --minna-space-72: 18rem;       /* 288px */
+    --minna-space-80: 20rem;       /* 320px */
+    --minna-space-96: 24rem;       /* 384px */
+    
+    /* Border Radius - Refined Curves */
+    --minna-radius-none: 0;
+    --minna-radius-sm: 0.125rem;    /* 2px */
+    --minna-radius-base: 0.25rem;   /* 4px */
+    --minna-radius-md: 0.375rem;    /* 6px */
+    --minna-radius-lg: 0.5rem;      /* 8px */
+    --minna-radius-xl: 0.75rem;     /* 12px */
+    --minna-radius-2xl: 1rem;       /* 16px */
+    --minna-radius-3xl: 1.5rem;     /* 24px */
+    --minna-radius-full: 9999px;
+    
+    /* Shadows - Professional Depth */
+    --minna-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --minna-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --minna-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --minna-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --minna-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --minna-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --minna-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    --minna-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    
+    /* Transitions - Smooth & Professional */
+    --minna-transition-none: none;
+    --minna-transition-all: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --minna-transition-fast: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --minna-transition-normal: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --minna-transition-slow: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Cubic Bezier Easing */
+    --minna-ease-linear: cubic-bezier(0, 0, 1, 1);
+    --minna-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --minna-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --minna-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Layout Constants */
+    --minna-container-xs: 320px;
+    --minna-container-sm: 640px;
+    --minna-container-md: 768px;
+    --minna-container-lg: 1024px;
+    --minna-container-xl: 1280px;
+    --minna-container-2xl: 1536px;
+    --minna-container-max: 1400px;
+    
+    /* Z-Index Scale */
+    --minna-z-0: 0;
+    --minna-z-10: 10;
+    --minna-z-20: 20;
+    --minna-z-30: 30;
+    --minna-z-40: 40;
+    --minna-z-50: 50;
+    --minna-z-auto: auto;
+    --minna-z-dropdown: 1000;
+    --minna-z-sticky: 1020;
+    --minna-z-fixed: 1030;
+    --minna-z-modal-backdrop: 1040;
+    --minna-z-modal: 1050;
+    --minna-z-popover: 1060;
+    --minna-z-tooltip: 1070;
+}
+
+/* ===== MINNA BANK ICON SYSTEM - STRICT BLACK & WHITE ONLY ===== */
+.minna-icon {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    flex-shrink: 0;
+}
+
+/* Core Business Icons */
+.minna-icon-money {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>');
+}
+
+.minna-icon-chart {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
+}
+
+.minna-icon-building {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>');
+}
+
+.minna-icon-calendar {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
+}
+
+.minna-icon-clock {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>');
+}
+
+.minna-icon-location {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>');
+}
+
+.minna-icon-target {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>');
+}
+
+.minna-icon-document {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>');
+}
+
+/* Navigation & UI Icons */
+.minna-icon-search {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>');
+}
+
+.minna-icon-filter {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 2v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/></svg>');
+}
+
+.minna-icon-sort {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/></svg>');
+}
+
+.minna-icon-grid {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>');
+}
+
+.minna-icon-list {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>');
+}
+
+.minna-icon-close {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>');
+}
+
+.minna-icon-chevron-down {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>');
+}
+
+.minna-icon-chevron-up {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>');
+}
+
+.minna-icon-chevron-left {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>');
+}
+
+.minna-icon-chevron-right {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>');
+}
+
+/* Status & Action Icons */
+.minna-icon-check {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>');
+}
+
+.minna-icon-plus {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>');
+}
+
+.minna-icon-minus {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>');
+}
+
+.minna-icon-info {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>');
+}
+
+.minna-icon-warning {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>');
+}
+
+.minna-icon-star {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>');
+}
+
+.minna-icon-heart {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>');
+}
+
+/* Communication Icons */
+.minna-icon-mail {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>');
+}
+
+.minna-icon-phone {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>');
+}
+
+.minna-icon-link {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 015.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>');
+}
+
+.minna-icon-share {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>');
+}
+
+/* Technology & AI Icons */
+.minna-icon-cpu {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>');
+}
+
+.minna-icon-lightning {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>');
+}
+
+.minna-icon-sparkles {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>');
+}
+
+/* White Variants for Dark Backgrounds */
+.minna-icon-white {
+    filter: brightness(0) invert(1);
+}
+
+/* Icon Sizes */
+.minna-icon-xs { width: 0.75rem; height: 0.75rem; }
+.minna-icon-sm { width: 1rem; height: 1rem; }
+.minna-icon-md { width: 1.25rem; height: 1.25rem; }
+.minna-icon-lg { width: 1.5rem; height: 1.5rem; }
+.minna-icon-xl { width: 2rem; height: 2rem; }
+.minna-icon-2xl { width: 2.5rem; height: 2.5rem; }
+.minna-icon-3xl { width: 3rem; height: 3rem; }
+
+/* ===== MINNA BANK COMPONENT STYLES ===== */
+
+/* Container System */
+.minna-container {
+    width: 100%;
+    max-width: var(--minna-container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--minna-space-4);
+    padding-right: var(--minna-space-4);
+}
+
+@media (min-width: 640px) {
+    .minna-container { padding-left: var(--minna-space-6); padding-right: var(--minna-space-6); }
+}
+
+@media (min-width: 1024px) {
+    .minna-container { padding-left: var(--minna-space-8); padding-right: var(--minna-space-8); }
+}
+
+/* Button System */
+.minna-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--minna-space-2);
+    padding: var(--minna-space-3) var(--minna-space-6);
+    border: 2px solid transparent;
+    border-radius: var(--minna-radius-lg);
+    font-family: var(--minna-font-primary);
+    font-size: var(--minna-text-sm);
+    font-weight: var(--minna-weight-semibold);
+    line-height: var(--minna-leading-none);
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--minna-transition-fast);
+    white-space: nowrap;
+    user-select: none;
+    outline: none;
+}
+
+.minna-btn:focus-visible {
+    outline: 2px solid var(--minna-info);
+    outline-offset: 2px;
+}
+
+/* Primary Button */
+.minna-btn-primary {
+    background-color: var(--minna-primary);
+    color: var(--minna-white);
+    border-color: var(--minna-primary);
+}
+
+.minna-btn-primary:hover {
+    background-color: var(--minna-gray-800);
+    border-color: var(--minna-gray-800);
+    transform: translateY(-1px);
+    box-shadow: var(--minna-shadow-lg);
+}
+
+.minna-btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--minna-shadow-md);
+}
+
+/* Secondary Button */
+.minna-btn-secondary {
+    background-color: var(--minna-white);
+    color: var(--minna-gray-900);
+    border-color: var(--minna-gray-300);
+}
+
+.minna-btn-secondary:hover {
+    background-color: var(--minna-gray-50);
+    border-color: var(--minna-gray-400);
+    transform: translateY(-1px);
+    box-shadow: var(--minna-shadow-md);
+}
+
+/* Outline Button */
+.minna-btn-outline {
+    background-color: transparent;
+    color: var(--minna-gray-700);
+    border-color: var(--minna-gray-300);
+}
+
+.minna-btn-outline:hover {
+    background-color: var(--minna-gray-100);
+    color: var(--minna-gray-900);
+    border-color: var(--minna-gray-400);
+}
+
+/* Ghost Button */
+.minna-btn-ghost {
+    background-color: transparent;
+    color: var(--minna-gray-600);
+    border-color: transparent;
+}
+
+.minna-btn-ghost:hover {
+    background-color: var(--minna-gray-100);
+    color: var(--minna-gray-900);
+}
+
+/* Button Sizes */
+.minna-btn-xs {
+    padding: var(--minna-space-1-5) var(--minna-space-3);
+    font-size: var(--minna-text-xs);
+}
+
+.minna-btn-sm {
+    padding: var(--minna-space-2) var(--minna-space-4);
+    font-size: var(--minna-text-sm);
+}
+
+.minna-btn-lg {
+    padding: var(--minna-space-4) var(--minna-space-8);
+    font-size: var(--minna-text-lg);
+}
+
+.minna-btn-xl {
+    padding: var(--minna-space-5) var(--minna-space-10);
+    font-size: var(--minna-text-xl);
+}
+
+/* Form Elements */
+.minna-input {
+    width: 100%;
+    padding: var(--minna-space-3) var(--minna-space-4);
+    background-color: var(--minna-white);
+    border: 2px solid var(--minna-gray-300);
+    border-radius: var(--minna-radius-lg);
+    font-family: var(--minna-font-primary);
+    font-size: var(--minna-text-base);
+    color: var(--minna-gray-900);
+    transition: var(--minna-transition-fast);
+    outline: none;
+}
+
+.minna-input:focus {
+    border-color: var(--minna-primary);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.minna-input::placeholder {
+    color: var(--minna-gray-500);
+}
+
+.minna-select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right var(--minna-space-3) center;
+    background-size: 16px;
+    padding-right: var(--minna-space-10);
+}
+
+/* Card System */
+.minna-card {
+    background-color: var(--minna-white);
+    border: 2px solid var(--minna-gray-200);
+    border-radius: var(--minna-radius-xl);
+    padding: var(--minna-space-6);
+    box-shadow: var(--minna-shadow-sm);
+    transition: var(--minna-transition-normal);
+}
+
+.minna-card:hover {
+    border-color: var(--minna-gray-300);
+    box-shadow: var(--minna-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.minna-card-header {
+    margin-bottom: var(--minna-space-4);
+    padding-bottom: var(--minna-space-4);
+    border-bottom: 1px solid var(--minna-gray-200);
+}
+
+.minna-card-body {
+    margin-bottom: var(--minna-space-4);
+}
+
+.minna-card-footer {
+    margin-top: var(--minna-space-4);
+    padding-top: var(--minna-space-4);
+    border-top: 1px solid var(--minna-gray-200);
+}
+
+/* Badge System */
+.minna-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--minna-space-1);
+    padding: var(--minna-space-1) var(--minna-space-3);
+    background-color: var(--minna-gray-100);
+    color: var(--minna-gray-700);
+    border-radius: var(--minna-radius-full);
+    font-size: var(--minna-text-xs);
+    font-weight: var(--minna-weight-medium);
+    white-space: nowrap;
+}
+
+.minna-badge-primary {
+    background-color: var(--minna-primary);
+    color: var(--minna-white);
+}
+
+.minna-badge-success {
+    background-color: var(--minna-success);
+    color: var(--minna-white);
+}
+
+.minna-badge-warning {
+    background-color: var(--minna-warning);
+    color: var(--minna-white);
+}
+
+.minna-badge-danger {
+    background-color: var(--minna-danger);
+    color: var(--minna-white);
+}
+
+/* Loading States */
+.minna-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--minna-space-3);
+    padding: var(--minna-space-8);
+    color: var(--minna-gray-600);
+}
+
+.minna-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--minna-gray-200);
+    border-top: 2px solid var(--minna-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Utility Classes */
+.minna-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.minna-hidden { display: none !important; }
+.minna-block { display: block !important; }
+.minna-flex { display: flex !important; }
+.minna-grid { display: grid !important; }
+
+/* Typography Utilities */
+.minna-text-xs { font-size: var(--minna-text-xs); }
+.minna-text-sm { font-size: var(--minna-text-sm); }
+.minna-text-base { font-size: var(--minna-text-base); }
+.minna-text-lg { font-size: var(--minna-text-lg); }
+.minna-text-xl { font-size: var(--minna-text-xl); }
+.minna-text-2xl { font-size: var(--minna-text-2xl); }
+.minna-text-3xl { font-size: var(--minna-text-3xl); }
+.minna-text-4xl { font-size: var(--minna-text-4xl); }
+.minna-text-5xl { font-size: var(--minna-text-5xl); }
+
+.minna-font-thin { font-weight: var(--minna-weight-thin); }
+.minna-font-light { font-weight: var(--minna-weight-light); }
+.minna-font-normal { font-weight: var(--minna-weight-normal); }
+.minna-font-medium { font-weight: var(--minna-weight-medium); }
+.minna-font-semibold { font-weight: var(--minna-weight-semibold); }
+.minna-font-bold { font-weight: var(--minna-weight-bold); }
+.minna-font-extrabold { font-weight: var(--minna-weight-extrabold); }
+.minna-font-black { font-weight: var(--minna-weight-black); }
+
+/* Color Utilities */
+.minna-text-primary { color: var(--minna-primary); }
+.minna-text-white { color: var(--minna-white); }
+.minna-text-gray-900 { color: var(--minna-gray-900); }
+.minna-text-gray-700 { color: var(--minna-gray-700); }
+.minna-text-gray-500 { color: var(--minna-gray-500); }
+
+.minna-bg-primary { background-color: var(--minna-primary); }
+.minna-bg-white { background-color: var(--minna-white); }
+.minna-bg-gray-50 { background-color: var(--minna-gray-50); }
+.minna-bg-gray-100 { background-color: var(--minna-gray-100); }
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .minna-btn {
+        padding: var(--minna-space-2-5) var(--minna-space-4);
+        font-size: var(--minna-text-sm);
+    }
+    
+    .minna-card {
+        padding: var(--minna-space-4);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --minna-white: #1a1a1a;
+        --minna-gray-50: #262626;
+        --minna-gray-100: #2d2d2d;
+        --minna-gray-200: #404040;
+        --minna-gray-300: #525252;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .minna-card {
+        border-width: 3px;
+    }
+    
+    .minna-btn {
+        border-width: 3px;
+    }
+    
+    .minna-input {
+        border-width: 3px;
+    }
+}
