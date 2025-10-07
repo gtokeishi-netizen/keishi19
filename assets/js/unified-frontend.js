@@ -1,30 +1,42 @@
 /*!
- * Grant Insight Perfect - 統合フロントエンドJavaScript
- * 全JSを統合・最適化したメインスクリプト
- * 重複削除、パフォーマンス最適化済み
+ * Minna Bank Style - WordPress Grant System
+ * みんなの銀行スタイル統合JavaScript
+ * 完全プロフェッショナル・デザイン対応
  * 
- * @version 1.0.0
- * @date 2025-10-05
+ * @version 2.0.0
+ * @date 2025-10-07
+ * @design Minna Bank Professional Style
  */
 
 /**
  * =============================================================================
- * GRANT INSIGHT - メイン名前空間
- * グローバルスコープ汚染を防ぐ統一名前空間
+ * MINNA BANK STYLE - メイン名前空間
+ * みんなの銀行デザインシステム統合JavaScript
+ * プロフェッショナル・モノクロームデザイン対応
  * =============================================================================
  */
-const GrantInsight = {
+const MinnaBankGrants = {
     // バージョン情報
-    version: '1.0.0',
+    version: '2.0.0',
     
     // 設定オブジェクト
     config: {
-        debounceDelay: 300,
-        toastDuration: 3000,
-        scrollTrackingInterval: 250,
+        debounceDelay: 250,
+        toastDuration: 4000,
+        scrollTrackingInterval: 100,
         apiEndpoint: '/wp-admin/admin-ajax.php',
-        searchMinLength: 2,
-        maxComparisonItems: 3
+        searchMinLength: 1,
+        maxComparisonItems: 5,
+        animationDuration: 300,
+        mobileBreakpoint: 768,
+        filterCategories: {
+            grant_category: 'カテゴリー',
+            grant_prefecture: '都道府県', 
+            grant_municipality: '市区町村',
+            deadline_status: '締切状況',
+            amount_range: '金額範囲',
+            status: 'ステータス'
+        }
     },
 
     // 初期化フラグ
@@ -52,6 +64,9 @@ const GrantInsight = {
     init() {
         if (this.initialized) return;
         
+        // Minna Bank Style 初期化開始ログ
+        console.log('🏦 Minna Bank Grant System - Initializing...');
+        
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.setupAll());
         } else {
@@ -66,6 +81,7 @@ const GrantInsight = {
         try {
             this.cacheElements();
             this.setupUtils();
+            this.setupMinnaBankCore();
             this.setupSearch();
             this.setupFilters();
             this.setupComparison();
@@ -74,11 +90,14 @@ const GrantInsight = {
             this.setupPerformance();
             this.setupAnimations();
             this.setupForms();
+            this.setupMinnaBankInteractions();
+            this.setupAdvancedFeatures();
             
             this.initialized = true;
-            this.debug('Grant Insight initialized successfully');
+            console.log('🏦 Minna Bank Grant System - Successfully Initialized');
+            this.debug('Minna Bank Grant System initialized successfully');
         } catch (error) {
-            console.error('Initialization error:', error);
+            console.error('🚨 Minna Bank initialization error:', error);
         }
     },
 
@@ -106,6 +125,275 @@ const GrantInsight = {
             // 比較関連
             comparisonBar: null // 動的作成
         };
+    },
+
+    /**
+     * ==========================================================================
+     * みんなの銀行コア機能
+     * プロフェッショナルデザインシステム基盤
+     * ==========================================================================
+     */
+    setupMinnaBankCore() {
+        // デザインシステムの初期化
+        this.initDesignSystem();
+        
+        // プロフェッショナル・インタラクションの設定
+        this.setupProfessionalInteractions();
+        
+        // モノクローム・UIの初期化
+        this.initMonochromeInterface();
+        
+        // 銀行スタイル・レスポンシブ対応
+        this.setupBankingResponsive();
+        
+        this.debug('Minna Bank core system initialized');
+    },
+
+    /**
+     * デザインシステムの初期化
+     */
+    initDesignSystem() {
+        // プロフェッショナル・カラーパレットの適用
+        document.documentElement.style.setProperty('--mb-transition', '0.2s cubic-bezier(0.4, 0, 0.2, 1)');
+        document.documentElement.style.setProperty('--mb-shadow', '0 2px 8px rgba(0, 0, 0, 0.1)');
+        document.documentElement.style.setProperty('--mb-shadow-hover', '0 4px 16px rgba(0, 0, 0, 0.15)');
+        
+        // Body クラスの設定
+        this.elements.body.classList.add('minna-bank-style', 'professional-interface');
+        
+        // フォントシステムの適用
+        this.applyProfessionalFonts();
+    },
+
+    /**
+     * プロフェッショナルフォントシステム
+     */
+    applyProfessionalFonts() {
+        const fontCSS = `
+            :root {
+                --mb-font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                --mb-font-mono: "SF Mono", Monaco, "Roboto Mono", Consolas, monospace;
+                --mb-font-weight-light: 300;
+                --mb-font-weight-normal: 400;
+                --mb-font-weight-medium: 500;
+                --mb-font-weight-bold: 600;
+            }
+        `;
+        
+        if (!document.querySelector('#minna-bank-fonts')) {
+            const style = document.createElement('style');
+            style.id = 'minna-bank-fonts';
+            style.textContent = fontCSS;
+            document.head.appendChild(style);
+        }
+    },
+
+    /**
+     * プロフェッショナル・インタラクション
+     */
+    setupProfessionalInteractions() {
+        // ホバー効果の統一
+        this.setupUnifiedHoverEffects();
+        
+        // フォーカス・インジケーターの改善
+        this.setupProfessionalFocus();
+        
+        // クリック・フィードバック
+        this.setupClickFeedback();
+        
+        // ローディング・インジケーター
+        this.setupLoadingIndicators();
+    },
+
+    /**
+     * 統一ホバー効果
+     */
+    setupUnifiedHoverEffects() {
+        const hoverElements = '.mb-card, .mb-button, .mb-filter-chip, .mb-grant-card, .grant-card';
+        
+        document.addEventListener('mouseenter', (e) => {
+            if (e.target.matches(hoverElements)) {
+                e.target.classList.add('mb-hover-active');
+            }
+        }, true);
+
+        document.addEventListener('mouseleave', (e) => {
+            if (e.target.matches(hoverElements)) {
+                e.target.classList.remove('mb-hover-active');
+            }
+        }, true);
+    },
+
+    /**
+     * プロフェッショナル・フォーカス
+     */
+    setupProfessionalFocus() {
+        // キーボードナビゲーション時のみフォーカス表示
+        let isKeyboardNavigation = false;
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                isKeyboardNavigation = true;
+                this.elements.body.classList.add('mb-keyboard-navigation');
+            }
+        });
+        
+        document.addEventListener('mousedown', () => {
+            isKeyboardNavigation = false;
+            this.elements.body.classList.remove('mb-keyboard-navigation');
+        });
+    },
+
+    /**
+     * クリック・フィードバック
+     */
+    setupClickFeedback() {
+        document.addEventListener('click', (e) => {
+            const button = e.target.closest('button, .mb-button, .btn');
+            if (!button) return;
+            
+            // リップル効果
+            this.createRippleEffect(button, e);
+            
+            // ハプティック・フィードバック（対応デバイスのみ）
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        });
+    },
+
+    /**
+     * リップル効果の作成
+     */
+    createRippleEffect(element, event) {
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+        
+        const ripple = document.createElement('div');
+        ripple.className = 'mb-ripple-effect';
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: mbRipple 0.6s ease-out;
+            pointer-events: none;
+        `;
+        
+        // 相対位置の設定
+        if (getComputedStyle(element).position === 'static') {
+            element.style.position = 'relative';
+        }
+        element.style.overflow = 'hidden';
+        
+        element.appendChild(ripple);
+        
+        setTimeout(() => {
+            if (ripple.parentNode) {
+                ripple.parentNode.removeChild(ripple);
+            }
+        }, 600);
+    },
+
+    /**
+     * モノクローム・インターフェース
+     */
+    initMonochromeInterface() {
+        // アイコン・システムの初期化
+        this.initIconSystem();
+        
+        // グレー・スケール・パレットの適用
+        this.applyGrayscalePalette();
+        
+        // プロフェッショナル・コンポーネントの初期化
+        this.initProfessionalComponents();
+    },
+
+    /**
+     * アイコンシステムの初期化
+     */
+    initIconSystem() {
+        // SVGアイコンの動的読み込み
+        this.loadSVGIcons();
+        
+        // アイコン・ユーティリティの設定
+        this.setupIconUtilities();
+    },
+
+    /**
+     * SVGアイコンの読み込み
+     */
+    loadSVGIcons() {
+        // Font Awesomeの代替としてSVGアイコンを設定
+        const iconMap = {
+            'search': '<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+            'filter': '<svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>',
+            'bookmark': '<svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>',
+            'heart': '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+            'arrow-up': '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>',
+            'close': '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+            'menu': '<svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>',
+            'calendar': '<svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>',
+            'location': '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+            'money': '<svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>',
+            'check': '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+            'info': '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>'
+        };
+        
+        // アイコンをページに注入
+        Object.keys(iconMap).forEach(iconName => {
+            const elements = document.querySelectorAll(`[data-icon="${iconName}"]`);
+            elements.forEach(el => {
+                el.innerHTML = iconMap[iconName];
+                el.classList.add('mb-icon', `mb-icon-${iconName}`);
+            });
+        });
+    },
+
+    /**
+     * 銀行スタイル・レスポンシブ
+     */
+    setupBankingResponsive() {
+        // ブレークポイント管理
+        this.handleResponsiveBreakpoints();
+        
+        // モバイル・バンキング・UI
+        this.setupMobileBankingUI();
+        
+        // タブレット最適化
+        this.setupTabletOptimization();
+    },
+
+    /**
+     * レスポンシブ・ブレークポイント
+     */
+    handleResponsiveBreakpoints() {
+        const updateBreakpoint = () => {
+            const width = window.innerWidth;
+            this.elements.body.classList.remove('mb-mobile', 'mb-tablet', 'mb-desktop');
+            
+            if (width < 768) {
+                this.elements.body.classList.add('mb-mobile');
+                this.state.currentBreakpoint = 'mobile';
+            } else if (width < 1024) {
+                this.elements.body.classList.add('mb-tablet');
+                this.state.currentBreakpoint = 'tablet';
+            } else {
+                this.elements.body.classList.add('mb-desktop');
+                this.state.currentBreakpoint = 'desktop';
+            }
+            
+            this.debug(`Breakpoint changed to: ${this.state.currentBreakpoint}`);
+        };
+        
+        updateBreakpoint();
+        window.addEventListener('resize', this.throttle(updateBreakpoint, 250));
     },
 
     /**
@@ -1171,6 +1459,652 @@ const GrantInsight = {
 
     /**
      * ==========================================================================
+     * みんなの銀行インタラクション機能
+     * プロフェッショナル・インタラクション・システム
+     * ==========================================================================
+     */
+    setupMinnaBankInteractions() {
+        // フィルター・インタラクション
+        this.setupAdvancedFiltering();
+        
+        // カード・インタラクション
+        this.setupProfessionalCards();
+        
+        // ステータス・バー・システム
+        this.setupStatusBars();
+        
+        // プロフェッショナル・ナビゲーション
+        this.setupProfessionalNavigation();
+        
+        this.debug('Minna Bank interactions initialized');
+    },
+
+    /**
+     * 高度フィルタリング・システム
+     */
+    setupAdvancedFiltering() {
+        // トップフィルターシステム
+        this.initTopFilterSystem();
+        
+        // インテリジェント・フィルター
+        this.setupIntelligentFilters();
+        
+        // フィルター・プリセット
+        this.setupFilterPresets();
+    },
+
+    /**
+     * トップフィルターシステムの初期化
+     */
+    initTopFilterSystem() {
+        const topFilters = document.querySelector('.mb-top-filters');
+        if (!topFilters) return;
+        
+        // フィルターカテゴリーの設定
+        Object.keys(this.config.filterCategories).forEach(category => {
+            const filterGroup = topFilters.querySelector(`[data-filter-group="${category}"]`);
+            if (filterGroup) {
+                this.setupFilterGroup(filterGroup, category);
+            }
+        });
+        
+        // フィルター同期
+        this.syncFilterStates();
+    },
+
+    /**
+     * フィルターグループの設定
+     */
+    setupFilterGroup(group, category) {
+        const chips = group.querySelectorAll('.mb-filter-chip');
+        
+        chips.forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleFilterChipClick(chip, category);
+            });
+            
+            // キーボード対応
+            chip.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.handleFilterChipClick(chip, category);
+                }
+            });
+        });
+    },
+
+    /**
+     * フィルターチップのクリック処理
+     */
+    handleFilterChipClick(chip, category) {
+        const value = chip.dataset.value;
+        const isMultiSelect = chip.closest('[data-multi-select="true"]');
+        
+        if (!isMultiSelect) {
+            // 単一選択：同じグループの他を無効化
+            const siblings = chip.parentNode.querySelectorAll('.mb-filter-chip');
+            siblings.forEach(sibling => {
+                if (sibling !== chip) {
+                    sibling.classList.remove('active');
+                }
+            });
+        }
+        
+        // 現在のチップの状態切り替え
+        chip.classList.toggle('active');
+        
+        // フィルター状態の更新
+        this.updateFilterState(category, value, chip.classList.contains('active'));
+        
+        // ステータスバーの更新
+        this.updateStatusBars();
+        
+        // フィルター適用
+        this.applyAdvancedFilters();
+        
+        // アニメーション効果
+        this.animateFilterChange(chip);
+    },
+
+    /**
+     * フィルター状態の更新
+     */
+    updateFilterState(category, value, isActive) {
+        if (!this.state.advancedFilters) {
+            this.state.advancedFilters = new Map();
+        }
+        
+        if (!this.state.advancedFilters.has(category)) {
+            this.state.advancedFilters.set(category, new Set());
+        }
+        
+        const categoryFilters = this.state.advancedFilters.get(category);
+        
+        if (isActive) {
+            categoryFilters.add(value);
+        } else {
+            categoryFilters.delete(value);
+        }
+        
+        this.debug(`Filter updated: ${category} = ${Array.from(categoryFilters)}`);
+    },
+
+    /**
+     * 高度フィルター適用
+     */
+    applyAdvancedFilters() {
+        const filters = this.buildAdvancedFilterObject();
+        
+        // ローディング状態の表示
+        this.showFilterLoading();
+        
+        this.ajax('mb_filter_grants_advanced', { filters })
+            .then(response => {
+                if (response.success) {
+                    this.updateGrantsDisplay(response.data);
+                    this.updateFilterSummary(response.data);
+                    this.showFilterSuccess(response.data.total);
+                } else {
+                    this.showFilterError(response.data);
+                }
+            })
+            .catch(error => {
+                console.error('Advanced filter error:', error);
+                this.showFilterError('フィルター処理中にエラーが発生しました');
+            })
+            .finally(() => {
+                this.hideFilterLoading();
+            });
+    },
+
+    /**
+     * 高度フィルターオブジェクトの構築
+     */
+    buildAdvancedFilterObject() {
+        const filters = {};
+        
+        if (this.state.advancedFilters) {
+            this.state.advancedFilters.forEach((values, category) => {
+                if (values.size > 0) {
+                    filters[category] = Array.from(values);
+                }
+            });
+        }
+        
+        return filters;
+    },
+
+    /**
+     * プロフェッショナル・カード・システム
+     */
+    setupProfessionalCards() {
+        // カード・ホバー・エフェクト
+        this.setupCardHoverEffects();
+        
+        // カード・クイック・アクション
+        this.setupCardQuickActions();
+        
+        // カード・詳細・プレビュー
+        this.setupCardPreview();
+        
+        // カード・ブックマーク・システム
+        this.setupCardBookmarks();
+    },
+
+    /**
+     * カード・ホバー・エフェクト
+     */
+    setupCardHoverEffects() {
+        document.addEventListener('mouseenter', (e) => {
+            const card = e.target.closest('.mb-grant-card, .grant-card');
+            if (!card) return;
+            
+            // ホバー・アニメーション
+            card.style.transform = 'translateY(-2px)';
+            card.style.boxShadow = 'var(--mb-shadow-hover)';
+            
+            // 関連情報の表示
+            this.showCardHoverInfo(card);
+        }, true);
+
+        document.addEventListener('mouseleave', (e) => {
+            const card = e.target.closest('.mb-grant-card, .grant-card');
+            if (!card) return;
+            
+            // ホバー・リセット
+            card.style.transform = '';
+            card.style.boxShadow = '';
+            
+            // 関連情報を隠す
+            this.hideCardHoverInfo(card);
+        }, true);
+    },
+
+    /**
+     * カード・ホバー・情報表示
+     */
+    showCardHoverInfo(card) {
+        const hoverInfo = card.querySelector('.mb-card-hover-info');
+        if (hoverInfo) {
+            hoverInfo.classList.add('visible');
+        }
+        
+        // 類似助成金のプリローディング
+        const grantId = card.dataset.grantId;
+        if (grantId) {
+            this.preloadSimilarGrants(grantId);
+        }
+    },
+
+    /**
+     * カード・クイック・アクション
+     */
+    setupCardQuickActions() {
+        document.addEventListener('click', (e) => {
+            // ブックマーク・ボタン
+            if (e.target.matches('.mb-bookmark-btn, .bookmark-btn')) {
+                e.preventDefault();
+                this.handleBookmarkClick(e.target);
+            }
+            
+            // クイック・比較
+            if (e.target.matches('.mb-quick-compare, .quick-compare')) {
+                e.preventDefault();
+                this.handleQuickCompare(e.target);
+            }
+            
+            // 詳細プレビュー
+            if (e.target.matches('.mb-preview-btn, .preview-btn')) {
+                e.preventDefault();
+                this.showGrantPreview(e.target);
+            }
+        });
+    },
+
+    /**
+     * ブックマーク・ハンドラー
+     */
+    handleBookmarkClick(button) {
+        const grantId = button.dataset.grantId || button.closest('.grant-card').dataset.grantId;
+        const isBookmarked = button.classList.contains('bookmarked');
+        
+        // アニメーション効果
+        button.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            button.style.transform = '';
+        }, 150);
+        
+        // ブックマーク状態の切り替え
+        this.toggleBookmark(grantId, !isBookmarked)
+            .then(success => {
+                if (success) {
+                    button.classList.toggle('bookmarked');
+                    const action = isBookmarked ? '削除しました' : '追加しました';
+                    this.showMinnaBankToast(`ブックマークを${action}`, 'success');
+                }
+            });
+    },
+
+    /**
+     * ブックマーク切り替え
+     */
+    toggleBookmark(grantId, add) {
+        return this.ajax('mb_toggle_bookmark', { grant_id: grantId, add })
+            .then(response => {
+                return response.success;
+            })
+            .catch(error => {
+                this.showMinnaBankToast('ブックマークの更新に失敗しました', 'error');
+                return false;
+            });
+    },
+
+    /**
+     * ステータス・バー・システム
+     */
+    setupStatusBars() {
+        // ホリゾンタル・ステータス・バーの初期化
+        this.initHorizontalStatusBars();
+        
+        // ステータス・インジケーター
+        this.setupStatusIndicators();
+        
+        // プログレス・バー
+        this.setupProgressBars();
+    },
+
+    /**
+     * ホリゾンタル・ステータス・バーの初期化
+     */
+    initHorizontalStatusBars() {
+        const statusBars = document.querySelectorAll('.mb-status-bar-horizontal');
+        
+        statusBars.forEach(bar => {
+            this.setupSingleStatusBar(bar);
+        });
+    },
+
+    /**
+     * 単一ステータス・バーの設定
+     */
+    setupSingleStatusBar(bar) {
+        const items = bar.querySelectorAll('.mb-status-item');
+        
+        items.forEach((item, index) => {
+            // アニメーション遅延の設定
+            item.style.animationDelay = `${index * 0.1}s`;
+            
+            // インタラクティブ要素の設定
+            if (item.classList.contains('interactive')) {
+                this.setupInteractiveStatusItem(item);
+            }
+        });
+        
+        // バー全体のアニメーション
+        this.animateStatusBar(bar);
+    },
+
+    /**
+     * インタラクティブ・ステータス・アイテム
+     */
+    setupInteractiveStatusItem(item) {
+        item.addEventListener('click', () => {
+            const action = item.dataset.action;
+            const value = item.dataset.value;
+            
+            switch (action) {
+                case 'filter':
+                    this.applyQuickFilter(value);
+                    break;
+                case 'sort':
+                    this.applySorting(value);
+                    break;
+                case 'view':
+                    this.changeViewMode(value);
+                    break;
+            }
+            
+            // アクティブ状態の管理
+            item.parentNode.querySelectorAll('.active').forEach(active => {
+                active.classList.remove('active');
+            });
+            item.classList.add('active');
+        });
+    },
+
+    /**
+     * ステータス・バー更新
+     */
+    updateStatusBars() {
+        const statusBars = document.querySelectorAll('.mb-status-bar-horizontal');
+        
+        statusBars.forEach(bar => {
+            this.updateSingleStatusBar(bar);
+        });
+    },
+
+    /**
+     * 単一ステータス・バー更新
+     */
+    updateSingleStatusBar(bar) {
+        const filters = this.buildAdvancedFilterObject();
+        const activeCount = Object.keys(filters).length;
+        
+        // アクティブ・フィルター数の表示
+        const filterCount = bar.querySelector('.mb-filter-count');
+        if (filterCount) {
+            filterCount.textContent = activeCount;
+            filterCount.classList.toggle('has-filters', activeCount > 0);
+        }
+        
+        // ステータス・インジケーターの更新
+        const indicators = bar.querySelectorAll('.mb-status-indicator');
+        indicators.forEach(indicator => {
+            this.updateStatusIndicator(indicator, filters);
+        });
+    },
+
+    /**
+     * プロフェッショナル・ナビゲーション
+     */
+    setupProfessionalNavigation() {
+        // ブレッドクラム・システム
+        this.setupBreadcrumbs();
+        
+        // ページネーション・システム
+        this.setupProfessionalPagination();
+        
+        // ナビゲーション・ショートカット
+        this.setupNavigationShortcuts();
+    },
+
+    /**
+     * ブレッドクラム・システム
+     */
+    setupBreadcrumbs() {
+        const breadcrumbs = document.querySelector('.mb-breadcrumbs');
+        if (!breadcrumbs) return;
+        
+        // 動的ブレッドクラム生成
+        this.generateBreadcrumbs();
+        
+        // ブレッドクラム・ナビゲーション
+        breadcrumbs.addEventListener('click', (e) => {
+            const link = e.target.closest('.mb-breadcrumb-link');
+            if (link && link.dataset.path) {
+                this.navigateToBreadcrumb(link.dataset.path);
+            }
+        });
+    },
+
+    /**
+     * ==========================================================================
+     * 高度機能システム
+     * ==========================================================================
+     */
+    setupAdvancedFeatures() {
+        // インテリジェント検索
+        this.setupIntelligentSearch();
+        
+        // パーソナライゼーション
+        this.setupPersonalization();
+        
+        // 分析・トラッキング
+        this.setupAnalytics();
+        
+        // A/Bテスト・システム
+        this.setupABTesting();
+        
+        this.debug('Advanced features initialized');
+    },
+
+    /**
+     * インテリジェント検索
+     */
+    setupIntelligentSearch() {
+        // 検索候補の改善
+        this.enhanceSearchSuggestions();
+        
+        // 検索履歴
+        this.setupSearchHistory();
+        
+        // 関連検索
+        this.setupRelatedSearches();
+    },
+
+    /**
+     * 検索候補の改善
+     */
+    enhanceSearchSuggestions() {
+        // 既存の検索機能を拡張
+        const originalShowSuggestions = this.showSearchSuggestions.bind(this);
+        
+        this.showSearchSuggestions = (query) => {
+            // インテリジェント候補の取得
+            this.getIntelligentSuggestions(query)
+                .then(suggestions => {
+                    this.renderIntelligentSuggestions(suggestions);
+                })
+                .catch(() => {
+                    // フォールバック：元の候補システム
+                    originalShowSuggestions(query);
+                });
+        };
+    },
+
+    /**
+     * インテリジェント候補の取得
+     */
+    getIntelligentSuggestions(query) {
+        return this.ajax('mb_get_intelligent_suggestions', { 
+            query,
+            user_history: this.getUserSearchHistory(),
+            current_filters: this.buildAdvancedFilterObject()
+        });
+    },
+
+    /**
+     * パーソナライゼーション
+     */
+    setupPersonalization() {
+        // ユーザー・プリファレンス
+        this.loadUserPreferences();
+        
+        // 閲覧履歴ベースの推奨
+        this.setupPersonalizedRecommendations();
+        
+        // カスタマイズ可能UI
+        this.setupCustomizableInterface();
+    },
+
+    /**
+     * みんなの銀行トースト通知
+     */
+    showMinnaBankToast(message, type = 'info', duration = null) {
+        const toastDuration = duration || this.config.toastDuration;
+        
+        // 既存のトーストを削除
+        document.querySelectorAll('.mb-toast').forEach(toast => toast.remove());
+        
+        const toast = document.createElement('div');
+        toast.className = `mb-toast mb-toast-${type}`;
+        
+        // アイコンの設定
+        const iconMap = {
+            'success': '✓',
+            'error': '✕',
+            'warning': '⚠',
+            'info': 'ℹ'
+        };
+        
+        toast.innerHTML = `
+            <div class="mb-toast-content">
+                <div class="mb-toast-icon">${iconMap[type] || iconMap.info}</div>
+                <div class="mb-toast-message">${this.escapeHtml(message)}</div>
+                <button class="mb-toast-close" aria-label="閉じる">×</button>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // アニメーション
+        requestAnimationFrame(() => {
+            toast.classList.add('mb-toast-show');
+        });
+        
+        // クローズボタン
+        toast.querySelector('.mb-toast-close').addEventListener('click', () => {
+            this.hideMinnaBankToast(toast);
+        });
+        
+        // 自動削除
+        setTimeout(() => {
+            this.hideMinnaBankToast(toast);
+        }, toastDuration);
+        
+        return toast;
+    },
+
+    /**
+     * みんなの銀行トースト非表示
+     */
+    hideMinnaBankToast(toast) {
+        toast.classList.remove('mb-toast-show');
+        toast.classList.add('mb-toast-hide');
+        
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    },
+
+    /**
+     * フィルター・ローディング表示
+     */
+    showFilterLoading() {
+        const container = this.elements.grantsGrid || document.querySelector('.grants-grid');
+        if (!container) return;
+        
+        // ローディング・オーバーレイ
+        const overlay = document.createElement('div');
+        overlay.className = 'mb-loading-overlay';
+        overlay.innerHTML = `
+            <div class="mb-loading-spinner">
+                <div class="mb-spinner"></div>
+                <p class="mb-loading-text">検索中...</p>
+            </div>
+        `;
+        
+        container.style.position = 'relative';
+        container.appendChild(overlay);
+        
+        // アニメーション
+        requestAnimationFrame(() => {
+            overlay.classList.add('mb-loading-active');
+        });
+    },
+
+    /**
+     * フィルター・ローディング非表示
+     */
+    hideFilterLoading() {
+        const overlay = document.querySelector('.mb-loading-overlay');
+        if (overlay) {
+            overlay.classList.remove('mb-loading-active');
+            setTimeout(() => {
+                if (overlay.parentNode) {
+                    overlay.parentNode.removeChild(overlay);
+                }
+            }, 300);
+        }
+    },
+
+    /**
+     * アニメーション・ユーティリティ
+     */
+    animateFilterChange(element) {
+        element.style.transform = 'scale(0.95)';
+        element.style.transition = 'transform 0.1s ease';
+        
+        setTimeout(() => {
+            element.style.transform = '';
+        }, 100);
+    },
+
+    animateStatusBar(bar) {
+        const items = bar.querySelectorAll('.mb-status-item');
+        
+        items.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('mb-animated', 'mb-fade-in-up');
+            }, index * 50);
+        });
+    },
+
+    /**
+     * ==========================================================================
      * アクセシビリティ・パフォーマンス
      * ==========================================================================
      */
@@ -1647,11 +2581,12 @@ const GrantInsight = {
  * =============================================================================
  */
 
-// 初期化実行
-GrantInsight.init();
+// みんなの銀行スタイル初期化実行
+MinnaBankGrants.init();
 
 // グローバルアクセス用（後方互換性とデバッグ用）
-window.GrantInsight = GrantInsight;
+window.MinnaBankGrants = MinnaBankGrants;
+window.GrantInsight = MinnaBankGrants; // 後方互換性
 
 /**
  * =============================================================================
@@ -1659,70 +2594,305 @@ window.GrantInsight = GrantInsight;
  * =============================================================================
  */
 
-// 動的に必要なスタイルを追加
+// みんなの銀行スタイル・動的CSS追加
 document.addEventListener('DOMContentLoaded', () => {
     const styleSheet = document.createElement('style');
+    styleSheet.id = 'minna-bank-dynamic-styles';
     styleSheet.textContent = `
-        /* Toast通知スタイル */
-        .gi-toast {
+        /* みんなの銀行Toast通知スタイル */
+        .mb-toast {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 24px;
+            right: 24px;
             z-index: 10000;
-            max-width: 400px;
+            max-width: 420px;
             background: var(--mb-white);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: var(--mb-shadow-hover);
             transform: translateX(100%);
-            transition: transform 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--mb-gray-200);
         }
         
-        .gi-toast-show {
+        .mb-toast-show {
             transform: translateX(0);
         }
         
-        .gi-toast-content {
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .mb-toast-hide {
+            transform: translateX(100%) scale(0.95);
+            opacity: 0;
         }
         
-        .gi-toast-close {
+        .mb-toast-content {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .mb-toast-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--mb-font-weight-bold);
+            font-size: 16px;
+        }
+        
+        .mb-toast-message {
+            flex: 1;
+            font-weight: var(--mb-font-weight-medium);
+            color: var(--mb-gray-800);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .mb-toast-close {
             background: none;
             border: none;
             font-size: 18px;
             cursor: pointer;
             color: var(--mb-gray-500);
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--mb-transition);
+        }
+        
+        .mb-toast-close:hover {
+            background-color: var(--mb-gray-100);
+            color: var(--mb-gray-700);
+        }
+        
+        /* トーストタイプ別スタイル */
+        .mb-toast-success .mb-toast-icon { color: var(--mb-success-600); }
+        .mb-toast-error .mb-toast-icon { color: var(--mb-error-600); }
+        .mb-toast-warning .mb-toast-icon { color: var(--mb-warning-600); }
+        .mb-toast-info .mb-toast-icon { color: var(--mb-primary-600); }
+        
+        /* ローディング・オーバーレイ */
+        .mb-loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mb-loading-active {
+            opacity: 1;
+        }
+        
+        .mb-loading-spinner {
+            text-align: center;
+        }
+        
+        .mb-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--mb-gray-200);
+            border-top: 3px solid var(--mb-primary-600);
+            border-radius: 50%;
+            animation: mbSpin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+        
+        .mb-loading-text {
+            font-size: 14px;
+            color: var(--mb-gray-600);
+            font-weight: var(--mb-font-weight-medium);
+        }
+        
+        /* リップル効果 */
+        .mb-ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            transform: scale(0);
+            animation: mbRipple 0.6s ease-out;
+            pointer-events: none;
         }
         
         /* アニメーション */
-        .gi-animate-on-scroll {
+        .mb-animate-on-scroll {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .gi-animated {
+        .mb-animated {
             opacity: 1;
             transform: translateY(0);
         }
         
+        .mb-fade-in-up {
+            animation: mbFadeInUp 0.6s ease-out forwards;
+        }
+        
+        /* ホバー効果 */
+        .mb-hover-active {
+            transform: translateY(-2px);
+            box-shadow: var(--mb-shadow-hover);
+            transition: var(--mb-transition);
+        }
+        
         /* タッチフィードバック */
-        .gi-touch-active {
+        .mb-touch-active {
             transform: scale(0.98);
-            opacity: 0.8;
+            opacity: 0.9;
+            transition: var(--mb-transition);
         }
         
         /* フォーカス管理 */
-        .gi-using-mouse *:focus {
+        .mb-keyboard-navigation *:focus {
+            outline: 2px solid var(--mb-primary-500);
+            outline-offset: 2px;
+        }
+        
+        .mb-using-mouse *:focus {
             outline: none;
         }
         
         /* エラー状態 */
-        .gi-field-error {
-            border-color: var(--accent-red) !important;
-            box-shadow: 0 0 0 2px rgba(230, 0, 18, 0.1);
+        .mb-field-error {
+            border-color: var(--mb-error-500) !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 127, 0.1);
+        }
+        
+        /* カード・ホバー情報 */
+        .mb-card-hover-info {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--mb-white);
+            border: 1px solid var(--mb-gray-200);
+            border-radius: 0 0 12px 12px;
+            padding: 16px;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: var(--mb-transition);
+            z-index: 10;
+        }
+        
+        .mb-card-hover-info.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* ブックマーク・アニメーション */
+        .mb-bookmark-btn.bookmarked {
+            color: var(--mb-primary-600);
+            transform: scale(1.1);
+        }
+        
+        /* ステータス・バー・アニメーション */
+        .mb-status-item {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .mb-status-item.mb-animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* キーフレーム・アニメーション */
+        @keyframes mbSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes mbRipple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes mbFadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* レスポンシブ・ブレークポイント対応 */
+        @media (max-width: 768px) {
+            .mb-toast {
+                right: 16px;
+                left: 16px;
+                max-width: none;
+                transform: translateY(-100%);
+                top: 16px;
+            }
+            
+            .mb-toast-show {
+                transform: translateY(0);
+            }
+            
+            .mb-toast-hide {
+                transform: translateY(-100%) scale(0.95);
+            }
+        }
+        
+        /* アクセシビリティ・改善 */
+        @media (prefers-reduced-motion: reduce) {
+            .mb-toast,
+            .mb-loading-overlay,
+            .mb-ripple-effect,
+            .mb-animate-on-scroll,
+            .mb-hover-active,
+            .mb-touch-active,
+            .mb-card-hover-info,
+            .mb-status-item {
+                transition: none;
+                animation: none;
+            }
+        }
+        
+        /* ダークモード対応 */
+        @media (prefers-color-scheme: dark) {
+            .mb-toast {
+                background: var(--mb-gray-800);
+                border-color: var(--mb-gray-700);
+            }
+            
+            .mb-toast-message {
+                color: var(--mb-gray-100);
+            }
+            
+            .mb-toast-close {
+                color: var(--mb-gray-400);
+            }
+            
+            .mb-toast-close:hover {
+                background-color: var(--mb-gray-700);
+                color: var(--mb-gray-200);
+            }
+            
+            .mb-loading-overlay {
+                background: rgba(17, 24, 39, 0.9);
+            }
+            
+            .mb-loading-text {
+                color: var(--mb-gray-300);
+            }
         }
     `;
     document.head.appendChild(styleSheet);
@@ -1736,10 +2906,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ES6モジュール対応
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = GrantInsight;
+    module.exports = MinnaBankGrants;
 }
 
 // AMD対応
 if (typeof define === 'function' && define.amd) {
-    define(() => GrantInsight);
+    define(() => MinnaBankGrants);
 }

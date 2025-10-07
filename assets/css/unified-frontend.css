@@ -1,816 +1,597 @@
 /*!
- * Grant Insight Perfect - 統合フロントエンドCSS
- * 全CSSを統合・最適化したメインスタイルシート
- * 重複削除、階層整理済み
+ * Grant Insight - みんなの銀行スタイル 統合フロントエンドCSS
+ * プロフェッショナル・モノクロデザインシステム
+ * 白黒アイコンのみ・高級感のあるスタイル
  * 
- * @version 1.0.0
- * @date 2025-10-05
+ * @version 2.0.0 - Minna Bank Style
+ * @date 2025-10-07
  */
 
 /* ===============================================
-   CSS変数定義 - 一元管理
+   みんなの銀行デザインシステム - CSS変数定義
    =============================================== */
 :root {
-    /* カラーシステム - みんなの銀行風モノクロベース */
-    --mb-black: #000000;
-    --mb-white: #FFFFFF;
-    --mb-gray-900: #0F0F0F;
-    --mb-gray-800: #1A1A1A;
-    --mb-gray-700: #2A2A2A;
-    --mb-gray-600: #3A3A3A;
-    --mb-gray-500: #6B6B6B;
-    --mb-gray-400: #9B9B9B;
-    --mb-gray-300: #CCCCCC;
-    --mb-gray-200: #E5E5E5;
-    --mb-gray-100: #F5F5F5;
+    /* みんなの銀行 プライマリカラー - プロフェッショナルモノクロ */
+    --minna-primary: #000000;
+    --minna-secondary: #1a1a1a;
+    --minna-accent: #262626;
     
-    /* プライマリカラー */
-    --primary-blue: #2563eb;
-    --primary-green: #059669;
-    --primary-dark: #047857;
-    --primary-light: #10b981;
+    /* 拡張グレースケールパレット */
+    --minna-white: #ffffff;
+    --minna-gray-25: #fcfcfc;
+    --minna-gray-50: #fafafa;
+    --minna-gray-100: #f5f5f5;
+    --minna-gray-150: #f0f0f0;
+    --minna-gray-200: #e5e5e5;
+    --minna-gray-250: #e0e0e0;
+    --minna-gray-300: #d4d4d4;
+    --minna-gray-350: #c9c9c9;
+    --minna-gray-400: #a3a3a3;
+    --minna-gray-450: #999999;
+    --minna-gray-500: #737373;
+    --minna-gray-550: #666666;
+    --minna-gray-600: #525252;
+    --minna-gray-650: #484848;
+    --minna-gray-700: #404040;
+    --minna-gray-750: #383838;
+    --minna-gray-800: #262626;
+    --minna-gray-850: #1f1f1f;
+    --minna-gray-900: #171717;
+    --minna-gray-950: #0a0a0a;
     
-    /* アクセントカラー（最小限の使用） */
-    --accent-red: #E60012;
-    --accent-green: #00C853;
-    --accent-orange: #ea580c;
+    /* セマンティックカラー - 最小限・プロフェッショナル */
+    --minna-success: #22c55e;
+    --minna-warning: #f59e0b;
+    --minna-danger: #ef4444;
+    --minna-info: #3b82f6;
     
-    /* フォントファミリー */
-    --font-primary: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
-    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    /* タイポグラフィシステム */
+    --minna-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --minna-font-secondary: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic Medium', sans-serif;
+    --minna-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
     
-    /* フォントサイズ（16px以上でiOS自動ズーム防止） */
-    --text-xs: 0.8125rem;    /* 13px */
-    --text-sm: 0.875rem;     /* 14px */
-    --text-base: 0.9375rem;  /* 15px */
-    --text-md: 1rem;         /* 16px - 最小サイズ */
-    --text-lg: 1.125rem;     /* 18px - チャット用拡大 */
-    --text-xl: 1.25rem;      /* 20px */
-    --text-2xl: 1.5rem;      /* 24px */
-    --text-3xl: 1.875rem;    /* 30px */
-    --text-4xl: 2.25rem;     /* 36px */
+    /* フォントウェイト */
+    --minna-weight-thin: 100;
+    --minna-weight-light: 300;
+    --minna-weight-normal: 400;
+    --minna-weight-medium: 500;
+    --minna-weight-semibold: 600;
+    --minna-weight-bold: 700;
+    --minna-weight-extrabold: 800;
+    --minna-weight-black: 900;
     
-    /* スペーシング */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-2xl: 48px;
+    /* フォントサイズ */
+    --minna-text-xs: 0.75rem;      /* 12px */
+    --minna-text-sm: 0.875rem;     /* 14px */
+    --minna-text-base: 1rem;       /* 16px */
+    --minna-text-lg: 1.125rem;     /* 18px */
+    --minna-text-xl: 1.25rem;      /* 20px */
+    --minna-text-2xl: 1.5rem;      /* 24px */
+    --minna-text-3xl: 1.875rem;    /* 30px */
+    --minna-text-4xl: 2.25rem;     /* 36px */
+    --minna-text-5xl: 3rem;        /* 48px */
+    --minna-text-6xl: 3.75rem;     /* 60px */
+    --minna-text-7xl: 4.5rem;      /* 72px */
+    --minna-text-8xl: 6rem;        /* 96px */
+    --minna-text-9xl: 8rem;        /* 128px */
     
-    /* Touch-friendly sizing */
-    --touch-target-min: 44px;
+    /* 行間 */
+    --minna-leading-none: 1;
+    --minna-leading-tight: 1.25;
+    --minna-leading-snug: 1.375;
+    --minna-leading-normal: 1.5;
+    --minna-leading-relaxed: 1.625;
+    --minna-leading-loose: 2;
     
-    /* シャドウ */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* スペーシングスケール - プロフェッショナル精度 */
+    --minna-space-px: 1px;
+    --minna-space-0: 0;
+    --minna-space-0-5: 0.125rem;   /* 2px */
+    --minna-space-1: 0.25rem;      /* 4px */
+    --minna-space-1-5: 0.375rem;   /* 6px */
+    --minna-space-2: 0.5rem;       /* 8px */
+    --minna-space-2-5: 0.625rem;   /* 10px */
+    --minna-space-3: 0.75rem;      /* 12px */
+    --minna-space-3-5: 0.875rem;   /* 14px */
+    --minna-space-4: 1rem;         /* 16px */
+    --minna-space-5: 1.25rem;      /* 20px */
+    --minna-space-6: 1.5rem;       /* 24px */
+    --minna-space-7: 1.75rem;      /* 28px */
+    --minna-space-8: 2rem;         /* 32px */
+    --minna-space-9: 2.25rem;      /* 36px */
+    --minna-space-10: 2.5rem;      /* 40px */
+    --minna-space-11: 2.75rem;     /* 44px */
+    --minna-space-12: 3rem;        /* 48px */
+    --minna-space-14: 3.5rem;      /* 56px */
+    --minna-space-16: 4rem;        /* 64px */
+    --minna-space-20: 5rem;        /* 80px */
+    --minna-space-24: 6rem;        /* 96px */
+    --minna-space-28: 7rem;        /* 112px */
+    --minna-space-32: 8rem;        /* 128px */
+    --minna-space-36: 9rem;        /* 144px */
+    --minna-space-40: 10rem;       /* 160px */
+    --minna-space-44: 11rem;       /* 176px */
+    --minna-space-48: 12rem;       /* 192px */
+    --minna-space-52: 13rem;       /* 208px */
+    --minna-space-56: 14rem;       /* 224px */
+    --minna-space-60: 15rem;       /* 240px */
+    --minna-space-64: 16rem;       /* 256px */
+    --minna-space-72: 18rem;       /* 288px */
+    --minna-space-80: 20rem;       /* 320px */
+    --minna-space-96: 24rem;       /* 384px */
     
-    /* アニメーション */
-    --duration-fast: 150ms;
-    --duration-normal: 250ms;
-    --duration-slow: 350ms;
-    --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    /* ボーダー半径 - 洗練されたカーブ */
+    --minna-radius-none: 0;
+    --minna-radius-sm: 0.125rem;    /* 2px */
+    --minna-radius-base: 0.25rem;   /* 4px */
+    --minna-radius-md: 0.375rem;    /* 6px */
+    --minna-radius-lg: 0.5rem;      /* 8px */
+    --minna-radius-xl: 0.75rem;     /* 12px */
+    --minna-radius-2xl: 1rem;       /* 16px */
+    --minna-radius-3xl: 1.5rem;     /* 24px */
+    --minna-radius-full: 9999px;
     
-    /* Z-index管理 */
-    --z-dropdown: 50;
-    --z-header: 100;
-    --z-overlay: 300;
-    --z-sidebar: 310;
-    --z-modal: 400;
-    --z-notification: 500;
+    /* シャドウ - プロフェッショナル深度 */
+    --minna-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --minna-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --minna-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --minna-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --minna-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --minna-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --minna-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    --minna-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
     
-    /* レイアウト */
-    --header-height: 80px;
-    --mobile-menu-width: 320px;
+    /* トランジション - スムーズ・プロフェッショナル */
+    --minna-transition-none: none;
+    --minna-transition-all: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --minna-transition-fast: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --minna-transition-normal: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --minna-transition-slow: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* キュービックベジエイージング */
+    --minna-ease-linear: cubic-bezier(0, 0, 1, 1);
+    --minna-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --minna-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --minna-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* レイアウト定数 */
+    --minna-container-xs: 320px;
+    --minna-container-sm: 640px;
+    --minna-container-md: 768px;
+    --minna-container-lg: 1024px;
+    --minna-container-xl: 1280px;
+    --minna-container-2xl: 1536px;
+    --minna-container-max: 1400px;
+    
+    /* Z-Indexスケール */
+    --minna-z-0: 0;
+    --minna-z-10: 10;
+    --minna-z-20: 20;
+    --minna-z-30: 30;
+    --minna-z-40: 40;
+    --minna-z-50: 50;
+    --minna-z-auto: auto;
+    --minna-z-dropdown: 1000;
+    --minna-z-sticky: 1020;
+    --minna-z-fixed: 1030;
+    --minna-z-modal-backdrop: 1040;
+    --minna-z-modal: 1050;
+    --minna-z-popover: 1060;
+    --minna-z-tooltip: 1070;
 }
 
 /* ===============================================
    基本リセット・ベーススタイル
    =============================================== */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
 * {
     margin: 0;
     padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+    box-sizing: border-box;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 html {
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     scroll-behavior: smooth;
 }
 
 body {
-    line-height: 1.6;
-    font-family: var(--font-primary);
-    font-size: var(--text-md);
-    color: var(--mb-black);
-    background-color: var(--mb-white);
-    min-height: 100vh;
-    position: relative;
+    font-family: var(--minna-font-secondary);
+    background: var(--minna-gray-50);
+    color: var(--minna-gray-900);
+    line-height: var(--minna-leading-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1;
+    text-rendering: optimizeLegibility;
 }
 
 /* ===============================================
-   グローバル色対応ルール（コントラスト修正）
+   みんなの銀行 アイコンシステム - 厳格な白黒のみ
    =============================================== */
-
-/* 白背景 → 黒系文字・アイコン */
-.bg-white,
-.background-white,
-*[style*="background: #fff"],
-*[style*="background: white"],
-*[style*="background-color: #fff"],
-*[style*="background-color: white"] {
-    color: var(--mb-black) !important;
+.minna-icon {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    flex-shrink: 0;
 }
 
-.bg-white *:not(a):not(button),
-.background-white *:not(a):not(button) {
-    color: var(--mb-black) !important;
+/* コアビジネスアイコン */
+.minna-icon-money {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>');
 }
 
-.bg-white svg,
-.bg-white i,
-.bg-white .icon,
-.background-white svg,
-.background-white i,
-.background-white .icon {
-    color: var(--mb-black) !important;
-    fill: var(--mb-black) !important;
+.minna-icon-chart {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
 }
 
-/* 黒背景 → 白系文字・アイコン */
-.bg-black,
-.background-black,
-*[style*="background: #000"],
-*[style*="background: black"],
-*[style*="background-color: #000"],
-*[style*="background-color: black"] {
-    color: var(--mb-white) !important;
+.minna-icon-building {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>');
 }
 
-.bg-black *:not(a):not(button),
-.background-black *:not(a):not(button) {
-    color: var(--mb-white) !important;
+.minna-icon-calendar {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
 }
 
-.bg-black svg,
-.bg-black i,
-.bg-black .icon,
-.background-black svg,
-.background-black i,
-.background-black .icon {
-    color: var(--mb-white) !important;
-    fill: var(--mb-white) !important;
+.minna-icon-clock {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>');
 }
+
+.minna-icon-location {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>');
+}
+
+.minna-icon-target {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>');
+}
+
+.minna-icon-document {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>');
+}
+
+/* ナビゲーション・UI アイコン */
+.minna-icon-search {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>');
+}
+
+.minna-icon-filter {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 2v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"/></svg>');
+}
+
+.minna-icon-grid {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>');
+}
+
+.minna-icon-list {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>');
+}
+
+.minna-icon-close {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>');
+}
+
+.minna-icon-chevron-down {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>');
+}
+
+.minna-icon-chevron-up {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>');
+}
+
+.minna-icon-chevron-left {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>');
+}
+
+.minna-icon-chevron-right {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>');
+}
+
+/* ステータス・アクション アイコン */
+.minna-icon-check {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>');
+}
+
+.minna-icon-star {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>');
+}
+
+.minna-icon-heart {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>');
+}
+
+.minna-icon-link {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 015.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>');
+}
+
+/* 白系バリエーション（ダーク背景用） */
+.minna-icon-white {
+    filter: brightness(0) invert(1);
+}
+
+/* アイコンサイズ */
+.minna-icon-xs { width: 0.75rem; height: 0.75rem; }
+.minna-icon-sm { width: 1rem; height: 1rem; }
+.minna-icon-md { width: 1.25rem; height: 1.25rem; }
+.minna-icon-lg { width: 1.5rem; height: 1.5rem; }
+.minna-icon-xl { width: 2rem; height: 2rem; }
+.minna-icon-2xl { width: 2.5rem; height: 2.5rem; }
+.minna-icon-3xl { width: 3rem; height: 3rem; }
 
 /* ===============================================
-   タイポグラフィ
+   みんなの銀行 コンテナシステム
    =============================================== */
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-primary);
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--mb-black);
-    margin-bottom: 1rem;
-}
-
-h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 900;
-    letter-spacing: -0.02em;
-}
-
-h2 {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: 800;
-}
-
-h3 {
-    font-size: clamp(1.25rem, 3vw, 2rem);
-    font-weight: 700;
-}
-
-h4 {
-    font-size: var(--text-xl);
-    font-weight: 600;
-}
-
-h5 {
-    font-size: var(--text-lg);
-    font-weight: 600;
-}
-
-h6 {
-    font-size: var(--text-md);
-    font-weight: 600;
-}
-
-p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-    color: var(--mb-gray-700);
-}
-
-a {
-    color: var(--primary-blue);
-    text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-out);
-}
-
-a:hover {
-    color: var(--primary-green);
-    text-decoration: underline;
-}
-
-/* ===============================================
-   レイアウト・コンテナ
-   =============================================== */
-.container {
+.minna-container {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-md);
+    max-width: var(--minna-container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--minna-space-4);
+    padding-right: var(--minna-space-4);
 }
 
-.section {
-    padding: var(--spacing-2xl) 0;
+@media (min-width: 640px) {
+    .minna-container { 
+        padding-left: var(--minna-space-6); 
+        padding-right: var(--minna-space-6); 
+    }
 }
 
-.grid {
-    display: grid;
-    gap: var(--spacing-lg);
-}
-
-.grid-2 {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.grid-3 {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.flex {
-    display: flex;
-}
-
-.flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flex-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+@media (min-width: 1024px) {
+    .minna-container { 
+        padding-left: var(--minna-space-8); 
+        padding-right: var(--minna-space-8); 
+    }
 }
 
 /* ===============================================
-   ヘッダー
+   みんなの銀行 ボタンシステム
    =============================================== */
-.site-header {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-header);
-    background: var(--mb-white);
-    border-bottom: 1px solid var(--mb-gray-200);
-    height: var(--header-height);
-}
-
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    padding: 0 var(--spacing-md);
-}
-
-.site-logo {
-    font-size: var(--text-xl);
-    font-weight: 900;
-    color: var(--mb-black);
-    text-decoration: none;
-}
-
-.main-navigation {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-}
-
-.nav-menu {
-    display: flex;
-    list-style: none;
-    gap: var(--spacing-lg);
-    margin: 0;
-    padding: 0;
-}
-
-.nav-menu a {
-    color: var(--mb-gray-700);
-    font-weight: 500;
-    font-size: var(--text-md);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: 4px;
-    transition: all var(--duration-fast) var(--ease-out);
-}
-
-.nav-menu a:hover {
-    color: var(--mb-black);
-    background-color: var(--mb-gray-100);
-    text-decoration: none;
-}
-
-/* Mobile menu toggle */
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: var(--spacing-sm);
-}
-
-/* ===============================================
-   ヒーローセクション
-   =============================================== */
-.hero-section {
-    padding: var(--spacing-2xl) 0;
-    background: linear-gradient(135deg, var(--mb-gray-100) 0%, var(--mb-white) 100%);
-    text-align: center;
-}
-
-.hero-title {
-    font-size: clamp(28px, 5.5vw, 48px) !important;
-    line-height: 1.25 !important;
-    letter-spacing: -0.02em !important;
-    margin-bottom: 20px !important;
-    font-weight: 900 !important;
-    color: var(--mb-black);
-}
-
-.hero-subtitle {
-    font-size: clamp(16px, 3vw, 20px);
-    color: var(--mb-gray-600);
-    margin-bottom: var(--spacing-xl);
-    line-height: 1.5;
-}
-
-.hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    background: var(--primary-blue);
-    color: var(--mb-white);
-    padding: var(--spacing-md) var(--spacing-xl);
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: var(--text-md);
-    text-decoration: none;
-    transition: all var(--duration-normal) var(--ease-out);
-    min-height: var(--touch-target-min);
-}
-
-.hero-cta:hover {
-    background: var(--primary-green);
-    color: var(--mb-white);
-    text-decoration: none;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* ===============================================
-   カテゴリセクション（フォント修正済み）
-   =============================================== */
-.categories-section,
-.section-categories {
-    padding: var(--spacing-2xl) 0;
-}
-
-.categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
-}
-
-.category-card {
-    background: var(--mb-white);
-    border: 1px solid var(--mb-gray-200);
-    border-radius: 8px;
-    padding: var(--spacing-lg);
-    transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-sm);
-}
-
-.category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-blue);
-}
-
-/* カテゴリカードタイポグラフィ（修正済み） */
-.categories-section .category-card .card-title,
-.section-categories .category-card .card-title,
-[class*="category"] .card-title {
-    font-size: 20px !important; /* デスクトップ：バランス調整 */
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--mb-black);
-    margin-bottom: 0.75rem;
-}
-
-.categories-section .category-card .card-description,
-.section-categories .category-card .card-description,
-[class*="category"] .card-description {
-    font-size: 15px !important; /* 可読性向上 */
-    line-height: 1.5;
-    color: #4a4a4a;
-    margin-bottom: 1rem;
-}
-
-/* Recent Grants */
-.recent-grants {
-    margin-top: 1rem;
-}
-
-.recent-grant-item {
-    padding: var(--spacing-sm) 0;
-    border-bottom: 1px solid var(--mb-gray-100);
-    font-size: var(--text-sm);
-    color: var(--mb-gray-600);
-}
-
-.recent-grant-item:last-child {
-    border-bottom: none;
-}
-
-/* ===============================================
-   助成金カード
-   =============================================== */
-.grant-card {
-    background: var(--mb-white);
-    border: 1px solid var(--mb-gray-200);
-    border-radius: 8px;
-    padding: var(--spacing-lg);
-    transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-card);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.grant-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-blue);
-}
-
-.grant-card-header {
-    margin-bottom: var(--spacing-md);
-}
-
-.grant-card-title {
-    font-size: var(--text-lg);
-    font-weight: 700;
-    color: var(--mb-black);
-    margin-bottom: var(--spacing-sm);
-    line-height: 1.4;
-}
-
-.grant-card-title a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.grant-card-title a:hover {
-    color: var(--primary-blue);
-}
-
-.grant-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-}
-
-.grant-meta-item {
-    background: var(--mb-gray-100);
-    color: var(--mb-gray-700);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: var(--text-xs);
-    font-weight: 500;
-}
-
-.grant-card-excerpt {
-    color: var(--mb-gray-600);
-    line-height: 1.5;
-    margin-bottom: var(--spacing-md);
-    flex-grow: 1;
-}
-
-.grant-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-    padding-top: var(--spacing-md);
-    border-top: 1px solid var(--mb-gray-100);
-}
-
-.grant-card-cta {
-    background: var(--primary-blue);
-    color: var(--mb-white);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: 4px;
-    font-size: var(--text-sm);
-    font-weight: 600;
-    text-decoration: none;
-    transition: background var(--duration-fast) var(--ease-out);
-}
-
-.grant-card-cta:hover {
-    background: var(--primary-green);
-    color: var(--mb-white);
-    text-decoration: none;
-}
-
-/* ===============================================
-   チャットUI（拡大フォント修正済み）
-   =============================================== */
-.chat-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 400px;
-    height: 600px;
-    background: var(--mb-white);
-    border: 1px solid var(--mb-gray-300);
-    border-radius: 12px;
-    box-shadow: var(--shadow-xl);
-    display: flex;
-    flex-direction: column;
-    z-index: var(--z-modal);
-    overflow: hidden;
-}
-
-.chat-header {
-    background: var(--primary-blue);
-    color: var(--mb-white);
-    padding: var(--spacing-md);
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px !important; /* 余白削減 */
-    display: flex;
-    flex-direction: column;
-    gap: 14px !important; /* 間隔調整 */
-}
-
-
-
-.message-ai .message-bubble {
-    background: var(--mb-white) !important;
-    color: var(--mb-black) !important;
-    border: 2px solid var(--mb-gray-200) !important;
-}
-
-.message-user .message-bubble {
-    background: var(--primary-blue) !important;
-    color: var(--mb-white) !important;
-    border: 2px solid var(--primary-blue) !important;
-}
-
-.chat-input-container {
-    padding: var(--spacing-md);
-    border-top: 1px solid var(--mb-gray-200);
-    display: flex;
-    gap: var(--spacing-sm);
-    background: var(--mb-white);
-}
-
-.chat-input {
-    flex: 1;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--mb-gray-300);
-    border-radius: 6px;
-    font-size: var(--text-md);
-    min-height: var(--touch-target-min);
-}
-
-.chat-send-button {
-    background: var(--primary-blue);
-    color: var(--mb-white);
-    border: none;
-    border-radius: 6px;
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-weight: 600;
-    cursor: pointer;
-    min-height: var(--touch-target-min);
-    min-width: var(--touch-target-min);
-    transition: background var(--duration-fast) var(--ease-out);
-}
-
-.chat-send-button:hover {
-    background: var(--primary-green);
-}
-
-.chat-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background: var(--primary-blue);
-    color: var(--mb-white);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--text-xl);
-    z-index: var(--z-notification);
-    transition: all var(--duration-normal) var(--ease-out);
-}
-
-.chat-toggle:hover {
-    background: var(--primary-green);
-    transform: scale(1.1);
-}
-
-/* ===============================================
-   フッター
-   =============================================== */
-.site-footer {
-    background: var(--mb-gray-900);
-    color: var(--mb-white);
-    padding: var(--spacing-2xl) 0 var(--spacing-lg) 0;
-    margin-top: var(--spacing-2xl);
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
-}
-
-.footer-section h3 {
-    color: var(--mb-white);
-    margin-bottom: var(--spacing-md);
-    font-size: var(--text-lg);
-}
-
-.footer-section p,
-.footer-section li {
-    color: var(--mb-gray-300);
-    line-height: 1.6;
-}
-
-.footer-section a {
-    color: var(--mb-gray-300);
-    transition: color var(--duration-fast) var(--ease-out);
-}
-
-.footer-section a:hover {
-    color: var(--mb-white);
-}
-
-.footer-bottom {
-    border-top: 1px solid var(--mb-gray-700);
-    padding-top: var(--spacing-lg);
-    text-align: center;
-    color: var(--mb-gray-400);
-    font-size: var(--text-sm);
-}
-
-/* ===============================================
-   ボタン・フォーム要素
-   =============================================== */
-.btn {
+.minna-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border: none;
-    border-radius: 6px;
-    font-size: var(--text-md);
-    font-weight: 600;
+    gap: var(--minna-space-2);
+    padding: var(--minna-space-3) var(--minna-space-6);
+    border: 2px solid transparent;
+    border-radius: var(--minna-radius-lg);
+    font-family: var(--minna-font-primary);
+    font-size: var(--minna-text-sm);
+    font-weight: var(--minna-weight-semibold);
+    line-height: var(--minna-leading-none);
     text-decoration: none;
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-out);
-    min-height: var(--touch-target-min);
-    line-height: 1;
-}
-
-.btn-primary {
-    background: var(--primary-blue);
-    color: var(--mb-white);
-}
-
-.btn-primary:hover {
-    background: var(--primary-green);
-    color: var(--mb-white);
-    text-decoration: none;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
-.btn-secondary {
-    background: var(--mb-gray-100);
-    color: var(--mb-gray-700);
-    border: 1px solid var(--mb-gray-300);
-}
-
-.btn-secondary:hover {
-    background: var(--mb-gray-200);
-    color: var(--mb-black);
-    text-decoration: none;
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--primary-blue);
-    border: 2px solid var(--primary-blue);
-}
-
-.btn-outline:hover {
-    background: var(--primary-blue);
-    color: var(--mb-white);
-    text-decoration: none;
-}
-
-/* フォーム要素 */
-.form-group {
-    margin-bottom: var(--spacing-lg);
-}
-
-.form-label {
-    display: block;
-    font-weight: 600;
-    color: var(--mb-black);
-    margin-bottom: var(--spacing-sm);
-    font-size: var(--text-md);
-}
-
-.form-input,
-.form-textarea,
-.form-select {
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--mb-gray-300);
-    border-radius: 4px;
-    font-size: var(--text-md);
-    font-family: var(--font-primary);
-    line-height: 1.5;
-    transition: border-color var(--duration-fast) var(--ease-out);
-    min-height: var(--touch-target-min);
-}
-
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
+    transition: var(--minna-transition-fast);
+    white-space: nowrap;
+    user-select: none;
     outline: none;
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
-.form-textarea {
-    min-height: 120px;
-    resize: vertical;
+.minna-btn:focus-visible {
+    outline: 2px solid var(--minna-info);
+    outline-offset: 2px;
+}
+
+/* プライマリボタン */
+.minna-btn-primary {
+    background-color: var(--minna-primary);
+    color: var(--minna-white);
+    border-color: var(--minna-primary);
+}
+
+.minna-btn-primary:hover {
+    background-color: var(--minna-gray-800);
+    border-color: var(--minna-gray-800);
+    transform: translateY(-1px);
+    box-shadow: var(--minna-shadow-lg);
+}
+
+.minna-btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--minna-shadow-md);
+}
+
+/* セカンダリボタン */
+.minna-btn-secondary {
+    background-color: var(--minna-white);
+    color: var(--minna-gray-900);
+    border-color: var(--minna-gray-300);
+}
+
+.minna-btn-secondary:hover {
+    background-color: var(--minna-gray-50);
+    border-color: var(--minna-gray-400);
+    transform: translateY(-1px);
+    box-shadow: var(--minna-shadow-md);
+}
+
+/* アウトラインボタン */
+.minna-btn-outline {
+    background-color: transparent;
+    color: var(--minna-gray-700);
+    border-color: var(--minna-gray-300);
+}
+
+.minna-btn-outline:hover {
+    background-color: var(--minna-gray-100);
+    color: var(--minna-gray-900);
+    border-color: var(--minna-gray-400);
+}
+
+/* ゴーストボタン */
+.minna-btn-ghost {
+    background-color: transparent;
+    color: var(--minna-gray-600);
+    border-color: transparent;
+}
+
+.minna-btn-ghost:hover {
+    background-color: var(--minna-gray-100);
+    color: var(--minna-gray-900);
+}
+
+/* ボタンサイズ */
+.minna-btn-xs {
+    padding: var(--minna-space-1-5) var(--minna-space-3);
+    font-size: var(--minna-text-xs);
+}
+
+.minna-btn-sm {
+    padding: var(--minna-space-2) var(--minna-space-4);
+    font-size: var(--minna-text-sm);
+}
+
+.minna-btn-lg {
+    padding: var(--minna-space-4) var(--minna-space-8);
+    font-size: var(--minna-text-lg);
+}
+
+.minna-btn-xl {
+    padding: var(--minna-space-5) var(--minna-space-10);
+    font-size: var(--minna-text-xl);
+}
+
+/* ===============================================
+   みんなの銀行 フォーム要素
+   =============================================== */
+.minna-input {
+    width: 100%;
+    padding: var(--minna-space-3) var(--minna-space-4);
+    background-color: var(--minna-white);
+    border: 2px solid var(--minna-gray-300);
+    border-radius: var(--minna-radius-lg);
+    font-family: var(--minna-font-primary);
+    font-size: var(--minna-text-base);
+    color: var(--minna-gray-900);
+    transition: var(--minna-transition-fast);
+    outline: none;
+}
+
+.minna-input:focus {
+    border-color: var(--minna-primary);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.minna-input::placeholder {
+    color: var(--minna-gray-500);
+}
+
+.minna-select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right var(--minna-space-3) center;
+    background-size: 16px;
+    padding-right: var(--minna-space-10);
+}
+
+/* ===============================================
+   みんなの銀行 カードシステム
+   =============================================== */
+.minna-card {
+    background-color: var(--minna-white);
+    border: 2px solid var(--minna-gray-200);
+    border-radius: var(--minna-radius-xl);
+    padding: var(--minna-space-6);
+    box-shadow: var(--minna-shadow-sm);
+    transition: var(--minna-transition-normal);
+}
+
+.minna-card:hover {
+    border-color: var(--minna-gray-300);
+    box-shadow: var(--minna-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.minna-card-header {
+    margin-bottom: var(--minna-space-4);
+    padding-bottom: var(--minna-space-4);
+    border-bottom: 1px solid var(--minna-gray-200);
+}
+
+.minna-card-body {
+    margin-bottom: var(--minna-space-4);
+}
+
+.minna-card-footer {
+    margin-top: var(--minna-space-4);
+    padding-top: var(--minna-space-4);
+    border-top: 1px solid var(--minna-gray-200);
+}
+
+/* ===============================================
+   みんなの銀行 バッジシステム
+   =============================================== */
+.minna-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--minna-space-1);
+    padding: var(--minna-space-1) var(--minna-space-3);
+    background-color: var(--minna-gray-100);
+    color: var(--minna-gray-700);
+    border-radius: var(--minna-radius-full);
+    font-size: var(--minna-text-xs);
+    font-weight: var(--minna-weight-medium);
+    white-space: nowrap;
+}
+
+.minna-badge-primary {
+    background-color: var(--minna-primary);
+    color: var(--minna-white);
+}
+
+.minna-badge-success {
+    background-color: var(--minna-success);
+    color: var(--minna-white);
+}
+
+.minna-badge-warning {
+    background-color: var(--minna-warning);
+    color: var(--minna-white);
+}
+
+.minna-badge-danger {
+    background-color: var(--minna-danger);
+    color: var(--minna-white);
+}
+
+/* ===============================================
+   みんなの銀行 ローディング状態
+   =============================================== */
+.minna-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--minna-space-3);
+    padding: var(--minna-space-8);
+    color: var(--minna-gray-600);
+}
+
+.minna-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--minna-gray-200);
+    border-top: 2px solid var(--minna-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* ===============================================
    ユーティリティクラス
    =============================================== */
-.sr-only {
+.minna-sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -822,210 +603,461 @@ a:hover {
     border: 0;
 }
 
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.minna-hidden { display: none !important; }
+.minna-block { display: block !important; }
+.minna-flex { display: flex !important; }
+.minna-grid { display: grid !important; }
 
-.text-primary { color: var(--primary-blue); }
-.text-success { color: var(--accent-green); }
-.text-danger { color: var(--accent-red); }
-.text-muted { color: var(--mb-gray-500); }
+/* タイポグラフィユーティリティ */
+.minna-text-xs { font-size: var(--minna-text-xs); }
+.minna-text-sm { font-size: var(--minna-text-sm); }
+.minna-text-base { font-size: var(--minna-text-base); }
+.minna-text-lg { font-size: var(--minna-text-lg); }
+.minna-text-xl { font-size: var(--minna-text-xl); }
+.minna-text-2xl { font-size: var(--minna-text-2xl); }
+.minna-text-3xl { font-size: var(--minna-text-3xl); }
+.minna-text-4xl { font-size: var(--minna-text-4xl); }
+.minna-text-5xl { font-size: var(--minna-text-5xl); }
 
-.bg-primary { background-color: var(--primary-blue); }
-.bg-light { background-color: var(--mb-gray-100); }
-.bg-white { background-color: var(--mb-white); }
+.minna-font-thin { font-weight: var(--minna-weight-thin); }
+.minna-font-light { font-weight: var(--minna-weight-light); }
+.minna-font-normal { font-weight: var(--minna-weight-normal); }
+.minna-font-medium { font-weight: var(--minna-weight-medium); }
+.minna-font-semibold { font-weight: var(--minna-weight-semibold); }
+.minna-font-bold { font-weight: var(--minna-weight-bold); }
+.minna-font-extrabold { font-weight: var(--minna-weight-extrabold); }
+.minna-font-black { font-weight: var(--minna-weight-black); }
 
-.mb-0 { margin-bottom: 0; }
-.mb-1 { margin-bottom: var(--spacing-xs); }
-.mb-2 { margin-bottom: var(--spacing-sm); }
-.mb-3 { margin-bottom: var(--spacing-md); }
-.mb-4 { margin-bottom: var(--spacing-lg); }
-.mb-5 { margin-bottom: var(--spacing-xl); }
+/* カラーユーティリティ */
+.minna-text-primary { color: var(--minna-primary); }
+.minna-text-white { color: var(--minna-white); }
+.minna-text-gray-900 { color: var(--minna-gray-900); }
+.minna-text-gray-700 { color: var(--minna-gray-700); }
+.minna-text-gray-500 { color: var(--minna-gray-500); }
 
-.mt-0 { margin-top: 0; }
-.mt-1 { margin-top: var(--spacing-xs); }
-.mt-2 { margin-top: var(--spacing-sm); }
-.mt-3 { margin-top: var(--spacing-md); }
-.mt-4 { margin-top: var(--spacing-lg); }
-.mt-5 { margin-top: var(--spacing-xl); }
-
-/* ===============================================
-   装飾要素削除（ユーザー要望）
-   =============================================== */
-
-/* 上部点線等の装飾を全削除 */
-.single-grant::before,
-.single-grant header::before,
-.grant-stylish::before,
-body.single-grant::before,
-.single-grant .entry-header::before,
-.single-grant .site-main::before,
-article.grant::before {
-    display: none !important;
-}
-
-/* 点線スタイルのボーダーを全て削除 */
-*[style*="border-top: dashed"],
-*[style*="border-style: dashed"] {
-    border-top: none !important;
-}
+.minna-bg-primary { background-color: var(--minna-primary); }
+.minna-bg-white { background-color: var(--minna-white); }
+.minna-bg-gray-50 { background-color: var(--minna-gray-50); }
+.minna-bg-gray-100 { background-color: var(--minna-gray-100); }
 
 /* ===============================================
    レスポンシブデザイン
    =============================================== */
-@media (max-width: 768px) {
-    /* ナビゲーション */
-    .main-navigation {
-        display: none;
+@media (max-width: 640px) {
+    .minna-btn {
+        padding: var(--minna-space-2-5) var(--minna-space-4);
+        font-size: var(--minna-text-sm);
     }
     
-    .menu-toggle {
-        display: block;
-    }
-    
-    /* ヒーロー */
-    .hero-section {
-        padding: var(--spacing-xl) 0;
-    }
-    
-    /* カテゴリセクション - モバイルフォント調整 */
-    .categories-section .category-card .card-title,
-    .section-categories .category-card .card-title,
-    [class*="category"] .card-title {
-        font-size: 17px !important; /* モバイル：17px（13px→17px） */
-    }
-    
-    .categories-section .category-card .card-description,
-    .section-categories .category-card .card-description,
-    [class*="category"] .card-description {
-        font-size: 14px !important; /* モバイル：14px */
-    }
-    
-    /* グリッド */
-    .categories-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-    
-    .grid-2,
-    .grid-3 {
-        grid-template-columns: 1fr;
-    }
-    
-    /* チャット */
-    .chat-container {
-        width: calc(100vw - 40px);
-        height: calc(100vh - 100px);
-        bottom: 10px;
-        right: 10px;
-        left: 10px;
-        width: auto;
-    }
-    
-    .chat-toggle {
-        bottom: 10px;
-        right: 10px;
-        width: 50px;
-        height: 50px;
-        font-size: var(--text-lg);
-    }
-    
-    /* フォント調整 */
-    .container {
-        padding: 0 var(--spacing-sm);
-    }
-    
-    .section {
-        padding: var(--spacing-lg) 0;
-    }
-    
-    /* フッター */
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-}
-
-@media (max-width: 480px) {
-    /* さらに小さなデバイス用調整 */
-    .hero-title {
-        font-size: 24px !important;
-    }
-    
-    .hero-subtitle {
-        font-size: 16px !important;
-    }
-    
-    .btn {
-        padding: var(--spacing-md);
-        font-size: var(--text-sm);
-    }
-    
-    /* チャットメッセージ - スマホでも大きなフォント */
-    .message-bubble {
-        font-size: 17px !important; /* スマホでも大きく */
-        padding: 16px 18px !important;
+    .minna-card {
+        padding: var(--minna-space-4);
     }
 }
 
 /* ===============================================
-   プリント用スタイル
+   ダークモードサポート
    =============================================== */
-@media print {
-    .chat-container,
-    .chat-toggle,
-    .site-header,
-    .site-footer {
-        display: none !important;
-    }
-    
-    body {
-        font-size: 12pt;
-        line-height: 1.4;
-        color: #000;
-        background: #fff;
-    }
-    
-    .grant-card {
-        break-inside: avoid;
-        border: 1px solid #000;
-        margin-bottom: 1rem;
-    }
-}
-
-/* ===============================================
-   高コントラストモード対応
-   =============================================== */
-@media (prefers-contrast: high) {
+@media (prefers-color-scheme: dark) {
     :root {
-        --mb-gray-500: #000;
-        --mb-gray-600: #000;
-        --mb-gray-700: #000;
-    }
-    
-    .grant-card,
-    .category-card {
-        border: 2px solid var(--mb-black);
-    }
-    
-    .btn {
-        border: 2px solid currentColor;
+        --minna-white: #1a1a1a;
+        --minna-gray-50: #262626;
+        --minna-gray-100: #2d2d2d;
+        --minna-gray-200: #404040;
+        --minna-gray-300: #525252;
     }
 }
 
 /* ===============================================
-   Reduced motion 対応
+   アクセシビリティ
    =============================================== */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-    
-    html {
-        scroll-behavior: auto;
+}
+
+/* ハイコントラストモード */
+@media (prefers-contrast: high) {
+    .minna-card {
+        border-width: 3px;
     }
+    
+    .minna-btn {
+        border-width: 3px;
+    }
+    
+    .minna-input {
+        border-width: 3px;
+    }
+}
+
+/* ===============================================
+   既存WordPress用クラス（互換性）
+   =============================================== */
+
+/* Grant Card Legacy Support */
+.grant-card {
+    @extend .minna-card;
+}
+
+.grant-card-header {
+    @extend .minna-card-header;
+}
+
+.grant-card-body {
+    @extend .minna-card-body;
+}
+
+.grant-card-footer {
+    @extend .minna-card-footer;
+}
+
+/* Button Legacy Support */
+.btn {
+    @extend .minna-btn;
+}
+
+.btn-primary {
+    @extend .minna-btn-primary;
+}
+
+.btn-secondary {
+    @extend .minna-btn-secondary;
+}
+
+/* Container Legacy Support */
+.container {
+    @extend .minna-container;
+}
+
+/* Input Legacy Support */
+.form-control {
+    @extend .minna-input;
+}
+
+.form-select {
+    @extend .minna-input;
+    @extend .minna-select;
+}
+
+/* Badge Legacy Support */
+.badge {
+    @extend .minna-badge;
+}
+
+.badge-primary {
+    @extend .minna-badge-primary;
+}
+
+.badge-success {
+    @extend .minna-badge-success;
+}
+
+.badge-warning {
+    @extend .minna-badge-warning;
+}
+
+.badge-danger {
+    @extend .minna-badge-danger;
+}
+
+/* Icon Legacy Support */
+.icon {
+    @extend .minna-icon;
+}
+
+/* Loading Legacy Support */
+.loading {
+    @extend .minna-loading;
+}
+
+.spinner {
+    @extend .minna-spinner;
+}
+
+/* Text Utility Legacy Support */
+.text-xs { @extend .minna-text-xs; }
+.text-sm { @extend .minna-text-sm; }
+.text-base { @extend .minna-text-base; }
+.text-lg { @extend .minna-text-lg; }
+.text-xl { @extend .minna-text-xl; }
+.text-2xl { @extend .minna-text-2xl; }
+.text-3xl { @extend .minna-text-3xl; }
+
+.font-light { @extend .minna-font-light; }
+.font-normal { @extend .minna-font-normal; }
+.font-medium { @extend .minna-font-medium; }
+.font-semibold { @extend .minna-font-semibold; }
+.font-bold { @extend .minna-font-bold; }
+
+/* Color Legacy Support */
+.text-primary { @extend .minna-text-primary; }
+.text-white { @extend .minna-text-white; }
+.text-gray-900 { @extend .minna-text-gray-900; }
+.text-gray-700 { @extend .minna-text-gray-700; }
+.text-gray-500 { @extend .minna-text-gray-500; }
+
+.bg-primary { @extend .minna-bg-primary; }
+.bg-white { @extend .minna-bg-white; }
+.bg-gray-50 { @extend .minna-bg-gray-50; }
+.bg-gray-100 { @extend .minna-bg-gray-100; }
+
+/* Display Legacy Support */
+.hidden { @extend .minna-hidden; }
+.block { @extend .minna-block; }
+.flex { @extend .minna-flex; }
+.grid { @extend .minna-grid; }
+
+.sr-only { @extend .minna-sr-only; }
+
+/* ===============================================
+   みんなの銀行アイコンシステム - SVGアイコン
+   =============================================== */
+.mb-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.mb-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+/* アイコンサイズバリエーション */
+.mb-icon-xs {
+    width: 12px;
+    height: 12px;
+}
+
+.mb-icon-sm {
+    width: 14px;
+    height: 14px;
+}
+
+.mb-icon-md {
+    width: 20px;
+    height: 20px;
+}
+
+.mb-icon-lg {
+    width: 24px;
+    height: 24px;
+}
+
+.mb-icon-xl {
+    width: 32px;
+    height: 32px;
+}
+
+/* アイコンカラーバリエーション */
+.mb-icon-white {
+    color: var(--minna-white);
+}
+
+.mb-icon-black {
+    color: var(--minna-primary);
+}
+
+.mb-icon-gray {
+    color: var(--minna-gray-500);
+}
+
+/* 個別アイコン定義 - CSS疑似要素 + データURL */
+.mb-icon-search::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-target::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-location::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-money::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-calendar::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-check::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-heart::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-bookmark::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-close::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-menu::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-arrow-up::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 14l5-5 5 5"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mb-icon-info::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* アイコン色調整（白アイコン用） */
+.mb-icon-white::before {
+    filter: invert(1) brightness(100%);
+}
+
+/* ===============================================
+   スピナー・ローディングシステム
+   =============================================== */
+.mb-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--minna-gray-200);
+    border-top: 3px solid var(--minna-primary);
+    border-radius: 50%;
+    animation: mb-spin 1s linear infinite;
+}
+
+.mb-spinner-sm {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+}
+
+.mb-spinner-inline {
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes mb-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===============================================
+   みんなの銀行フィルター・ピル拡張
+   =============================================== */
+.minna-filter-pill-ai {
+    background: linear-gradient(135deg, var(--minna-primary) 0%, var(--minna-gray-800) 100%);
+    color: var(--minna-white);
+    border-color: var(--minna-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.minna-filter-pill-ai::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.minna-filter-pill-ai:hover::before {
+    left: 100%;
 }

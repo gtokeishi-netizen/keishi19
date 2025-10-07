@@ -879,11 +879,11 @@ $all_prefectures = get_terms([
                 </h2>
                 <div class="minna-filter-actions">
                     <button class="minna-btn minna-btn-secondary" onclick="clearAllFilters()">
-                        <div class="icon-target" style="width: 16px; height: 16px;"></div>
+                        <div class="mb-icon mb-icon-target"></div>
                         フィルターをクリア
                     </button>
                     <button class="minna-btn minna-btn-primary" onclick="applyFilters()">
-                        <div class="icon-search" style="width: 16px; height: 16px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"white\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z\"/></svg>');"></div>
+                        <div class="mb-icon mb-icon-search mb-icon-white"></div>
                         検索実行
                     </button>
                 </div>
@@ -893,7 +893,7 @@ $all_prefectures = get_terms([
                 <!-- Search Input -->
                 <div class="minna-filter-group">
                     <div class="minna-filter-group-title">
-                        <div class="icon-search" style="width: 14px; height: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"black\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z\"/></svg>');"></div>
+                        <div class="mb-icon mb-icon-search mb-icon-sm"></div>
                         キーワード検索
                     </div>
                     <input type="text" 
@@ -906,7 +906,7 @@ $all_prefectures = get_terms([
                 <!-- Category Filter -->
                 <div class="minna-filter-group">
                     <div class="minna-filter-group-title">
-                        <div class="icon-target" style="width: 14px; height: 14px;"></div>
+                        <div class="mb-icon mb-icon-target mb-icon-sm"></div>
                         カテゴリー
                     </div>
                     <select class="minna-select" id="category-filter">
@@ -923,7 +923,7 @@ $all_prefectures = get_terms([
                 <!-- Prefecture Filter -->
                 <div class="minna-filter-group">
                     <div class="minna-filter-group-title">
-                        <div class="icon-location" style="width: 14px; height: 14px;"></div>
+                        <div class="mb-icon mb-icon-location mb-icon-sm"></div>
                         都道府県
                     </div>
                     <select class="minna-select" id="prefecture-filter">
@@ -940,7 +940,7 @@ $all_prefectures = get_terms([
                 <!-- Amount Range Filter -->
                 <div class="minna-filter-group">
                     <div class="minna-filter-group-title">
-                        <div class="icon-money" style="width: 14px; height: 14px;"></div>
+                        <div class="mb-icon mb-icon-money mb-icon-sm"></div>
                         助成金額
                     </div>
                     <select class="minna-select" id="amount-filter">
@@ -956,7 +956,7 @@ $all_prefectures = get_terms([
                 <!-- Status Filter -->
                 <div class="minna-filter-group">
                     <div class="minna-filter-group-title">
-                        <div class="icon-clock" style="width: 14px; height: 14px;"></div>
+                        <div class="mb-icon mb-icon-calendar mb-icon-sm"></div>
                         募集状況
                     </div>
                     <select class="minna-select" id="status-filter">
@@ -970,7 +970,7 @@ $all_prefectures = get_terms([
                 <!-- Sort Filter -->
                 <div class="minna-filter-group">
                     <div class="minna-filter-group-title">
-                        <div class="icon-chart" style="width: 14px; height: 14px;"></div>
+                        <div class="mb-icon mb-icon-check mb-icon-sm"></div>
                         並び順
                     </div>
                     <select class="minna-select" id="sort-filter">
@@ -991,7 +991,7 @@ $all_prefectures = get_terms([
             <div class="minna-status-grid">
                 <div class="minna-status-bar" onclick="filterByStatus('active')">
                     <div class="minna-status-icon">
-                        <div class="icon-clock" style="width: 24px; height: 24px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"white\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>');"></div>
+                        <div class="mb-icon mb-icon-calendar mb-icon-white"></div>
                     </div>
                     <div class="minna-status-content">
                         <div class="minna-status-title">募集中の助成金</div>
@@ -1002,7 +1002,7 @@ $all_prefectures = get_terms([
 
                 <div class="minna-status-bar" onclick="filterByAmount('1000+')">
                     <div class="minna-status-icon">
-                        <div class="icon-money" style="width: 24px; height: 24px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"white\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1\"/></svg>');"></div>
+                        <div class="mb-icon mb-icon-money mb-icon-white"></div>
                     </div>
                     <div class="minna-status-content">
                         <div class="minna-status-title">高額助成金</div>
@@ -1013,7 +1013,7 @@ $all_prefectures = get_terms([
 
                 <div class="minna-status-bar" onclick="filterByFeatured()">
                     <div class="minna-status-icon">
-                        <div class="icon-target" style="width: 24px; height: 24px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"white\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z\"/></svg>');"></div>
+                        <div class="mb-icon mb-icon-heart mb-icon-white"></div>
                     </div>
                     <div class="minna-status-content">
                         <div class="minna-status-title">おすすめ助成金</div>
@@ -1056,9 +1056,8 @@ $all_prefectures = get_terms([
                     申請しやすい
                     <span class="count">65</span>
                 </button>
-                <button class="minna-filter-pill" onclick="openAIOptimization()" 
-                        style="background: linear-gradient(135deg, var(--minna-primary) 0%, var(--minna-gray-800) 100%); color: var(--minna-white); border-color: var(--minna-primary);">
-                    <div class="icon-target" style="width: 16px; height: 16px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"white\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z\"/></svg>');"></div>
+                <button class="minna-filter-pill minna-filter-pill-ai" onclick="openAIOptimization()">
+                    <div class="mb-icon mb-icon-target mb-icon-white mb-icon-sm"></div>
                     AI最適化
                 </button>
             </div>
@@ -1296,7 +1295,7 @@ $all_prefectures = get_terms([
         document.querySelectorAll('.minna-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (this.onclick && this.onclick.toString().includes('applyFilters')) {
-                    this.innerHTML = '<div class="minna-spinner" style="width: 16px; height: 16px; margin-right: 8px;"></div>検索中...';
+                    this.innerHTML = '<div class="mb-spinner mb-spinner-sm mb-spinner-inline"></div>検索中...';
                 }
             });
         });
