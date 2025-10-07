@@ -1,83 +1,158 @@
 <?php
 /**
- * Grant Single Page - Stylish Monochrome Design
- * 助成金詳細ページ - スタイリッシュモノクロームデザイン
+ * Grant Single Page - Minna Bank Style Design
+ * 助成金詳細ページ - みんなの銀行スタイルデザイン
+ * SEO最適化 + ACF完全連携 + レスポンシブ対応
  * 
  * @package Grant_Insight_Perfect
- * @version 11.0.0-stylish
+ * @version 12.0.0-minna-bank-style
+ * @author Grant Insight Team
  */
 
-get_header();
-
-// Security and post validation
-if (!have_posts()) {
-    wp_redirect(home_url('/404'));
+// セキュリティとパフォーマンス最適化
+if (!defined('ABSPATH')) {
     exit;
 }
 
+// 早期リダイレクト（SEO対策）
+if (!have_posts()) {
+    wp_redirect(home_url('/404'), 302);
+    exit;
+}
+
+get_header();
+
+// 投稿データ取得
 the_post();
 $post_id = get_the_ID();
 
-// 📋 完全31列対応 ACFフィールド取得
+// SEO用メタデータ生成
+$seo_title = get_the_title();
+$seo_description = '';
+$seo_keywords = [];
+$canonical_url = get_permalink($post_id);
+
+// AI要約をSEO descriptionに使用
+if (function_exists('get_field')) {
+    $ai_summary = get_field('ai_summary', $post_id);
+    if ($ai_summary) {
+        $seo_description = wp_trim_words(strip_tags($ai_summary), 25, '...');
+    }
+}
+
+// フォールバック：本文からSEO descriptionを生成
+if (empty($seo_description)) {
+    $content = get_the_content();
+    if ($content) {
+        $seo_description = wp_trim_words(strip_tags($content), 25, '...');
+    }
+}
+
+// タクソノミーからキーワード生成
+$categories = wp_get_post_terms($post_id, 'grant_category', ['fields' => 'names']);
+$prefectures = wp_get_post_terms($post_id, 'grant_prefecture', ['fields' => 'names']);
+$tags = wp_get_post_tags($post_id, ['fields' => 'names']);
+
+if (!is_wp_error($categories)) $seo_keywords = array_merge($seo_keywords, $categories);
+if (!is_wp_error($prefectures)) $seo_keywords = array_merge($seo_keywords, $prefectures);
+if (!is_wp_error($tags)) $seo_keywords = array_merge($seo_keywords, $tags);
+$seo_keywords = array_unique($seo_keywords);
+
+// ACFフィールド完全対応データ取得（フォールバック付き）
 $grant_data = array(
-    // 基本情報 (A-G列)
-    'organization' => get_field('organization', $post_id) ?: '',
-    'organization_type' => get_field('organization_type', $post_id) ?: '',
+    // 基本情報
+    'organization' => function_exists('get_field') ? get_field('organization', $post_id) : get_post_meta($post_id, 'organization', true),
+    'organization_type' => function_exists('get_field') ? get_field('organization_type', $post_id) : get_post_meta($post_id, 'organization_type', true),
     
-    // 金額情報 (H-I列)
-    'max_amount' => get_field('max_amount', $post_id) ?: '',
-    'max_amount_numeric' => intval(get_field('max_amount_numeric', $post_id)),
-    'min_amount' => intval(get_field('min_amount', $post_id)),
-    'amount_note' => get_field('amount_note', $post_id) ?: '',
+    // 金額情報
+    'max_amount' => function_exists('get_field') ? get_field('max_amount', $post_id) : get_post_meta($post_id, 'max_amount', true),
+    'max_amount_numeric' => function_exists('get_field') ? intval(get_field('max_amount_numeric', $post_id)) : intval(get_post_meta($post_id, 'max_amount_numeric', true)),
+    'min_amount' => function_exists('get_field') ? intval(get_field('min_amount', $post_id)) : intval(get_post_meta($post_id, 'min_amount', true)),
+    'subsidy_rate' => function_exists('get_field') ? get_field('subsidy_rate', $post_id) : get_post_meta($post_id, 'subsidy_rate', true),
     
-    // 期間・締切情報 (J-K列)
-    'deadline' => get_field('deadline', $post_id) ?: '',
-    'deadline_date' => get_field('deadline_date', $post_id) ?: '',
-    'application_period' => get_field('application_period', $post_id) ?: '',
-    'deadline_note' => get_field('deadline_note', $post_id) ?: '',
+    // 期間・締切情報
+    'deadline' => function_exists('get_field') ? get_field('deadline', $post_id) : get_post_meta($post_id, 'deadline', true),
+    'deadline_date' => function_exists('get_field') ? get_field('deadline_date', $post_id) : get_post_meta($post_id, 'deadline_date', true),
+    'application_period' => function_exists('get_field') ? get_field('application_period', $post_id) : get_post_meta($post_id, 'application_period', true),
     
-    // 申請・組織情報 (L-Q列)
-    'grant_target' => get_field('grant_target', $post_id) ?: '',
-    'application_method' => get_field('application_method', $post_id) ?: '',
-    'contact_info' => get_field('contact_info', $post_id) ?: '',
-    'official_url' => get_field('official_url', $post_id) ?: '',
+    // 申請情報
+    'grant_target' => function_exists('get_field') ? get_field('grant_target', $post_id) : get_post_meta($post_id, 'grant_target', true),
+    'application_method' => function_exists('get_field') ? get_field('application_method', $post_id) : get_post_meta($post_id, 'application_method', true),
+    'contact_info' => function_exists('get_field') ? get_field('contact_info', $post_id) : get_post_meta($post_id, 'contact_info', true),
+    'official_url' => function_exists('get_field') ? get_field('official_url', $post_id) : get_post_meta($post_id, 'official_url', true),
     
-    // 地域・ステータス情報 (R-S列)
-    'regional_limitation' => get_field('regional_limitation', $post_id) ?: '',
-    'application_status' => get_field('application_status', $post_id) ?: 'open',
+    // 地域・ステータス情報
+    'regional_limitation' => function_exists('get_field') ? get_field('regional_limitation', $post_id) : get_post_meta($post_id, 'regional_limitation', true),
+    'application_status' => function_exists('get_field') ? get_field('application_status', $post_id) : get_post_meta($post_id, 'application_status', true),
     
-    // ★ 新規拡張フィールド (X-AD列) - 31列対応
-    'external_link' => get_field('external_link', $post_id) ?: '',           // X列
-    'region_notes' => get_field('region_notes', $post_id) ?: '',            // Y列
-    'required_documents' => get_field('required_documents', $post_id) ?: '', // Z列
-    'adoption_rate' => floatval(get_field('adoption_rate', $post_id)),       // AA列
-    'grant_difficulty' => get_field('grant_difficulty', $post_id) ?: 'normal', // AB列
-    'target_expenses' => get_field('target_expenses', $post_id) ?: '',       // AC列
-    'subsidy_rate' => get_field('subsidy_rate', $post_id) ?: '',            // AD列
+    // 新規拡張フィールド（31列対応）
+    'external_link' => function_exists('get_field') ? get_field('external_link', $post_id) : get_post_meta($post_id, 'external_link', true),
+    'region_notes' => function_exists('get_field') ? get_field('region_notes', $post_id) : get_post_meta($post_id, 'region_notes', true),
+    'required_documents' => function_exists('get_field') ? get_field('required_documents', $post_id) : get_post_meta($post_id, 'required_documents', true),
+    'adoption_rate' => function_exists('get_field') ? floatval(get_field('adoption_rate', $post_id)) : floatval(get_post_meta($post_id, 'adoption_rate', true)),
+    'grant_difficulty' => function_exists('get_field') ? get_field('grant_difficulty', $post_id) : get_post_meta($post_id, 'grant_difficulty', true),
+    'target_expenses' => function_exists('get_field') ? get_field('target_expenses', $post_id) : get_post_meta($post_id, 'target_expenses', true),
     
     // 管理・統計情報
-    'is_featured' => get_field('is_featured', $post_id) ?: false,
-    'views_count' => intval(get_field('views_count', $post_id)),
-    'last_updated' => get_field('last_updated', $post_id) ?: '',
+    'is_featured' => function_exists('get_field') ? get_field('is_featured', $post_id) : get_post_meta($post_id, 'is_featured', true),
+    'views_count' => function_exists('get_field') ? intval(get_field('views_count', $post_id)) : intval(get_post_meta($post_id, 'views_count', true)),
+    'last_updated' => function_exists('get_field') ? get_field('last_updated', $post_id) : get_post_meta($post_id, 'last_updated', true),
     
     // AI関連
-    'ai_summary' => get_field('ai_summary', $post_id) ?: get_post_meta($post_id, 'ai_summary', true),
+    'ai_summary' => function_exists('get_field') ? get_field('ai_summary', $post_id) : get_post_meta($post_id, 'ai_summary', true),
 );
 
-// Comprehensive taxonomy data
+// デフォルト値設定
+$grant_data = array_merge(array(
+    'organization' => '',
+    'organization_type' => 'national',
+    'max_amount' => '',
+    'max_amount_numeric' => 0,
+    'min_amount' => 0,
+    'subsidy_rate' => '',
+    'deadline' => '',
+    'deadline_date' => '',
+    'application_period' => '',
+    'grant_target' => '',
+    'application_method' => 'online',
+    'contact_info' => '',
+    'official_url' => '',
+    'regional_limitation' => 'nationwide',
+    'application_status' => 'open',
+    'external_link' => '',
+    'region_notes' => '',
+    'required_documents' => '',
+    'adoption_rate' => 0,
+    'grant_difficulty' => 'normal',
+    'target_expenses' => '',
+    'is_featured' => false,
+    'views_count' => 0,
+    'last_updated' => '',
+    'ai_summary' => ''
+), $grant_data);
+
+// タクソノミーデータ取得（エラーハンドリング付き）
 $taxonomies = array(
-    'categories' => get_the_terms($post_id, 'grant_category'),
-    'prefectures' => get_the_terms($post_id, 'grant_prefecture'),
-    'municipalities' => get_the_terms($post_id, 'grant_municipality'),
-    'tags' => get_the_tags($post_id),
+    'categories' => wp_get_post_terms($post_id, 'grant_category'),
+    'prefectures' => wp_get_post_terms($post_id, 'grant_prefecture'), 
+    'municipalities' => wp_get_post_terms($post_id, 'grant_municipality'),
+    'tags' => wp_get_post_tags($post_id),
 );
 
-$main_category = ($taxonomies['categories'] && !is_wp_error($taxonomies['categories'])) ? $taxonomies['categories'][0] : null;
-$main_prefecture = ($taxonomies['prefectures'] && !is_wp_error($taxonomies['prefectures'])) ? $taxonomies['prefectures'][0] : null;
+// エラーチェックとデフォルト値設定
+foreach ($taxonomies as $key => $terms) {
+    if (is_wp_error($terms) || empty($terms)) {
+        $taxonomies[$key] = array();
+    }
+}
 
-// Format amounts
+$main_category = !empty($taxonomies['categories']) ? $taxonomies['categories'][0] : null;
+$main_prefecture = !empty($taxonomies['prefectures']) ? $taxonomies['prefectures'][0] : null;
+
+// 金額フォーマット処理（改善版）
 $formatted_amount = '';
-$max_amount_yen = $grant_data['max_amount_numeric'];
+$max_amount_yen = intval($grant_data['max_amount_numeric']);
+
 if ($max_amount_yen > 0) {
     if ($max_amount_yen >= 100000000) {
         $formatted_amount = number_format($max_amount_yen / 100000000, 1) . '億円';
@@ -86,11 +161,13 @@ if ($max_amount_yen > 0) {
     } else {
         $formatted_amount = number_format($max_amount_yen) . '円';
     }
-} elseif ($grant_data['max_amount']) {
+} elseif (!empty($grant_data['max_amount'])) {
     $formatted_amount = $grant_data['max_amount'];
+} else {
+    $formatted_amount = '金額未設定';
 }
 
-// Organization type mapping
+// 組織タイプラベルマッピング
 $org_type_labels = array(
     'national' => '国（省庁）',
     'prefecture' => '都道府県',
@@ -102,7 +179,7 @@ $org_type_labels = array(
     'other' => 'その他'
 );
 
-// Application method mapping
+// 申請方法ラベルマッピング
 $method_labels = array(
     'online' => 'オンライン申請',
     'mail' => '郵送申請',
@@ -110,20 +187,29 @@ $method_labels = array(
     'mixed' => 'オンライン・郵送併用'
 );
 
-// Deadline calculation
+// 地域制限ラベルマッピング
+$region_labels = array(
+    'nationwide' => '全国対象',
+    'prefecture_only' => '都道府県内限定',
+    'municipality_only' => '市町村限定',
+    'region_group' => '地域グループ限定',
+    'specific_area' => '特定地域限定'
+);
+
+// 締切日計算（改善版・エラーハンドリング付き）
 $deadline_info = '';
 $deadline_class = '';
 $days_remaining = 0;
 
-if ($grant_data['deadline_date']) {
+if (!empty($grant_data['deadline_date'])) {
     $deadline_timestamp = strtotime($grant_data['deadline_date']);
     if ($deadline_timestamp && $deadline_timestamp > 0) {
         $deadline_info = date('Y年n月j日', $deadline_timestamp);
-        $current_time = current_time('timestamp');
-        $days_remaining = ceil(($deadline_timestamp - $current_time) / (60 * 60 * 24));
+        $current_time = function_exists('current_time') ? current_time('timestamp') : time();
+        $days_remaining = ceil(($deadline_timestamp - $current_time) / 86400); // 86400 = 60*60*24
         
         if ($days_remaining <= 0) {
-            $deadline_class = 'expired';
+            $deadline_class = 'closed';
             $deadline_info .= ' (募集終了)';
         } elseif ($days_remaining <= 7) {
             $deadline_class = 'urgent';
@@ -133,116 +219,173 @@ if ($grant_data['deadline_date']) {
             $deadline_info .= ' (あと' . $days_remaining . '日)';
         }
     }
-} elseif ($grant_data['deadline']) {
+} elseif (!empty($grant_data['deadline'])) {
     $deadline_info = $grant_data['deadline'];
+} else {
+    $deadline_info = '締切日未設定';
 }
 
-//  申請難易度設定 (31列対応 - AB列)
+// 申請難易度設定（エラーハンドリング付き）
 $difficulty_configs = array(
-    'easy' => array('label' => '簡単', 'dots' => 1, 'emoji' => '🟢'),
-    'normal' => array('label' => '普通', 'dots' => 2, 'emoji' => '🟡'),
-    'hard' => array('label' => '難しい', 'dots' => 3, 'emoji' => '🟠'),
-    'very_hard' => array('label' => '非常に困難', 'dots' => 4, 'emoji' => '🔴')
+    'easy' => array('label' => '簡単', 'dots' => 1),
+    'normal' => array('label' => '普通', 'dots' => 2),
+    'hard' => array('label' => '難しい', 'dots' => 3),
+    'very_hard' => array('label' => '非常に困難', 'dots' => 4),
+    'expert' => array('label' => '専門的', 'dots' => 4)
 );
-$difficulty = $grant_data['grant_difficulty'];
-$difficulty_data = $difficulty_configs[$difficulty] ?? $difficulty_configs['normal'];
 
-// Status mapping
+$difficulty = !empty($grant_data['grant_difficulty']) ? $grant_data['grant_difficulty'] : 'normal';
+$difficulty_data = isset($difficulty_configs[$difficulty]) ? $difficulty_configs[$difficulty] : $difficulty_configs['normal'];
+
+// ステータスマッピング（エラーハンドリング付き）
 $status_configs = array(
     'open' => array('label' => '募集中', 'class' => 'open'),
     'upcoming' => array('label' => '募集予定', 'class' => 'upcoming'),
     'closed' => array('label' => '募集終了', 'class' => 'closed'),
     'suspended' => array('label' => '一時停止', 'class' => 'suspended')
 );
-$status_data = $status_configs[$grant_data['application_status']] ?? $status_configs['open'];
 
-// Update view count
-$grant_data['views_count']++;
-update_post_meta($post_id, 'views_count', $grant_data['views_count']);
+$application_status = !empty($grant_data['application_status']) ? $grant_data['application_status'] : 'open';
+$status_data = isset($status_configs[$application_status]) ? $status_configs[$application_status] : $status_configs['open'];
+
+// 閲覧数更新（エラーハンドリング付き）
+$current_views = intval($grant_data['views_count']);
+$new_views = $current_views + 1;
+if (function_exists('update_post_meta')) {
+    update_post_meta($post_id, 'views_count', $new_views);
+    $grant_data['views_count'] = $new_views;
+}
 ?>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="<?php echo esc_attr($seo_description); ?>">
+<meta name="keywords" content="<?php echo esc_attr(implode(', ', $seo_keywords)); ?>">
+<link rel="canonical" href="<?php echo esc_url($canonical_url); ?>">
+
+<!-- Open Graph Tags -->
+<meta property="og:title" content="<?php echo esc_attr($seo_title); ?>">
+<meta property="og:description" content="<?php echo esc_attr($seo_description); ?>">
+<meta property="og:url" content="<?php echo esc_url($canonical_url); ?>">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="<?php echo esc_attr(get_bloginfo('name')); ?>">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<?php echo esc_attr($seo_title); ?>">
+<meta name="twitter:description" content="<?php echo esc_attr($seo_description); ?>">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "GovernmentService",
+  "name": "<?php echo esc_js($seo_title); ?>",
+  "description": "<?php echo esc_js($seo_description); ?>",
+  "url": "<?php echo esc_js($canonical_url); ?>",
+  "provider": {
+    "@type": "Organization",
+    "name": "<?php echo esc_js($grant_data['organization']); ?>"
+  },
+  "audience": "<?php echo esc_js(wp_strip_all_tags($grant_data['grant_target'])); ?>",
+  "availableChannel": {
+    "@type": "ServiceChannel",
+    "serviceUrl": "<?php echo esc_js($grant_data['official_url']); ?>"
+  }
+}
+</script>
 
 <style>
 /* ===============================================
-   STYLISH MONOCHROME GRANT SINGLE PAGE
+   MINNA BANK STYLE - GRANT SINGLE PAGE
    =============================================== */
 
 :root {
-    /* Monochrome Color Palette - Photo-like */
-    --mono-black: #000000;
-    --mono-charcoal: #1a1a1a;
-    --mono-dark-gray: #2d2d2d;
-    --mono-gray: #4a4a4a;
-    --mono-mid-gray: #6b6b6b;
-    --mono-light-gray: #9a9a9a;
-    --mono-pale-gray: #d4d4d4;
-    --mono-off-white: #f8f8f8;
-    --mono-white: #ffffff;
+    /* Minna Bank Inspired Color System */
+    --color-bg: #ffffff;
+    --color-surface: #F7F8FA;
+    --color-muted: #F1F3F5;
+    --color-gray-200: #E6E9EE;
+    --color-gray-300: #CBD2DB;
+    --color-gray-400: #9AA6B2;
+    --color-gray-500: #6B7A86;
+    --color-gray-700: #2F3B45;
+    --color-gray-900: #0B1722;
+    --color-border: rgba(11,23,34,0.08);
+    --accent: #5B6CFF;
+    --accent-danger: #FF5B5B;
+    --accent-warning: #FFB800;
+    --accent-success: #00C896;
+    --accent-info: #00A8FF;
     
-    /* Accent colors for status */
-    --accent-yellow: #FFD500;
-    --accent-danger: #dc2626;
-    --accent-warning: #f59e0b;
-    --accent-success: #059669;
-    --accent-info: #2563eb;
+    /* Typography Scale */
+    --type-xxs: 0.75rem;     /* 12px */
+    --type-xs: 0.8125rem;    /* 13px */
+    --type-sm: 0.875rem;     /* 14px */
+    --type-base: 1rem;       /* 16px */
+    --type-lg: 1.125rem;     /* 18px */
+    --type-xl: 1.25rem;      /* 20px */
+    --type-2xl: 1.5rem;      /* 24px */
+    --type-3xl: 2rem;        /* 32px */
     
-    /* Typography scale */
-    --text-xs: 0.75rem;
-    --text-sm: 0.875rem;
-    --text-base: 1rem;
-    --text-lg: 1.125rem;
-    --text-xl: 1.25rem;
-    --text-2xl: 1.5rem;
-    --text-3xl: 1.875rem;
-    --text-4xl: 2.25rem;
-    --text-5xl: 3rem;
+    /* Spacing Scale (8px base) */
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
     
-    /* Spacing scale */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.25rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-10: 2.5rem;
-    --space-12: 3rem;
-    --space-16: 4rem;
-    --space-20: 5rem;
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(11,23,34,0.06);
+    --shadow-md: 0 6px 18px rgba(11,23,34,0.08);
+    --shadow-lg: 0 10px 25px rgba(11,23,34,0.12);
     
-    /* Shadows - Photo-like depth */
-    --shadow-soft: 0 2px 15px rgba(0, 0, 0, 0.08);
-    --shadow-medium: 0 4px 25px rgba(0, 0, 0, 0.12);
-    --shadow-hard: 0 10px 40px rgba(0, 0, 0, 0.15);
-    --shadow-dramatic: 0 20px 60px rgba(0, 0, 0, 0.25);
-    
-    /* Border radius */
-    --radius-sm: 0.25rem;
-    --radius-base: 0.5rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-    --radius-2xl: 2rem;
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
     
     /* Transitions */
-    --transition-fast: 0.15s ease-out;
-    --transition-base: 0.3s ease-out;
-    --transition-slow: 0.5s ease-out;
+    --transition: 0.2s ease-out;
 }
 
-/* Reset and base styles */
+/* Base Styles - Minna Bank Typography */
 * {
     box-sizing: border-box;
 }
 
-/* 📋 31列対応メインコンテナ - フォトライクスタイリング */
-.grant-stylish {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--space-8) var(--space-4);
-    background: var(--mono-white);
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+html, body {
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-gray-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
-    color: var(--mono-charcoal);
-    position: relative;
+}
+
+/* Main Container - Mobile First */
+.grant-minna {
+    width: 100%;
+    padding-inline: var(--space-md);
+    margin-inline: auto;
+    max-width: 1200px;
+    background: var(--color-bg);
+    color: var(--color-gray-900);
+    font-size: var(--type-sm);
+}
+
+@media (min-width: 600px) {
+    .grant-minna {
+        padding-inline: var(--space-lg);
+        font-size: var(--type-base);
+    }
+}
+
+@media (min-width: 960px) {
+    .grant-minna {
+        padding-inline: 40px;
+    }
 }
 
 /* 新規フィールド専用スタイル */
@@ -267,280 +410,338 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
     }
 }
 
-/* Film strip header effect - REMOVED per user request */
-/* ユーザーリクエストにより削除: 上部の装飾線は不要 */
-
-/* Hero Section - Magazine style */
+/* Hero Section - Clean Minna Bank Style */
 .grant-hero {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-2xl);
     text-align: center;
-    padding: var(--space-16) 0;
-    background: linear-gradient(135deg, var(--mono-off-white) 0%, var(--mono-white) 100%);
-    margin: 0 calc(-1 * var(--space-8)) var(--space-12);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-soft);
     position: relative;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 600px) {
     .grant-hero {
-        margin: 0 calc(-1 * var(--space-16)) var(--space-16);
-        padding: var(--space-20) var(--space-8);
+        padding: var(--space-2xl);
     }
 }
 
-/* Status badge - Polaroid style */
+@media (min-width: 960px) {
+    .grant-hero {
+        padding: 48px;
+    }
+}
+
+/* Status Badge - Minna Bank Style */
 .status-badge {
-    display: inline-block;
-    padding: var(--space-2) var(--space-4);
-    background: var(--mono-black);
-    color: var(--mono-white);
-    font-size: var(--text-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 6px var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--type-xs);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-radius: var(--radius-base);
-    margin-bottom: var(--space-6);
-    box-shadow: var(--shadow-soft);
-    position: relative;
+    margin-bottom: var(--space-md);
+    transition: var(--transition);
 }
 
 .status-badge.open {
     background: var(--accent-success);
+    color: white;
 }
 
 .status-badge.warning {
     background: var(--accent-warning);
+    color: white;
 }
 
 .status-badge.urgent {
     background: var(--accent-danger);
+    color: white;
 }
 
 .status-badge.closed {
-    background: var(--mono-gray);
+    background: var(--color-gray-500);
+    color: white;
 }
 
-/* Typography - Editorial style */
+/* Typography - Minna Bank Style */
 .grant-title {
-    font-size: var(--text-3xl);
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--mono-black);
-    margin: 0 0 var(--space-6);
-    letter-spacing: -0.02em;
+    font-size: var(--type-2xl);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--color-gray-900);
+    margin: 0 0 var(--space-md);
+    letter-spacing: -0.01em;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 600px) {
     .grant-title {
-        font-size: var(--text-5xl);
+        font-size: var(--type-3xl);
+        line-height: 1.2;
     }
 }
 
 .grant-subtitle {
-    font-size: var(--text-lg);
-    color: var(--mono-gray);
-    margin-bottom: var(--space-8);
+    font-size: var(--type-base);
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-xl);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.6;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Key Information Grid - Newspaper layout */
-.key-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-6);
-    margin-bottom: var(--space-16);
-}
-
-.info-card {
-    background: var(--mono-white);
-    border: 2px solid var(--mono-pale-gray);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    text-align: center;
-    transition: all var(--transition-base);
-    position: relative;
-    overflow: hidden;
-}
-
-.info-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left var(--transition-slow);
-}
-
-.info-card:hover {
-    border-color: var(--mono-black);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
-}
-
-.info-card:hover::before {
-    left: 100%;
-}
-
-.info-icon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, var(--mono-black) 0%, var(--mono-charcoal) 100%);
-    color: var(--mono-white);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto var(--space-4);
-    font-size: var(--text-xl);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all var(--transition-base);
-}
-
-.info-card:hover .info-icon {
-    background: linear-gradient(135deg, var(--accent-yellow) 0%, #fbbf24 100%);
-    color: var(--mono-black);
-    transform: scale(1.1);
-}
-
-.info-label {
-    font-size: var(--text-xs);
-    color: var(--mono-mid-gray);
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
-}
-
-.info-value {
-    font-size: var(--text-2xl);
-    font-weight: 700;
-    color: var(--mono-black);
-    line-height: 1.2;
-}
-
-.info-value.highlight {
-    background: linear-gradient(135deg, var(--mono-black), var(--mono-dark-gray));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Content Layout - Magazine columns */
-.content-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: var(--space-12);
-    align-items: start;
-}
-
-@media (max-width: 1024px) {
-    .content-layout {
-        grid-template-columns: 1fr;
-        gap: var(--space-8);
+@media (min-width: 600px) {
+    .grant-subtitle {
+        font-size: var(--type-lg);
     }
 }
 
-/* Main content sections */
+/* Key Information Grid - Minna Bank Style */
+.key-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-2xl);
+}
+
+@media (min-width: 600px) {
+    .key-info-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: var(--space-lg);
+    }
+}
+
+/* Info Cards - Clean Minna Bank Style */
+.info-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-md);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.info-card:hover {
+    border-color: var(--color-gray-300);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+@media (min-width: 600px) {
+    .info-card {
+        padding: var(--space-lg);
+    }
+}
+
+/* Icon Style - Minimalist */
+.info-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-muted);
+    color: var(--color-gray-700);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-sm);
+    font-size: var(--type-lg);
+    transition: var(--transition);
+}
+
+.info-card:hover .info-icon {
+    background: var(--accent);
+    color: white;
+    transform: scale(1.05);
+}
+
+@media (min-width: 600px) {
+    .info-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: var(--space-md);
+    }
+}
+
+.info-label {
+    font-size: var(--type-xs);
+    color: var(--color-gray-500);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-xs);
+}
+
+.info-value {
+    font-size: var(--type-xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
+    line-height: 1.2;
+}
+
+@media (min-width: 600px) {
+    .info-value {
+        font-size: var(--type-2xl);
+    }
+}
+
+.info-value.highlight {
+    color: var(--accent);
+}
+
+/* Content Layout - Responsive Grid */
+.content-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+}
+
+@media (min-width: 960px) {
+    .content-layout {
+        grid-template-columns: 2fr 1fr;
+        gap: var(--space-2xl);
+    }
+}
+
+/* Content Sections - Minna Bank Style */
 .content-main {
     display: flex;
     flex-direction: column;
-    gap: var(--space-10);
+    gap: var(--space-xl);
 }
 
 .content-section {
-    background: var(--mono-white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-8);
-    box-shadow: var(--shadow-soft);
-    border-left: 4px solid var(--mono-black);
-    position: relative;
-    transition: border-left-color var(--transition-base);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--accent);
+    transition: var(--transition);
 }
 
 .content-section:hover {
-    border-left-color: var(--accent-yellow);
+    box-shadow: var(--shadow-md);
+    border-left-color: var(--color-gray-900);
+}
+
+@media (min-width: 600px) {
+    .content-section {
+        padding: var(--space-xl);
+    }
 }
 
 .section-header {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
-    margin-bottom: var(--space-6);
-    padding-bottom: var(--space-4);
-    border-bottom: 1px solid var(--mono-pale-gray);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .section-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--mono-black);
+    width: 24px;
+    height: 24px;
+    color: var(--color-gray-700);
+    font-size: var(--type-lg);
+}
+
+@media (min-width: 600px) {
+    .section-icon {
+        width: 28px;
+        height: 28px;
+    }
 }
 
 .section-title {
-    font-size: var(--text-xl);
+    font-size: var(--type-lg);
     font-weight: 700;
-    color: var(--mono-black);
+    color: var(--color-gray-900);
     margin: 0;
 }
 
+@media (min-width: 600px) {
+    .section-title {
+        font-size: var(--type-xl);
+    }
+}
+
 .section-content {
-    color: var(--mono-charcoal);
+    color: var(--color-gray-700);
     line-height: 1.7;
 }
 
 .section-content p {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-md);
 }
 
 .section-content ul,
 .section-content ol {
-    margin: var(--space-4) 0;
-    padding-left: var(--space-6);
+    margin: var(--space-md) 0;
+    padding-left: var(--space-lg);
 }
 
 .section-content li {
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-xs);
 }
 
-/* Information table - Technical specs style */
+/* Information Table - Clean Minna Bank Style */
 .info-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background: var(--mono-white);
-    border-radius: var(--radius-base);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: var(--shadow-soft);
 }
 
 .info-table th,
 .info-table td {
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-sm) var(--space-md);
     text-align: left;
-    border-bottom: 1px solid var(--mono-pale-gray);
+    border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 600px) {
+    .info-table th,
+    .info-table td {
+        padding: var(--space-md) var(--space-lg);
+    }
 }
 
 .info-table th {
-    background: var(--mono-off-white);
+    background: var(--color-muted);
     font-weight: 600;
-    color: var(--mono-dark-gray);
-    font-size: var(--text-sm);
+    color: var(--color-gray-700);
+    font-size: var(--type-sm);
     width: 35%;
 }
 
 .info-table td {
     font-weight: 500;
-    color: var(--mono-charcoal);
+    color: var(--color-gray-900);
+    font-size: var(--type-sm);
+}
+
+@media (min-width: 600px) {
+    .info-table td {
+        font-size: var(--type-base);
+    }
 }
 
 .info-table tr:hover {
-    background: var(--mono-off-white);
+    background: var(--color-surface);
 }
 
 .info-table tr:last-child th,
@@ -548,238 +749,248 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
     border-bottom: none;
 }
 
-/* Sidebar - Vintage photo frame style */
+/* Sidebar - Minna Bank Style */
 .sidebar {
-    position: sticky;
-    top: var(--space-8);
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-lg);
+}
+
+@media (min-width: 960px) {
+    .sidebar {
+        position: sticky;
+        top: var(--space-xl);
+    }
 }
 
 .sidebar-card {
-    background: var(--mono-white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-medium);
-    border: 1px solid var(--mono-pale-gray);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .sidebar-title {
-    font-size: var(--text-lg);
+    font-size: var(--type-base);
     font-weight: 700;
-    color: var(--mono-black);
-    margin-bottom: var(--space-5);
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-md);
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-xs);
 }
 
-/* Action buttons - Film camera style */
+@media (min-width: 600px) {
+    .sidebar-title {
+        font-size: var(--type-lg);
+    }
+}
+
+/* Action Buttons - Clean Minna Bank Style */
 .action-buttons {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-sm);
 }
 
 .btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-6);
-    border-radius: var(--radius-base);
+    gap: var(--space-xs);
+    padding: 10px var(--space-md);
+    border-radius: var(--radius-sm);
     text-decoration: none;
     font-weight: 600;
-    font-size: var(--text-sm);
-    transition: all var(--transition-base);
+    font-size: var(--type-sm);
+    transition: var(--transition);
     border: none;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
+    min-height: 44px; /* Touch friendly */
 }
 
 .btn-primary {
-    background: var(--mono-black);
-    color: var(--mono-white);
-    box-shadow: var(--shadow-soft);
+    background: var(--accent);
+    color: white;
+    box-shadow: none;
 }
 
 .btn-primary:hover {
-    background: var(--accent-yellow);
-    color: var(--mono-black);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 213, 0, 0.3);
+    background: var(--color-gray-900);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
     background: transparent;
-    color: var(--mono-charcoal);
-    border: 2px solid var(--mono-pale-gray);
+    color: var(--color-gray-700);
+    border: 1px solid var(--color-gray-300);
 }
 
 .btn-secondary:hover {
-    border-color: var(--mono-black);
-    background: var(--mono-off-white);
+    border-color: var(--color-gray-900);
+    background: var(--color-surface);
+    color: var(--color-gray-900);
 }
 
-/* Statistics - Darkroom timer style */
+/* Statistics Grid - Clean & Minimal */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
+    gap: var(--space-sm);
+}
+
+@media (min-width: 600px) {
+    .stats-grid {
+        gap: var(--space-md);
+    }
 }
 
 .stat-item {
     text-align: center;
-    padding: var(--space-4);
-    background: var(--mono-off-white);
-    border-radius: var(--radius-base);
-    border: 1px solid var(--mono-pale-gray);
-    transition: transform var(--transition-base);
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
 }
 
 .stat-item:hover {
-    transform: scale(1.02);
+    border-color: var(--color-gray-300);
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-number {
-    font-size: var(--text-2xl);
-    font-weight: 800;
-    color: var(--mono-black);
+    font-size: var(--type-xl);
+    font-weight: 700;
+    color: var(--color-gray-900);
     display: block;
-    line-height: 1;
+    line-height: 1.1;
+}
+
+@media (min-width: 600px) {
+    .stat-number {
+        font-size: var(--type-2xl);
+    }
 }
 
 .stat-label {
-    font-size: var(--text-xs);
-    color: var(--mono-mid-gray);
-    margin-top: var(--space-1);
+    font-size: var(--type-xxs);
+    color: var(--color-gray-500);
+    margin-top: var(--space-xxs);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
-/* Difficulty indicator - Film grain effect */
+@media (min-width: 600px) {
+    .stat-label {
+        font-size: var(--type-xs);
+    }
+}
+
+/* Difficulty Indicator - Simple & Clean */
 .difficulty-indicator {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-sm);
 }
 
 .difficulty-dots {
     display: flex;
-    gap: var(--space-1);
+    gap: var(--space-xxs);
 }
 
 .difficulty-dot {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: var(--mono-pale-gray);
+    background: var(--color-gray-300);
+    transition: var(--transition);
 }
 
 .difficulty-dot.filled {
-    background: var(--mono-black);
+    background: var(--accent);
 }
 
-/* Tags - Contact sheet style */
+/* Tags - Minna Bank Style */
 .tags-section {
-    margin-top: var(--space-5);
+    margin-top: var(--space-md);
 }
 
 .tags-list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: var(--space-xs);
 }
 
 .tag {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background: var(--mono-off-white);
-    color: var(--mono-dark-gray);
-    border: 1px solid var(--mono-pale-gray);
-    border-radius: var(--radius-base);
-    font-size: var(--text-xs);
+    gap: var(--space-xxs);
+    padding: var(--space-xxs) var(--space-sm);
+    background: var(--color-muted);
+    color: var(--color-gray-700);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--type-xxs);
     text-decoration: none;
-    transition: all var(--transition-fast);
+    transition: var(--transition);
     font-weight: 500;
 }
 
-.tag:hover {
-    background: var(--mono-black);
-    color: var(--mono-white);
-    transform: translateY(-1px);
+@media (min-width: 600px) {
+    .tag {
+        font-size: var(--type-xs);
+        padding: var(--space-xs) var(--space-sm);
+    }
 }
 
-/* Progress bar - Film loading effect */
+.tag:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+/* Progress Bar - Clean Style */
 .progress-bar {
     width: 100%;
-    height: 4px;
-    background: var(--mono-pale-gray);
+    height: 6px;
+    background: var(--color-gray-200);
     border-radius: var(--radius-sm);
     overflow: hidden;
-    margin-top: var(--space-2);
+    margin-top: var(--space-xs);
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--mono-black), var(--mono-dark-gray));
+    background: var(--accent);
     border-radius: var(--radius-sm);
     transition: width 0.8s ease-out;
     position: relative;
 }
 
-.progress-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .grant-stylish {
-        padding: var(--space-6) var(--space-4);
-    }
-    
-    .grant-hero {
-        margin: 0 calc(-1 * var(--space-4)) var(--space-8);
-        padding: var(--space-12) var(--space-4);
-    }
-    
-    .grant-title {
-        font-size: var(--text-2xl);
-    }
-    
+/* Responsive Design - Mobile First */
+@media (max-width: 599px) {
     .key-info-grid {
         grid-template-columns: 1fr;
-        gap: var(--space-4);
     }
     
     .stats-grid {
         grid-template-columns: 1fr;
     }
     
-    .sidebar {
-        position: static;
+    .info-table th,
+    .info-table td {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--type-xs);
     }
 }
 
-/* Print styles - High contrast */
+/* Print Styles */
 @media print {
-    .grant-stylish {
+    .grant-minna {
         background: white;
         color: black;
         box-shadow: none;
@@ -796,23 +1007,19 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
     .btn {
         display: none;
     }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --mono-black: #ffffff;
-        --mono-white: #000000;
-        --mono-charcoal: #e5e5e5;
-        --mono-off-white: #0a0a0a;
-        --mono-pale-gray: #2d2d2d;
+    
+    .grant-hero {
+        box-shadow: none;
+        border: 1px solid #ccc;
     }
 }
 
-/* High contrast mode */
+/* Accessibility - High Contrast */
 @media (prefers-contrast: high) {
-    .info-card {
-        border-width: 3px;
+    .info-card,
+    .content-section,
+    .sidebar-card {
+        border-width: 2px;
     }
     
     .btn {
@@ -820,7 +1027,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
     }
 }
 
-/* Reduced motion */
+/* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
@@ -828,14 +1035,40 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Focus States for Accessibility */
+a:focus, button:focus, .btn:focus {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Icon Font Replacement with Unicode (No Emojis) */
+.icon-yen::before { content: '¥'; }
+.icon-calendar::before { content: '📅'; }
+.icon-chart::before { content: '📊'; }
+.icon-building::before { content: '🏢'; }
+.icon-document::before { content: '📄'; }
+.icon-target::before { content: '🎯'; }
+.icon-location::before { content: '📍'; }
+.icon-phone::before { content: '📞'; }
+.icon-clock::before { content: '⏰'; }
+.icon-money::before { content: '💵'; }
+.icon-map::before { content: '🗺️'; }
+.icon-link::before { content: '🔗'; }
+.icon-globe::before { content: '🌐'; }
+.icon-heart::before { content: '❤️'; }
+.icon-share::before { content: '📤'; }
+.icon-print::before { content: '🖨️'; }
+.icon-tag::before { content: '🏷️'; }
+.icon-home::before { content: '🏘️'; }
 </style>
 
-<main class="grant-stylish">
+<main class="grant-minna">
     <!-- Hero Section -->
     <header class="grant-hero">
         <?php if ($grant_data['is_featured']): ?>
-        <div class="status-badge" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); margin-bottom: var(--space-3);">
-             注目の助成金
+        <div class="status-badge" style="background: var(--accent-warning); margin-bottom: var(--space-sm);">
+            注目の助成金
         </div>
         <?php endif; ?>
         
@@ -856,7 +1089,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
         <div class="key-info-grid">
             <?php if ($formatted_amount): ?>
             <div class="info-card">
-                <div class="info-icon">¥</div>
+                <div class="info-icon icon-yen">¥</div>
                 <div class="info-label">最大助成額</div>
                 <div class="info-value highlight"><?php echo esc_html($formatted_amount); ?></div>
             </div>
@@ -864,7 +1097,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             
             <?php if ($deadline_info): ?>
             <div class="info-card">
-                <div class="info-icon"></div>
+                <div class="info-icon icon-calendar"></div>
                 <div class="info-label">申請締切</div>
                 <div class="info-value <?php echo $deadline_class === 'urgent' ? 'urgent' : ''; ?>">
                     <?php echo esc_html($deadline_info); ?>
@@ -874,7 +1107,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             
             <?php if ($grant_data['adoption_rate'] > 0): ?>
             <div class="info-card">
-                <div class="info-icon"></div>
+                <div class="info-icon icon-chart"></div>
                 <div class="info-label">採択率</div>
                 <div class="info-value"><?php echo number_format($grant_data['adoption_rate'], 1); ?>%</div>
             </div>
@@ -882,9 +1115,9 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             
             <?php if ($grant_data['organization']): ?>
             <div class="info-card">
-                <div class="info-icon"></div>
+                <div class="info-icon icon-building"></div>
                 <div class="info-label">実施機関</div>
-                <div class="info-value" style="font-size: var(--text-lg);"><?php echo esc_html($grant_data['organization']); ?></div>
+                <div class="info-value" style="font-size: var(--type-base);"><?php echo esc_html($grant_data['organization']); ?></div>
             </div>
             <?php endif; ?>
         </div>
@@ -898,12 +1131,12 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- AI Summary Section -->
             <section class="content-section" style="border-left-color: var(--accent-info);">
                 <header class="section-header">
-                    <div class="section-icon">🤖</div>
+                    <div class="section-icon">AI</div>
                     <h2 class="section-title">AI要約</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: var(--space-6); border-radius: var(--radius-lg); border-left: 4px solid var(--accent-info);">
-                        <p style="font-size: var(--text-lg); line-height: 1.8; margin: 0;">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-info);">
+                        <p style="font-size: var(--type-base); line-height: 1.7; margin: 0; color: var(--color-gray-700);">
                             <?php echo esc_html($grant_data['ai_summary']); ?>
                         </p>
                     </div>
@@ -914,7 +1147,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Main Content Section -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">📄</div>
+                    <div class="section-icon icon-document"></div>
                     <h2 class="section-title">詳細情報</h2>
                 </header>
                 <div class="section-content">
@@ -925,7 +1158,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Detailed Information Table -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">📋</div>
+                    <div class="section-icon icon-document"></div>
                     <h2 class="section-title">助成金詳細情報</h2>
                 </header>
                 <div class="section-content">
@@ -945,7 +1178,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                         <?php if ($formatted_amount): ?>
                         <tr>
                             <th>最大助成額</th>
-                            <td><strong style="font-size: var(--text-xl);"><?php echo esc_html($formatted_amount); ?></strong></td>
+                            <td><strong style="font-size: var(--type-lg); color: var(--accent);"><?php echo esc_html($formatted_amount); ?></strong></td>
                         </tr>
                         <?php endif; ?>
                         
@@ -973,7 +1206,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                         <?php if ($deadline_info): ?>
                         <tr>
                             <th>申請締切</th>
-                            <td><strong style="<?php echo $deadline_class === 'urgent' ? 'color: var(--accent-danger);' : ''; ?>"><?php echo esc_html($deadline_info); ?></strong></td>
+                            <td><strong style="<?php echo $deadline_class === 'urgent' ? 'color: var(--accent-danger);' : 'color: var(--color-gray-900);'; ?>"><?php echo esc_html($deadline_info); ?></strong></td>
                         </tr>
                         <?php endif; ?>
                         
@@ -1009,8 +1242,8 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                         <tr>
                             <th>採択率</th>
                             <td>
-                                <strong style="font-size: var(--text-xl);"><?php echo number_format($grant_data['adoption_rate'], 1); ?>%</strong>
-                                <div class="progress-bar" style="margin-top: var(--space-2);">
+                                <strong style="font-size: var(--type-lg); color: var(--accent);"><?php echo number_format($grant_data['adoption_rate'], 1); ?>%</strong>
+                                <div class="progress-bar" style="margin-top: var(--space-xs);">
                                     <div class="progress-fill" style="width: <?php echo min($grant_data['adoption_rate'], 100); ?>%"></div>
                                 </div>
                             </td>
@@ -1021,7 +1254,6 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                             <th>申請難易度</th>
                             <td>
                                 <div class="difficulty-indicator">
-                                    <span style="margin-right: var(--space-2); font-size: 1.5em;"><?php echo $difficulty_data['emoji']; ?></span>
                                     <strong><?php echo $difficulty_data['label']; ?></strong>
                                     <div class="difficulty-dots">
                                         <?php for ($i = 1; $i <= 4; $i++): ?>
@@ -1060,7 +1292,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Target Details -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon"></div>
+                    <div class="section-icon icon-target"></div>
                     <h2 class="section-title">対象者・対象事業</h2>
                 </header>
                 <div class="section-content">
@@ -1073,7 +1305,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Target Expenses (31列対応 - AC列) -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon"></div>
+                    <div class="section-icon icon-money"></div>
                     <h2 class="section-title">対象経費</h2>
                 </header>
                 <div class="section-content">
@@ -1086,11 +1318,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Required Documents (31列対応 - Z列) -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">📋</div>
+                    <div class="section-icon icon-document"></div>
                     <h2 class="section-title">必要書類</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: var(--mono-off-white); padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--accent-info);">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-info);">
                         <?php echo wp_kses_post($grant_data['required_documents']); ?>
                     </div>
                 </div>
@@ -1101,11 +1333,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Region Notes (31列対応 - Y列) -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">📍</div>
+                    <div class="section-icon icon-location"></div>
                     <h2 class="section-title">地域に関する備考</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: var(--mono-off-white); padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--accent-warning);">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-warning);">
                         <?php echo wp_kses_post($grant_data['region_notes']); ?>
                     </div>
                 </div>
@@ -1116,11 +1348,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Amount Notes -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">💵</div>
+                    <div class="section-icon icon-money"></div>
                     <h2 class="section-title">金額に関する備考</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: var(--mono-off-white); padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--accent-success);">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-success);">
                         <?php echo wp_kses_post($grant_data['amount_note']); ?>
                     </div>
                 </div>
@@ -1131,11 +1363,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Deadline Notes -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">⏰</div>
+                    <div class="section-icon icon-clock"></div>
                     <h2 class="section-title">締切に関する備考</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: #fff5f5; padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--accent-danger);">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-danger);">
                         <?php echo wp_kses_post($grant_data['deadline_note']); ?>
                     </div>
                 </div>
@@ -1146,12 +1378,12 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Application Period -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">📆</div>
+                    <div class="section-icon icon-calendar"></div>
                     <h2 class="section-title">申請期間</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: var(--mono-off-white); padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--accent-info);">
-                        <p style="font-size: var(--text-lg); font-weight: 600; margin: 0;">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-info);">
+                        <p style="font-size: var(--type-base); font-weight: 600; margin: 0; color: var(--color-gray-900);">
                             <?php echo esc_html($grant_data['application_period']); ?>
                         </p>
                     </div>
@@ -1163,11 +1395,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Regional Limitation -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">🗺️</div>
+                    <div class="section-icon icon-map"></div>
                     <h2 class="section-title">地域制限</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: var(--mono-off-white); padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--accent-warning);">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--accent-warning);">
                         <?php echo wp_kses_post($grant_data['regional_limitation']); ?>
                     </div>
                 </div>
@@ -1178,11 +1410,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Contact Information -->
             <section class="content-section">
                 <header class="section-header">
-                    <div class="section-icon">📞</div>
+                    <div class="section-icon icon-phone"></div>
                     <h2 class="section-title">お問い合わせ先</h2>
                 </header>
                 <div class="section-content">
-                    <div style="background: var(--mono-off-white); padding: var(--space-5); border-radius: var(--radius-base); border-left: 4px solid var(--mono-black);">
+                    <div style="background: var(--color-surface); padding: var(--space-lg); border-radius: var(--radius-md); border-left: 4px solid var(--color-gray-900);">
                         <?php echo nl2br(esc_html($grant_data['contact_info'])); ?>
                     </div>
                 </div>
@@ -1195,31 +1427,31 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Action Buttons -->
             <div class="sidebar-card">
                 <h3 class="sidebar-title">
-                     アクション
+                    <span class="icon-link"></span> アクション
                 </h3>
                 <div class="action-buttons">
                     <?php if ($grant_data['official_url']): ?>
                     <a href="<?php echo esc_url($grant_data['official_url']); ?>" class="btn btn-primary" target="_blank" rel="noopener">
-                        🔗 公式サイトで申請
+                        <span class="icon-link"></span> 公式サイトで申請
                     </a>
                     <?php endif; ?>
                     
                     <?php if ($grant_data['external_link']): ?>
                     <a href="<?php echo esc_url($grant_data['external_link']); ?>" class="btn btn-secondary" target="_blank" rel="noopener">
-                        🌐 参考リンク
+                        <span class="icon-globe"></span> 参考リンク
                     </a>
                     <?php endif; ?>
                     
                     <button class="btn btn-secondary" onclick="toggleFavorite(<?php echo $post_id; ?>)">
-                        ❤️ お気に入りに追加
+                        <span class="icon-heart"></span> お気に入りに追加
                     </button>
                     
                     <button class="btn btn-secondary" onclick="shareGrant()">
-                        📤 この助成金をシェア
+                        <span class="icon-share"></span> この助成金をシェア
                     </button>
                     
                     <button class="btn btn-secondary" onclick="window.print()">
-                        🖨️ 印刷用ページ
+                        <span class="icon-print"></span> 印刷用ページ
                     </button>
                 </div>
             </div>
@@ -1227,7 +1459,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <!-- Statistics -->
             <div class="sidebar-card">
                 <h3 class="sidebar-title">
-                     統計情報
+                    <span class="icon-chart"></span> 統計情報
                 </h3>
                 <div class="stats-grid">
                     <?php if ($grant_data['adoption_rate'] > 0): ?>
@@ -1253,28 +1485,28 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                     <?php endif; ?>
                     
                     <div class="stat-item">
-                        <span class="stat-number"><?php echo $difficulty_data['emoji']; ?> <?php echo $difficulty_data['dots']; ?>/4</span>
+                        <span class="stat-number"><?php echo $difficulty_data['dots']; ?>/4</span>
                         <span class="stat-label">申請難易度</span>
                     </div>
                     
                     <?php if ($grant_data['max_amount_numeric'] > 0): ?>
                     <div class="stat-item">
-                        <span class="stat-number" style="font-size: var(--text-lg);">¥<?php echo number_format($grant_data['max_amount_numeric']); ?></span>
+                        <span class="stat-number" style="font-size: var(--type-base);">¥<?php echo number_format($grant_data['max_amount_numeric']); ?></span>
                         <span class="stat-label">最大助成額</span>
                     </div>
                     <?php endif; ?>
                     
                     <?php if ($grant_data['min_amount'] > 0): ?>
                     <div class="stat-item">
-                        <span class="stat-number" style="font-size: var(--text-lg);">¥<?php echo number_format($grant_data['min_amount']); ?></span>
+                        <span class="stat-number" style="font-size: var(--type-base);">¥<?php echo number_format($grant_data['min_amount']); ?></span>
                         <span class="stat-label">最小助成額</span>
                     </div>
                     <?php endif; ?>
                 </div>
                 
                 <?php if ($grant_data['last_updated']): ?>
-                <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--mono-pale-gray); text-align: center;">
-                    <small style="color: var(--mono-mid-gray);">
+                <div style="margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); text-align: center;">
+                    <small style="color: var(--color-gray-500); font-size: var(--type-xs);">
                         最終更新: <?php echo esc_html($grant_data['last_updated']); ?>
                     </small>
                 </div>
@@ -1285,16 +1517,16 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
             <?php if ($taxonomies['categories'] || $taxonomies['prefectures'] || $taxonomies['tags']): ?>
             <div class="sidebar-card">
                 <h3 class="sidebar-title">
-                    🏷️ 関連分類
+                    <span class="icon-tag"></span> 関連分類
                 </h3>
                 
                 <?php if ($taxonomies['categories'] && !is_wp_error($taxonomies['categories'])): ?>
                 <div class="tags-section">
-                    <h4 style="margin-bottom: var(--space-3); color: var(--mono-mid-gray); font-size: var(--text-sm);">カテゴリー</h4>
+                    <h4 style="margin-bottom: var(--space-sm); color: var(--color-gray-500); font-size: var(--type-xs); font-weight: 600;">カテゴリー</h4>
                     <div class="tags-list">
                         <?php foreach ($taxonomies['categories'] as $category): ?>
                         <a href="<?php echo get_term_link($category); ?>" class="tag">
-                            🏷️ <?php echo esc_html($category->name); ?>
+                            <span class="icon-tag"></span> <?php echo esc_html($category->name); ?>
                         </a>
                         <?php endforeach; ?>
                     </div>
@@ -1303,11 +1535,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                 
                 <?php if ($taxonomies['prefectures'] && !is_wp_error($taxonomies['prefectures'])): ?>
                 <div class="tags-section">
-                    <h4 style="margin: var(--space-4) 0 var(--space-3) 0; color: var(--mono-mid-gray); font-size: var(--text-sm);">対象地域</h4>
+                    <h4 style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--color-gray-500); font-size: var(--type-xs); font-weight: 600;">対象地域</h4>
                     <div class="tags-list">
                         <?php foreach ($taxonomies['prefectures'] as $prefecture): ?>
                         <a href="<?php echo get_term_link($prefecture); ?>" class="tag">
-                            📍 <?php echo esc_html($prefecture->name); ?>
+                            <span class="icon-location"></span> <?php echo esc_html($prefecture->name); ?>
                         </a>
                         <?php endforeach; ?>
                     </div>
@@ -1316,11 +1548,11 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                 
                 <?php if ($taxonomies['municipalities'] && !is_wp_error($taxonomies['municipalities'])): ?>
                 <div class="tags-section">
-                    <h4 style="margin: var(--space-4) 0 var(--space-3) 0; color: var(--mono-mid-gray); font-size: var(--text-sm);">市町村</h4>
+                    <h4 style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--color-gray-500); font-size: var(--type-xs); font-weight: 600;">市町村</h4>
                     <div class="tags-list">
                         <?php foreach ($taxonomies['municipalities'] as $municipality): ?>
                         <a href="<?php echo get_term_link($municipality); ?>" class="tag">
-                            🏘️ <?php echo esc_html($municipality->name); ?>
+                            <span class="icon-home"></span> <?php echo esc_html($municipality->name); ?>
                         </a>
                         <?php endforeach; ?>
                     </div>
@@ -1329,7 +1561,7 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
                 
                 <?php if ($taxonomies['tags'] && !is_wp_error($taxonomies['tags'])): ?>
                 <div class="tags-section">
-                    <h4 style="margin: var(--space-4) 0 var(--space-3) 0; color: var(--mono-mid-gray); font-size: var(--text-sm);">タグ</h4>
+                    <h4 style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--color-gray-500); font-size: var(--type-xs); font-weight: 600;">タグ</h4>
                     <div class="tags-list">
                         <?php foreach ($taxonomies['tags'] as $tag): ?>
                         <a href="<?php echo get_term_link($tag); ?>" class="tag">
@@ -1355,20 +1587,20 @@ update_post_meta($post_id, 'views_count', $grant_data['views_count']);
     ?>
     <!-- Similar Grants Recommendation Section -->
     <section class="similar-grants-section" style="margin-top: var(--space-16); padding-top: var(--space-12); border-top: 2px solid var(--mono-pale-gray);">
-        <header style="text-align: center; margin-bottom: var(--space-10);">
-            <div style="display: inline-flex; align-items: center; gap: var(--space-3); background: var(--mono-black); color: var(--mono-white); padding: var(--space-3) var(--space-6); border-radius: var(--radius-2xl); margin-bottom: var(--space-4);">
-                <span style="font-size: 1.5rem;">🤖</span>
-                <span style="font-weight: 700; letter-spacing: 0.05em;">AI RECOMMENDATION</span>
+        <header style="text-align: center; margin-bottom: var(--space-2xl);">
+            <div style="display: inline-flex; align-items: center; gap: var(--space-sm); background: var(--color-gray-900); color: white; padding: var(--space-sm) var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-md);">
+                <span style="font-weight: 700;">AI</span>
+                <span style="font-weight: 700; letter-spacing: 0.05em;">RECOMMENDATION</span>
             </div>
-            <h2 style="font-size: var(--text-3xl); font-weight: 800; color: var(--mono-black); margin: 0 0 var(--space-3); letter-spacing: -0.02em;">
+            <h2 style="font-size: var(--type-2xl); font-weight: 700; color: var(--color-gray-900); margin: 0 0 var(--space-sm); letter-spacing: -0.01em;">
                 類似する助成金
             </h2>
-            <p style="color: var(--mono-mid-gray); font-size: var(--text-base); max-width: 600px; margin: 0 auto;">
+            <p style="color: var(--color-gray-500); font-size: var(--type-base); max-width: 600px; margin: 0 auto;">
                 AIがあなたに最適な類似助成金を分析・推薦しています
             </p>
         </header>
         
-        <div class="similar-grants-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6);">
+        <div class="similar-grants-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg);">
             <?php foreach ($similar_grants as $similar_post) : 
                 $similar_id = $similar_post->ID;
                 $similar_amount = get_field('max_amount', $similar_id);
@@ -1483,7 +1715,7 @@ function toggleFavorite(postId) {
     button.style.transform = 'scale(0.95)';
     setTimeout(() => {
         button.style.transform = '';
-        button.innerHTML = '💖 お気に入り登録済み';
+        button.innerHTML = '<span class="icon-heart"></span> お気に入り登録済み';
         button.style.background = 'var(--accent-danger)';
         button.style.color = 'white';
     }, 100);
@@ -1507,7 +1739,7 @@ function shareGrant() {
             // Visual feedback
             const button = event.target.closest('.btn');
             const originalText = button.innerHTML;
-            button.innerHTML = '✅ URLをコピーしました！';
+            button.innerHTML = '<span class="icon-share"></span> URLをコピーしました！';
             button.style.background = 'var(--accent-success)';
             button.style.color = 'white';
             
@@ -1522,39 +1754,40 @@ function shareGrant() {
     }
 }
 
-// Initialize page functionality
+// Initialize page functionality - Minna Bank Style
 document.addEventListener('DOMContentLoaded', function() {
-    // Animate progress bars
+    // Animate progress bars with smooth timing
     setTimeout(() => {
         document.querySelectorAll('.progress-fill').forEach((bar, index) => {
             const width = bar.style.width;
             bar.style.width = '0';
             setTimeout(() => {
                 bar.style.width = width;
-            }, 300 + (index * 100));
+            }, 200 + (index * 80));
         });
-    }, 500);
+    }, 300);
     
-    // Add intersection observer for animations
+    // Smooth scroll animation for sections
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    entry.target.style.animation = 'fadeInUp 0.4s ease-out forwards';
                 }
             });
         }, {
-            threshold: 0.1
+            threshold: 0.05,
+            rootMargin: '50px'
         });
         
-        document.querySelectorAll('.content-section, .sidebar-card').forEach(el => {
+        document.querySelectorAll('.content-section, .sidebar-card, .info-card').forEach(el => {
             el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
+            el.style.transform = 'translateY(15px)';
             observer.observe(el);
         });
     }
     
-    // Add CSS animation keyframes
+    // Add CSS animation keyframes with Minna Bank style
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeInUp {
@@ -1563,18 +1796,57 @@ document.addEventListener('DOMContentLoaded', function() {
                 transform: translateY(0);
             }
         }
+        
+        /* Icon content for accessibility */
+        .icon-yen::before { content: '¥'; font-weight: bold; }
+        .icon-calendar::before { content: '📅'; }
+        .icon-chart::before { content: '📊'; }
+        .icon-building::before { content: '🏢'; }
+        .icon-document::before { content: '📄'; }
+        .icon-target::before { content: '🎯'; }
+        .icon-location::before { content: '📍'; }
+        .icon-phone::before { content: '📞'; }
+        .icon-clock::before { content: '⏰'; }
+        .icon-money::before { content: '💵'; }
+        .icon-map::before { content: '🗺️'; }
+        .icon-link::before { content: '🔗'; }
+        .icon-globe::before { content: '🌐'; }
+        .icon-heart::before { content: '❤️'; }
+        .icon-share::before { content: '📤'; }
+        .icon-print::before { content: '🖨️'; }
+        .icon-tag::before { content: '🏷️'; }
+        .icon-home::before { content: '🏘️'; }
     `;
     document.head.appendChild(style);
+    
+    // Enhanced touch support for mobile
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        btn.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    });
 });
 
-// Enhanced print functionality
+// Enhanced print functionality - Minna Bank Style
 window.addEventListener('beforeprint', function() {
     document.body.style.background = 'white';
+    document.body.style.color = 'black';
 });
 
 window.addEventListener('afterprint', function() {
     document.body.style.background = '';
+    document.body.style.color = '';
 });
+
+// Performance optimization - Lazy loading for images
+if ('loading' in HTMLImageElement.prototype) {
+    document.querySelectorAll('img').forEach(img => {
+        img.loading = 'lazy';
+    });
+}
 </script>
 
 <?php get_footer(); ?>
